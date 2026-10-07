@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>יחידה 6 – Pit Wall: חמ״ל המרוץ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&display=swap" rel="stylesheet">
+<!--
+  מבנה הקובץ (להמרה ל-Storyline) – באותו מבנה ועיצוב של לומדת יחידה 4:
+  - במה קבועה 1200x675 (גודל הסטורי). כל רכיב ממוקם בפיקסלים של הסטורי (left/top/width/height).
+  - <section class="slide"> = שקף. data-title = שם השקף, data-chapter = פרק בתפריט העליון (0-4).
+  - <div class="layer" data-layer="..."> = שכבה בתוך השקף (משוב נכון / לא נכון / נסו שוב / פופאפ הרחבה).
+  - #master = פס עליון (לוגו + תפריט פרקים + כפתור צליל).
+  - .slide.hub = קיר המסכים (Pit Wall) – שקף ניווט מרכזי, לינארי: שגרה (ימין) ← עומס (אמצע) ← חירום (שמאל).
+  - [data-xp] = רכיב "לחצו להרחבה". כשכל הרכיבים בשקף נצפו – מופיע כפתור ההמשך (.gate).
+  - .opt = תשובה בשאלת בחירה (data-correct="1" לתשובה נכונה; data-multi="1" בשקף = רב-ברירה, כמה תשובות נכונות).
+  - .dd-card / .dd-slot = שאלת גרירה.
+  - צבעים: כחול כהה #001930 | תכלת #6CCFF6 | ירוק #B2D234 | כתום #F99D26.
+-->
+<style>
+:root{--navy:#001930;--sky:#6CCFF6;--green:#B2D234;--orange:#F99D26;--gray:#969696;--red:#E5484D}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0a1220;overflow:hidden}
+body{font-family:'Assistant',Arial,sans-serif;color:var(--navy);-webkit-font-smoothing:antialiased}
+#stage{position:absolute;width:1200px;height:675px;left:50%;top:50%;transform-origin:center center;overflow:hidden;background:#000;direction:rtl}
+.a{position:absolute}
+img{display:block;user-select:none;-webkit-user-drag:none}
+button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+b{font-weight:800}
+
+/* font sizes */
+.f9{font-size:12px}.f10{font-size:13.3px}.f11{font-size:14.7px}.f128{font-size:17px}.f14{font-size:18.7px}.f16{font-size:21.3px}.f192{font-size:25.6px}.f27{font-size:36px}
+.lh{line-height:1.3}
+.w{color:#fff}.sky{color:var(--sky)}.grn{color:var(--green)}.org{color:var(--orange)}.nv{color:var(--navy)}
+.c{text-align:center}.r{text-align:right}
+
+/* slides & layers */
+.slide{position:absolute;inset:0;display:none;overflow:hidden}
+.slide.active{display:block;animation:fadeIn .4s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.layer{position:absolute;inset:0;display:none;z-index:40}
+.layer.show{display:block;animation:fadeIn .3s ease}
+.dim{position:absolute;left:0;top:45px;width:1200px;height:630px;background:rgba(0,0,0,.55)}
+.fbbox{position:absolute;inset:0;transform:scale(.8);transform-origin:50% 50%}
+.slide.answered > :not(.bg):not(.layer){visibility:hidden}   /* question area hidden while its feedback card shows */
+.fbrow{display:flex;align-items:center;justify-content:center;gap:10px;color:var(--navy)}
+.fbrow .vx{width:44px;height:44px}
+.shade{position:absolute;left:0;top:45px;width:1200px;height:630px;background:rgba(0,12,26,.8)}
+
+/* master: white bar, logo, chapter menu, sound toggle */
+#master{position:absolute;inset:0;z-index:30;pointer-events:none}
+#master.hidden{display:none}
+.hdr{position:absolute;left:0;top:0;width:1200px;height:44px;background:#fff;box-shadow:0 1px 6px rgba(0,0,0,.25)}
+.hdr .logo{position:absolute;left:1110px;top:5px;height:34px}
+.menu{position:absolute;right:113px;top:0;height:44px;display:flex;align-items:center;font-size:15.5px;color:#111;white-space:nowrap}
+.menu span{padding:0 6px;line-height:1}
+.menu span+span{border-right:1.5px solid #111}
+.menu span.cur{font-weight:800}
+#sound{position:absolute;left:14px;top:7px;width:30px;height:30px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;pointer-events:auto;transition:transform .15s}
+#sound:hover{transform:scale(1.1)}
+#sound svg{width:18px;height:18px}
+#sound .off{display:none}
+#sound.muted .on{display:none}
+#sound.muted .off{display:block}
+
+/* nav buttons: white circle, dark arrow */
+#controls{position:absolute;inset:0;z-index:60;pointer-events:none}
+.navbtn{position:absolute;top:607px;width:50px;height:50px;border-radius:50%;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;pointer-events:auto;transition:transform .15s,opacity .2s}
+.navbtn:hover{transform:scale(1.08)}
+.navbtn svg{width:34px;height:34px}
+#btnNext{left:15px}
+#btnPrev{left:1133px}
+.navbtn.gone{display:none}
+.navbtn.disabled{opacity:.35;pointer-events:none;filter:grayscale(1)}
+
+/* entrance animations (re-run each time a slide / layer is shown) */
+@keyframes rise{from{opacity:0;translate:0 16px}to{opacity:1;translate:0 0}}
+@keyframes popin{0%{opacity:0;scale:.6}70%{opacity:1;scale:1.06}100%{opacity:1;scale:1}}
+@keyframes slidein{from{opacity:0;translate:-60px 0}to{opacity:1;translate:0 0}}
+@keyframes dropin{0%{opacity:0;translate:0 -40px;scale:.9}70%{opacity:1;translate:0 4px;scale:1.02}100%{opacity:1;translate:0 0;scale:1}}
+.in{animation:rise .5s ease var(--d,0s) both}
+.in.pop,.layer .in.card{animation:popin .45s ease var(--d,0s) both}
+.pulse.in{animation:rise .5s ease var(--d,0s) both,pulse 1.8s ease-in-out calc(var(--d,0s) + .5s) infinite}
+.vx{object-fit:contain;animation:popin .5s cubic-bezier(.3,1.6,.5,1) .15s both}
+
+/* "gate": the continue button appears only after everything on the slide was explored */
+.gate{opacity:0;pointer-events:none;transition:opacity .5s ease}
+.gate.shown{opacity:1;pointer-events:auto}
+.xphint.done{visibility:hidden}
+
+/* story button: white, light-blue border */
+.btn{position:absolute;display:flex;align-items:center;justify-content:center;text-align:center;background:#fff;border:1px solid var(--sky);border-radius:10px;color:var(--navy);font-size:17px;font-weight:700;line-height:1.15;padding:0 10px;box-shadow:0 2px 6px rgba(0,0,0,.25);transition:background .15s,transform .15s}
+.btn:hover{background:var(--sky);transform:scale(1.03)}
+.btn.on{background:var(--sky);border:2px solid var(--navy)}
+.pulse{animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(108,207,246,.8)}60%{box-shadow:0 0 0 10px rgba(108,207,246,0)}}
+
+/* white cards & callouts */
+.card{position:absolute;background:#fff;border:1px solid var(--navy);border-radius:20px;box-shadow:0 4px 18px rgba(0,0,0,.35)}
+.callout{position:absolute;background:#fff;border:1.5px solid var(--navy);border-radius:16px;padding:10px 16px;color:var(--navy);line-height:1.25;box-shadow:0 3px 10px rgba(0,0,0,.25)}
+.callout::before,.callout::after{content:"";position:absolute;width:0;height:0;border-style:solid}
+.callout::before{bottom:-17px;border-width:17px 11px 0 11px;border-color:var(--navy) transparent transparent transparent}
+.callout::after{bottom:-14px;border-width:15px 9.5px 0 9.5px;border-color:#fff transparent transparent transparent}
+.callout.tl::before{left:36px}.callout.tl::after{left:37.5px}
+.callout.tr::before{right:36px}.callout.tr::after{right:37.5px}
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+.chips span{background:#eaf8fe;border:1.5px solid var(--sky);border-radius:20px;padding:4px 14px;font-size:15px;font-weight:700}
+.chips.dark span{background:rgba(108,207,246,.15);color:#fff}
+.dots li{list-style:none;position:relative;padding-right:16px}
+.dots li::before{content:"";position:absolute;right:0;top:.55em;width:7px;height:7px;border-radius:50%;background:var(--sky)}
+.dots.o li::before{background:var(--orange)}
+.toast{position:absolute;left:330px;top:200px;width:540px;padding:26px;background:#fff;border:1px solid var(--navy);border-radius:20px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+
+/* glowing dark panels (as the "shift" boxes of unit 4) */
+.glass{position:absolute;background:rgba(0,25,48,.84);border:1.5px solid rgba(108,207,246,.65);border-radius:16px;box-shadow:0 0 22px rgba(30,160,255,.25);color:#fff}
+.shift{position:absolute;border-radius:16px;background:rgba(0,25,48,.72);border:1.5px solid rgba(30,160,255,.7);box-shadow:0 0 18px rgba(30,160,255,.25);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#fff;font-size:18px;font-weight:800;text-align:center}
+.shift svg{width:64px;height:64px;fill:none;stroke:#1EA0FF;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 4px rgba(30,160,255,.55))}
+.shift small{display:block;font-size:15px;font-weight:600;color:var(--sky)}
+.shift.o{border-color:rgba(249,157,38,.8);box-shadow:0 0 18px rgba(249,157,38,.25)}
+.shift.o svg{stroke:var(--orange);filter:drop-shadow(0 0 4px rgba(249,157,38,.55))}
+.shift.o small{color:var(--orange)}
+.shift svg .fillarc{fill:rgba(30,160,255,.35);stroke:none}
+.shift.o svg .fillarc{fill:rgba(249,157,38,.35)}
+
+/* clickable tiles ("לחצו להרחבה") */
+.tile{cursor:pointer;transition:transform .15s,background .15s}
+.tile:hover{transform:scale(1.05);background:rgba(30,160,255,.22)}
+.tile::after{content:"";position:absolute;top:-10px;left:-10px;width:28px;height:28px;border-radius:50%;background:var(--green) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-9' fill='none' stroke='%23001930' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/18px no-repeat;opacity:0;scale:.4;transition:opacity .3s,scale .3s}
+.tile.seen::after{opacity:1;scale:1}
+.tile.seen{border-color:var(--green)}
+
+/* popups (layers that expand a topic) */
+.pophead{display:flex;align-items:center;gap:14px;color:var(--navy)}
+.pophead .pic{flex:0 0 58px;height:58px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center}
+.pophead .pic svg{width:36px;height:36px;fill:none;stroke:var(--sky);stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round}
+.pophead b{font-size:28px}
+.pophead span{font-size:19px;font-weight:700;color:#1d6fa5}
+.popcol{font-size:16px;line-height:1.36;color:var(--navy)}
+.popcol p+p,.popcol p+ul,.popcol ul+p,.popcol .note,.popcol .ex{margin-top:9px}
+.popcol ul{margin-top:4px}
+.popcol h4{font-size:16px;font-weight:800;margin-top:10px}
+.popcol h4:first-child{margin-top:0}
+.note{background:#fff5e6;border-right:5px solid var(--orange);border-radius:8px;padding:8px 12px}
+.ex{background:#eef8fd;border-right:5px solid var(--sky);border-radius:8px;padding:8px 12px}
+.ex.g{background:#f4f9e4;border-color:var(--green)}
+.xclose{position:absolute;width:34px;height:34px;border-radius:50%;background:var(--navy);color:#fff;font-size:20px;line-height:1;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.3);transition:transform .15s}
+.xclose:hover{transform:scale(1.1)}
+
+/* calls (slide 03) */
+/* call slides: the caller appears on the big screen (full-scene background). The caller's words in a bubble next to them;
+   answer buttons + feedback on the desk area at the bottom right */
+.callslide .bub{position:absolute;background:#fff;border:1.5px solid var(--navy);border-radius:16px;padding:12px 18px;font-size:17.5px;line-height:1.35;color:var(--navy);box-shadow:0 4px 14px rgba(0,0,0,.5)}
+.callslide .bub::before,.callslide .bub::after{content:"";position:absolute;width:0;height:0;border-style:solid}
+.callslide .bub::before{left:-24px;top:var(--ty,30px);border-width:12px 24px 12px 0;border-color:transparent var(--navy) transparent transparent}
+.callslide .bub::after{left:-20px;top:calc(var(--ty,30px) + 2px);border-width:10px 21px 10px 0;border-color:transparent #fff transparent transparent}
+.callslide .bub small{display:flex;align-items:center;gap:8px;font-size:14.5px;font-weight:800;color:#1d6fa5;margin-bottom:4px}
+.callslide .ph{flex:0 0 26px;width:26px;height:26px;border-radius:50%;background:#2fbf4f;display:flex;align-items:center;justify-content:center;animation:ringp 1.4s infinite}
+.callslide .ph svg{width:15px;height:15px;animation:shake 1.4s infinite}
+.callslide.called .ph,.callslide.called .ph svg{animation:none}
+.callslide .askq{position:absolute;color:#fff;font-size:17px;font-weight:800;text-shadow:0 1px 4px rgba(0,0,0,.7)}
+.callslide .ans{position:absolute;display:flex;gap:12px}
+.callslide .ans button{flex:1;height:48px;border-radius:10px;background:#fff;border:1px solid var(--navy);font-size:17px;font-weight:700;color:var(--navy);box-shadow:0 2px 6px rgba(0,0,0,.35);transition:all .15s}
+.callslide .ans button:hover:not(:disabled){background:#eaf8fe;border-color:var(--sky)}
+.callslide .ans button:disabled{cursor:default;opacity:.4}
+/* after answering: the correct answer turns green; a wrong choice turns orange (the feedback colours) */
+.callslide .ans button.right{opacity:1;background:#eef6d2;border:2.5px solid var(--green);color:var(--navy)}
+.callslide .ans button.wrong{opacity:1;background:#fde8cc;border:2.5px solid var(--orange);color:var(--navy)}
+.callslide .cfb{position:absolute;display:none;background:#fff;border-radius:14px;padding:10px 14px;font-size:15.5px;line-height:1.35;color:var(--navy);box-shadow:0 4px 14px rgba(0,0,0,.5);align-items:flex-start;gap:10px}
+.callslide .cfb.show{display:flex;animation:popin .45s cubic-bezier(.3,1.6,.5,1) both}
+.callslide .cfb img{flex:0 0 38px;width:38px;height:38px}
+.callslide .cfb b.res{font-size:19px;margin-left:4px}
+.callslide .cfb.ok{border-right:6px solid var(--green)}
+.callslide .cfb.bad{border-right:6px solid var(--orange)}
+.callslide .nextcall{display:none}
+.callslide .nextcall.show{display:flex;animation:rise .4s ease .5s both}
+.persp{position:absolute;display:flex;align-items:center;gap:12px;color:#fff}
+.icoitem{position:absolute;display:flex;align-items:center;gap:10px;color:#fff;font-size:16.5px;font-weight:700;line-height:1.3}
+.icoitem svg{flex:0 0 46px;width:46px;height:46px;fill:none;stroke:#1EA0FF;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 4px rgba(30,160,255,.55))}
+.persp .ic{flex:0 0 auto;display:flex;align-items:center;justify-content:center}
+.persp svg{width:56px;height:56px;fill:none;stroke:#1EA0FF;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 4px rgba(30,160,255,.6))}
+.persp b{display:block;font-size:23px;line-height:1.1}
+.persp small{display:block;color:#1EA0FF;font-size:15px;font-weight:700}
+.callsteps{position:absolute;display:flex;flex-direction:column;gap:10px}
+/* slide 02: what appears after the video ends (dark layer, Maya, bubble, button) */
+.after-video{opacity:0;visibility:hidden}
+.slide.vdone .after-video{visibility:visible;animation:fadeIn .6s ease var(--av,0s) both}
+.slide.vdone img.after-video{animation:slidein .7s ease var(--av,0s) both}
+.slide.vdone .speech.after-video{animation:popin .5s ease var(--av,0s) both}
+.slide.vdone .btn.after-video{animation:rise .5s ease var(--av,0s) both,pulse 1.8s ease-in-out calc(var(--av,0s) + .5s) infinite}
+/* designed popups (image = frame + title + X): transparent hotspot over the X, text in the white area */
+.xhot{position:absolute;width:48px;height:48px;border-radius:50%;cursor:pointer;z-index:2}
+.xhot:hover{box-shadow:0 0 0 3px var(--sky)}
+.pop2 .popcol{font-size:16.5px;line-height:1.36}
+.dots.row{display:flex;flex-wrap:wrap;gap:2px 26px}
+.boxrow{display:flex;gap:12px;margin-top:9px;align-items:stretch}
+.boxrow > div{margin-top:0 !important}
+.callsteps span{display:flex;align-items:center;gap:6px;background:rgba(0,25,48,.8);border-radius:18px;padding:3px 12px 3px 5px;color:rgba(255,255,255,.6);font-size:14px;font-weight:700}
+.callsteps span i{width:24px;height:24px;border-radius:50%;border:2px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;font-style:normal;font-size:13px}
+.callsteps span.cur{color:#fff}.callsteps span.cur i{border-color:var(--sky);background:var(--sky);color:var(--navy)}
+.callsteps span.ok i{border-color:var(--green);background:var(--green);color:var(--navy)}
+.callsteps span.bad i{border-color:var(--orange);background:var(--orange);color:var(--navy)}
+
+/* speech bubble of the agent (Maya talks to the learner) */
+.speech{position:absolute;background:#fff;border:2px solid var(--navy);border-radius:22px;padding:16px 22px;color:var(--navy);box-shadow:0 8px 24px rgba(0,0,0,.45)}
+.speech::before,.speech::after{content:"";position:absolute;width:0;height:0;border-style:solid}
+.speech.tail-right::before{right:-28px;top:var(--ty,60px);border-width:13px 0 13px 28px;border-color:transparent transparent transparent var(--tail,var(--navy))}
+.speech.tail-right::after{right:-24px;top:calc(var(--ty,60px) + 2px);border-width:11px 0 11px 25px;border-color:transparent transparent transparent #fff}
+.speech.tail-left::before{left:-28px;top:var(--ty,60px);border-width:13px 28px 13px 0;border-color:transparent var(--navy) transparent transparent}
+.speech.tail-left::after{left:-24px;top:calc(var(--ty,60px) + 2px);border-width:11px 25px 11px 0;border-color:transparent #fff transparent transparent}
+.speech .t{font-size:21px;font-weight:800;line-height:1.2;margin-bottom:6px}
+.speech p{font-size:16px;line-height:1.4}
+.speech p+p{margin-top:7px}
+
+/* exciting summary popup (slide 03) */
+.burst{position:absolute;left:600px;top:360px;width:1100px;height:1100px;margin:-550px 0 0 -550px;border-radius:50%;background:repeating-conic-gradient(rgba(108,207,246,.22) 0 9deg,rgba(108,207,246,0) 9deg 18deg);-webkit-mask:radial-gradient(circle,#000 18%,transparent 62%);mask:radial-gradient(circle,#000 18%,transparent 62%);animation:spin 18s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.wowcard{position:absolute;left:190px;top:165px;width:820px;height:350px;background:#fff;border-radius:22px;border:2px solid var(--navy);box-shadow:0 0 0 6px rgba(108,207,246,.35),0 16px 40px rgba(0,0,0,.55);overflow:hidden}
+.wowcard .band{position:absolute;left:0;right:0;top:0;height:78px;background:linear-gradient(100deg,#001930,#0b4f86 60%,#1ea0ff);display:flex;align-items:center;justify-content:center;gap:12px;color:#fff;font-size:28px;font-weight:800}
+.wowcard .band::after{content:"";position:absolute;left:0;right:0;bottom:0;height:8px;background:conic-gradient(#111 25%,#fff 0 50%,#111 0 75%,#fff 0) 0 0/16px 16px}
+.score{display:inline-flex;align-items:center;gap:8px;background:#f4f9e4;border:2px solid var(--green);border-radius:22px;padding:4px 16px;font-size:18px;font-weight:800;color:var(--navy)}
+.score.mid{background:#fff5e6;border-color:var(--orange)}
+.faces{position:absolute;display:flex;justify-content:space-between;align-items:center}
+.faces img{width:74px;height:74px;border-radius:50%;object-fit:cover;object-position:30% 25%;border:3px solid var(--orange);box-shadow:0 3px 10px rgba(0,0,0,.35);position:relative;z-index:1;animation:popin .45s ease var(--fd,0s) both}
+.faces svg{position:absolute;left:30px;right:30px;top:50%;width:calc(100% - 60px);height:20px;margin-top:-10px;overflow:visible}
+.faces svg path{stroke:var(--orange);stroke-width:4;stroke-dasharray:10 8;fill:none;animation:dash 1.2s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-36}}
+.confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:2}
+.confetti i{position:absolute;top:-20px;width:10px;height:16px;border-radius:2px;animation:fall var(--t,3s) linear var(--cd,0s) both}
+@keyframes fall{0%{transform:translate(0,0) rotate(0)}100%{transform:translate(var(--dx,0),720px) rotate(var(--r,540deg));opacity:.9}}
+@keyframes ringp{0%{box-shadow:0 0 0 0 rgba(47,191,79,.7)}70%{box-shadow:0 0 0 12px rgba(47,191,79,0)}100%{box-shadow:0 0 0 0 rgba(47,191,79,0)}}
+@keyframes shake{0%,50%,100%{transform:rotate(0)}10%,30%{transform:rotate(-14deg)}20%,40%{transform:rotate(14deg)}}
+
+/* tabs (slide 05) */
+.tabpanel{position:absolute;inset:0;display:none;pointer-events:none}   /* the panel covers the slide – let clicks through to the tabs */
+.tabpanel > *{pointer-events:auto}
+.tabpanel.on{display:block}
+.checklist{position:absolute;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:10px 34px}
+.checklist li{position:relative;padding-right:34px;color:#fff;font-size:15px;line-height:1.3;min-height:38px}
+.checklist li::before{content:"";position:absolute;right:0;top:0;width:24px;height:24px;border-radius:6px;border:2px solid var(--sky)}
+.checklist li::after{content:"";position:absolute;right:3px;top:1px;width:20px;height:20px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4.5 4.5L19 6.5' fill='none' stroke='%23B2D234' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;animation:popin .35s ease var(--cd,0s) both}
+.infobox{position:absolute;border-radius:12px;padding:12px 16px;color:#fff;font-size:15.5px;line-height:1.38;background:rgba(255,255,255,.07);border-top:5px solid var(--sky)}
+.infobox.o{border-top-color:var(--orange)}
+.infobox b.t{display:block;font-size:17px;margin-bottom:4px}
+
+/* drag & drop */
+.dd-num{position:absolute;width:50px;height:50px}
+.dd-slot{position:absolute;width:190px;height:110px;border:2px dashed var(--sky);border-radius:14px;background:#fff;transition:background .15s}
+.dd-slot.over{background:#d9f3fd}
+.dd-card{position:absolute;width:190px;height:110px;background:#fff;border:2.5px solid var(--sky);border-radius:14px;box-shadow:0 3px 8px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;text-align:center;padding:10px;font-size:19px;font-weight:700;line-height:1.2;color:var(--navy);cursor:grab;touch-action:none;transition:left .25s,top .25s,box-shadow .15s;z-index:3}
+.dd-card.dragging{transition:none;cursor:grabbing;box-shadow:0 10px 24px rgba(0,0,0,.5);z-index:25}
+.dd-card.right{background:#eef6d2;border-color:var(--green)}
+.dd-card.wrong{background:#fde8cc;border-color:var(--orange)}
+.dd-check{position:absolute;height:38px;border-radius:6px;background:var(--sky);color:var(--navy);font-size:18.7px;font-weight:700;box-shadow:0 2px 5px rgba(0,0,0,.3);transition:opacity .2s,filter .15s}
+.dd-check:hover:not(:disabled){filter:brightness(1.08)}
+.dd-check:disabled{opacity:.5;cursor:default}
+
+/* model steps (slide 08) */
+.step{position:absolute;width:190px;height:330px;border-radius:16px;background:rgba(0,25,48,.78);border:1.5px solid rgba(108,207,246,.65);box-shadow:0 0 18px rgba(30,160,255,.2);padding:14px 14px;color:#fff;text-align:center}
+.step img{width:46px;height:46px;margin:0 auto 6px}
+.step b{display:block;color:var(--sky);font-size:19px;line-height:1.15;min-height:44px}
+.step p{font-size:15px;line-height:1.38;margin-top:8px}
+.chev{position:absolute;width:26px;height:26px}
+
+/* choice (single / multi) */
+.opt{position:absolute;display:flex;align-items:center;justify-content:center;text-align:center;background:#fff;border:1px solid var(--navy);border-radius:12px;color:var(--navy);font-size:17px;line-height:1.25;padding:6px 14px;box-shadow:0 2px 5px rgba(0,0,0,.2);transition:all .15s}
+.opt:hover{background:#eaf8fe;border-color:var(--sky)}
+.opt.sel{background:var(--sky);border:2px solid var(--navy);font-weight:700}
+.slide.checked .opt{pointer-events:none}
+.opt.right{background:#eef6d2;border:2.5px solid var(--green)}
+.opt.wrong{background:#fde8cc;border:2.5px solid var(--orange)}
+.slide[data-multi] .opt.right::before{border-color:#7ea31a}
+.slide[data-multi] .opt.wrong::before{border-color:var(--orange)}
+.fbtop{position:absolute;background:#fff;border-radius:18px;border:2px solid var(--navy);box-shadow:0 10px 30px rgba(0,0,0,.55);padding:14px 20px;color:var(--navy);animation:dropin .45s ease both}
+.fbtop.ok{border-color:var(--green)}.fbtop.bad{border-color:var(--orange)}
+.fbtop .hd{display:flex;align-items:center;gap:10px}
+.fbtop .hd img{width:40px;height:40px}
+.fbtop p{font-size:15.5px;line-height:1.38;margin-top:6px}
+.fbtop.fbsm{padding:10px 18px}.fbtop.fbsm p{font-size:15px;line-height:1.33;margin-top:4px}
+.slide[data-multi] .opt{justify-content:flex-start;text-align:right;padding-right:50px}
+.slide[data-multi] .opt::before{content:"";position:absolute;right:14px;top:50%;margin-top:-12px;width:24px;height:24px;border-radius:6px;border:2px solid var(--navy);background:#fff}
+.slide[data-multi] .opt.sel::after{content:"";position:absolute;right:16px;top:50%;margin-top:-10px;width:20px;height:20px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4.5 4.5L19 6.5' fill='none' stroke='%23001930' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat}
+.check{position:absolute;height:40px;border-radius:10px;background:#fff;border:1px solid var(--navy);color:var(--navy);font-size:18.7px;font-weight:700;box-shadow:0 2px 5px rgba(0,0,0,.2);transition:opacity .2s,background .15s}
+.check:hover:not(:disabled){background:var(--sky)}
+.check:disabled{opacity:.45;cursor:default}
+
+/* hub: Pit-Wall screens */
+.scr{position:absolute;border-radius:10px;cursor:pointer;transition:background .2s}
+.scr .tag{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;background:rgba(0,25,48,.92);border:2px solid var(--sky);border-radius:26px;padding:6px 16px 6px 10px;color:#fff;font-size:19px;font-weight:800;white-space:nowrap;box-shadow:0 3px 12px rgba(0,0,0,.5)}
+.scr .tag .num{width:30px;height:30px}
+.scr .tag .flag{width:26px;display:none}
+.scr:not(.locked):hover{background:rgba(108,207,246,.14)}
+.scr:not(.locked):hover .tag{scale:1.06;transition:scale .15s}
+.scr.next{animation:scrglow 1.6s ease-in-out infinite}
+@keyframes scrglow{0%,100%{box-shadow:0 0 0 2px rgba(108,207,246,.45)}50%{box-shadow:0 0 0 4px rgba(108,207,246,1),0 0 34px rgba(108,207,246,.85)}}
+.scr.done .tag{border-color:var(--orange);color:var(--orange)}
+.scr.done .tag .flag{display:block}
+.scr.locked{background:rgba(0,10,20,.6);cursor:default}
+.scr.locked .tag{border-color:var(--gray);color:#aaa}
+.scr.locked .tag img{filter:grayscale(1) opacity(.6)}
+
+/* hotspots on the city image (slide 12) */
+.pin{position:absolute;width:150px;height:60px;cursor:pointer}
+.pin .pi{position:absolute;right:0;top:-8px;width:44px;height:58px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.5))}
+.pin .pi svg{width:44px;height:58px;display:block}
+.pin .pi svg path{fill:var(--orange);stroke:#fff;stroke-width:2.2;transition:fill .3s}
+.pin .pi svg circle{fill:#fff}
+.pin.seen .pi svg path{fill:#7cb518}
+.pin .pi span{position:absolute;left:0;right:0;top:9px;text-align:center;line-height:24px;font-weight:800;font-size:19px;color:var(--navy)}
+.pin .pi::after{content:"";position:absolute;left:12px;bottom:0;width:20px;height:8px;border-radius:50%;background:rgba(249,157,38,.6);animation:ping 1.6s ease-out infinite}
+.pin.seen .pi::after{background:rgba(178,210,52,.6)}
+@keyframes ping{0%{transform:scale(.6);opacity:1}100%{transform:scale(2.6);opacity:0}}
+.pin .lbl{position:absolute;right:56px;top:8px;background:rgba(0,25,48,.9);border:1.5px solid var(--orange);color:#fff;font-size:14.5px;font-weight:700;border-radius:14px;padding:3px 10px;white-space:nowrap;transition:scale .15s}
+.pin:hover .lbl{scale:1.07}
+.pin.seen .lbl{border-color:var(--green)}
+.signhead{display:flex;align-items:center;gap:12px}
+.avatar{position:absolute;width:120px;height:120px;border-radius:50%;overflow:hidden;border:4px solid var(--sky);background:radial-gradient(circle at 50% 35%,#2a6fa8,#001930);box-shadow:0 0 0 4px rgba(0,25,48,.6),0 0 22px rgba(108,207,246,.6)}
+.avatar img{position:absolute;left:-14px;top:6px;width:148px;max-width:none}
+.minipop{position:absolute;background:#fff;border-radius:14px;border-top:5px solid var(--orange);box-shadow:0 8px 24px rgba(0,0,0,.5);padding:12px 16px 12px 40px;color:var(--navy);font-size:15.5px;line-height:1.38;animation:popin .35s ease both}
+.minipop > b{display:block;font-size:18px;margin-bottom:3px}
+.minipop p.exl{margin-top:6px;background:#eef8fd;border-radius:8px;padding:5px 9px}
+.mclose{position:absolute;left:8px;top:8px;width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;font-size:14px;display:flex;align-items:center;justify-content:center}
+.signhead .n{flex:0 0 44px;height:44px;border-radius:50%;background:var(--orange);color:var(--navy);font-size:24px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.signhead b{font-size:24px}
+
+/* shift-update screen (slide 13) */
+.crm{position:absolute;background:#fff;border:1px solid #c9d3dd;border-radius:8px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.crm .bar{height:42px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:17px;font-weight:800}
+.crm .bar small{font-weight:600;font-size:14px;color:var(--sky)}
+.crm table{width:100%;border-collapse:collapse;font-size:15px;color:#1b2733}
+.crm th{background:#eef3f8;color:#4a5a6a;font-weight:700;text-align:right;padding:7px 10px;font-size:13.5px;border-bottom:1px solid #d5dee7}
+.crm td{padding:10px 10px;border-bottom:1px solid #e6ecf2;vertical-align:top;line-height:1.3}
+.crm tr.row{animation:rowin .5s ease var(--rd,0s) both}
+@keyframes rowin{from{opacity:0;background:#fff3c4}to{opacity:1;background:transparent}}
+.crm td.t{font-weight:800;color:#1d6fa5;white-space:nowrap}
+.crm .st{display:inline-block;background:#e9f4fb;color:#1b5ea8;border-radius:10px;padding:1px 9px;font-size:13px;font-weight:700}
+.incoming{position:absolute;display:flex;align-items:center;gap:12px;background:#fff7ea;border:2px solid var(--orange);border-radius:12px;padding:8px 16px;font-size:17px;font-weight:700;color:var(--navy);box-shadow:0 0 0 0 rgba(249,157,38,.6);animation:inc 1.6s ease-in-out infinite}
+.incoming.in{animation:rise .5s ease var(--d,0s) both,inc 1.6s ease-in-out calc(var(--d,0s) + .5s) infinite}
+@keyframes inc{50%{box-shadow:0 0 0 8px rgba(249,157,38,0)}}
+.incoming .ph{flex:0 0 34px;width:34px;height:34px;border-radius:50%;background:#2fbf4f;display:flex;align-items:center;justify-content:center;animation:ringp 1.4s infinite}
+.incoming .ph svg{width:19px;height:19px;animation:shake 1.4s infinite}
+.incoming .cnt{background:var(--orange);color:#fff;border-radius:12px;padding:1px 10px;font-size:15px}
+.scr-title{position:absolute;right:116px;top:52px;font-size:25.6px;font-weight:800;color:#fff}
+.scr-txt{position:absolute;right:66px;top:118px;width:1082px;font-size:17px;line-height:1.35;color:#111}
+
+/* emergency questions (slide 19) */
+.qtile{position:absolute;width:200px;height:350px}
+.qtile .q{position:absolute;left:0;right:0;top:0;height:100px;border-radius:14px;background:rgba(0,25,48,.85);border:1.5px solid rgba(30,160,255,.75);box-shadow:0 0 16px rgba(30,160,255,.25);color:#fff;font-size:17.5px;font-weight:800;line-height:1.22;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px 14px 10px 14px;cursor:pointer;transition:background .15s,transform .15s}
+.qtile .q:hover{background:rgba(30,160,255,.25);transform:scale(1.03)}
+.qtile .q i{position:absolute;top:-13px;right:50%;margin-right:-15px;width:30px;height:30px;border-radius:50%;background:var(--orange);color:var(--navy);font-style:normal;font-size:16px;display:flex;align-items:center;justify-content:center}
+.qtile .q::after{content:"+";position:absolute;left:10px;bottom:6px;width:22px;height:22px;border-radius:50%;background:var(--sky);color:var(--navy);font-size:19px;line-height:21px;text-align:center;transition:transform .3s}
+.qtile.open .q::after{transform:rotate(45deg)}
+.qtile.open .q{border-color:var(--green)}
+.qtile .ans{position:absolute;left:8px;right:8px;top:108px;height:192px;background:#fff;border-radius:12px;border-top:5px solid var(--sky);padding:12px 14px;font-size:17px;line-height:1.38;color:var(--navy);box-shadow:0 4px 12px rgba(0,0,0,.35);display:none}
+.qtile.open .ans{display:block;animation:dropin .45s ease both}
+
+/* do / don't (slide 20) */
+.dobox{position:absolute;border-radius:12px;padding:10px 14px;font-size:15px;line-height:1.35;color:#fff;background:rgba(255,255,255,.07)}
+.dobox b.t{display:flex;align-items:center;gap:8px;font-size:17px;margin-bottom:4px}
+.dobox b.t i{flex:0 0 24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-style:normal;color:var(--navy);font-size:15px}
+.dobox.no{border-right:5px solid var(--red);background:rgba(229,72,77,.32)}.dobox.no b.t i{background:var(--red);color:#fff}
+.dobox.yes{border-right:5px solid var(--green);background:rgba(178,210,52,.28)}.dobox.yes b.t i{background:var(--green)}
+
+/* tips (slide 21) & summary columns (slide 23) */
+.tip{position:absolute;background:#fff;border-radius:14px;border-top:6px solid var(--sky);padding:8px 11px;color:var(--navy);font-size:13.5px;line-height:1.3;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+.tip b{display:block;font-size:15px;line-height:1.18;margin-bottom:3px}
+.sumcol{position:absolute;background:rgba(0,25,48,.82);border-radius:14px;border:1.5px solid;padding:0 0 12px;color:#fff;font-size:14px;line-height:1.36;overflow:hidden}
+.sumcol .h{padding:8px 12px;font-size:18px;font-weight:800;color:var(--navy)}
+.sumcol .h small{font-size:15px;font-weight:700}
+.sumcol p{padding:8px 14px 0}
+.sumcol p.k{font-weight:700}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="arrowL" viewBox="0 0 24 24"><path d="M19.5 12H5.5M11.5 5.5L5 12l6.5 6.5" fill="none" stroke="#001930" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="arrowR" viewBox="0 0 24 24"><path d="M4.5 12h14M12.5 5.5L19 12l-6.5 6.5" fill="none" stroke="#001930" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="phone" viewBox="0 0 24 24"><path fill="#fff" d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></symbol>
+    <!-- glow icons (stroke) -->
+    <symbol id="icDanger" viewBox="0 0 64 64"><path d="M32 8 58 54H6z"/><path d="M32 24v14"/><path d="M32 45.5v.5"/></symbol>
+    <symbol id="icClock" viewBox="0 0 64 64"><circle cx="32" cy="32" r="24"/><path d="M32 18v14l10 7"/><path d="M32 4v4M60 32h-4M32 60v-4M4 32h4"/></symbol>
+    <symbol id="icHandler" viewBox="0 0 64 64"><rect x="24" y="6" width="16" height="12" rx="2"/><path d="M32 18v10M12 28h40M12 28v8M32 28v8M52 28v8"/><rect x="4" y="36" width="16" height="12" rx="2"/><rect x="24" y="36" width="16" height="12" rx="2"/><rect x="44" y="36" width="16" height="12" rx="2"/><path d="M8 56h8M28 56h8M48 56h8"/></symbol>
+    <symbol id="icPin" viewBox="0 0 64 64"><path d="M32 58S14 38 14 25a18 18 0 0 1 36 0c0 13-18 33-18 33z"/><circle cx="32" cy="25" r="7"/></symbol>
+    <symbol id="icPins" viewBox="0 0 64 64"><path d="M20 40S9 28 9 20a11 11 0 0 1 22 0c0 8-11 20-11 20z"/><circle cx="20" cy="20" r="4"/><path d="M44 30S33 18 33 10.5a11 11 0 0 1 22 0C55 18 44 30 44 30z"/><circle cx="44" cy="11" r="4"/><path d="M40 60S29 48 29 40a11 11 0 0 1 22 0c0 8-11 20-11 20z"/><circle cx="40" cy="40" r="4"/></symbol>
+    <symbol id="icSiren" viewBox="0 0 64 64"><path d="M20 48V34a12 12 0 0 1 24 0v14"/><path d="M14 48h36v7H14z"/><path d="M32 28v8"/><path d="M32 6v8M14 12l5 5M50 12l-5 5M6 28h7M51 28h7"/></symbol>
+    <symbol id="icCal" viewBox="0 0 64 64"><rect x="10" y="14" width="44" height="40" rx="5"/><path d="M10 26h44M22 8v10M42 8v10"/><path d="M19 34h6v6h-6zM39 34h6v6h-6zM29 44h6v6h-6z"/></symbol>
+  </defs>
+</svg>
+<div id="stage">
+
+<!-- ======================= MASTER ======================= -->
+<div id="master">
+  <div class="hdr">
+    <img class="logo" src="assets/logo-jlm.png" alt="עיריית ירושלים">
+    <div class="menu" id="menu"><span>מבוא</span><span>שגרה – מבט ממוקד</span><span>עומס – מזהים את הדפוס</span><span>חירום – תמונת מצב</span><span>קו הסיום</span></div>
+    <button id="sound" aria-label="השתקה / הפעלת צלילים">
+      <svg class="on" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z" fill="#fff"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+      <svg class="off" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z" fill="#fff"/><path d="m16 9 6 6M22 9l-6 6"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ======================= 01 פתיח (שקף 1 בתסריט) ======================= -->
+<section class="slide" id="s01" data-title="פתיח – Pit Wall: חמ״ל המרוץ" data-master="0" data-chapter="0">
+  <!-- סרטון 1 ברקע (opening.mp4) – מתנגן פעם אחת ונעצר על הפריים האחרון; אחרי כמה שניות עולים הלוגואים, הכותרת והכפתור (לפי "שקף 1 - ברקע לשים את סרטון 1.png") -->
+  <video class="a bg" id="v01" src="assets/opening.mp4" poster="assets/bg-pitwall.jpg" muted playsinline preload="auto" style="left:0;top:0;width:1200px;height:675px;object-fit:cover"></video>
+  <div class="a bg" style="left:0;top:0;width:1200px;height:675px;background:linear-gradient(to bottom,rgba(255,255,255,.55),rgba(255,255,255,.18) 42%,rgba(0,12,26,0) 70%)"></div>
+  <div class="a" data-anim="slidein" data-delay="2.6" style="left:-60px;top:22px;width:316px;height:222px;background:#fff;border-radius:0 111px 111px 0;box-shadow:0 3px 10px rgba(0,0,0,.25)"></div>
+  <img class="a" data-anim="slidein" data-delay="2.75" src="assets/speedo-6b.png" style="left:38px;top:30px;width:140px" alt="מ-0 ל-106 תחנות – תחנה 6">
+  <img class="a" data-anim="slidein" data-delay="2.85" src="assets/logo-106.png" style="left:45px;top:156px;width:130px" alt="106 המוקד העירוני">
+  <img class="a" data-anim="popin" data-delay="2.75" src="assets/logo-jlm.png" style="left:1085px;top:16px;width:96px" alt="עיריית ירושלים">
+  <img class="a" data-anim="dropin" data-delay="3.1" src="assets/title.png" style="left:190px;top:128px;width:820px" alt="PIT WALL – חמ״ל המרוץ. סוג פנייה דומה יכול לספר סיפור שונה">
+  <button class="btn pulse" data-act="next" data-delay="3.8" style="left:508px;top:578px;width:185px;height:50px;font-size:19px">יוצאים למסלול</button>
+</section>
+
+<!-- ======================= 02 לפני שהמרוץ מתחיל (שקף 2 בתסריט) ======================= -->
+<!-- סרטון 1 (intro.mp4) מתנגן; בסיומו עולה שכבה כחולה-כהה שקופה, ואז הנציגה בגדול עם בועת דיבור שמסבירה את תהליך הלמידה (.after-video) -->
+<section class="slide" id="s02" data-title="לפני שהמרוץ מתחיל" data-chapter="0">
+  <video class="a bg" id="v02" src="assets/intro.mp4" poster="assets/bg-start.jpg" muted playsinline preload="auto" style="left:0;top:45px;width:1200px;height:630px;object-fit:cover"></video>
+  <div class="a after-video" style="left:0;top:45px;width:1200px;height:630px;background:rgba(0,25,48,.72)"></div>
+  <div class="speech tail-right after-video" style="left:250px;top:150px;width:570px;--ty:90px;padding:22px 28px;--av:.6s">
+    <div class="t" style="font-size:24px">לפני שהמרוץ מתחיל, כדאי שתכירו:</div>
+    <p style="font-size:18px">ניתן להתקדם קדימה ולחזור אחורה באמצעות <b>כפתורי הניווט בתחתית המסך.</b></p>
+    <p style="font-size:18px"><b>סרגל ההתקדמות העליון</b> יציג בכל שלב באיזה פרק אתם נמצאים וכמה מהלומדה כבר השלמתם.</p>
+    <p style="font-size:18px">בחלק מהמסכים תתבקשו <b>ללחוץ על אזורים שונים במסך, לבחור תשובות או לקבל החלטות</b> כפי שנעשה בעבודה במוקד.</p>
+  </div>
+  <img class="a after-video" src="assets/maya-explain.png" style="left:860px;top:58px;width:320px;--av:.3s" alt="הנציגה מאיה">
+  <button class="btn pulse after-video" data-act="next" style="left:15px;top:607px;width:185px;height:48px;--av:1.2s">קו זינוק</button>
+</section>
+
+<!-- ======================= 03 המוקד רוחש – פתיחה (שקף 3 בתסריט) ======================= -->
+<!-- רקע: הנציגה מול מסך המרוץ בשקיעה. בועת דיבור של הנציגה עם ההנחיה, וכפתור קבלת השיחה בתוך הבועה; השקף הבא – השיחה הראשונה -->
+<section class="slide" id="s03" data-title="המוקד רוחש – הנחיה" data-chapter="0">
+  <img class="a bg" src="assets/bg-sunset.jpg" style="left:0;top:45px;width:1200px;height:640px" alt="">
+  <div class="speech tail-left" data-anim="popin" data-delay=".5" style="left:478px;top:110px;width:560px;--ty:140px;padding:22px 28px">
+    <div class="t" style="font-size:26px">מוקד עיריית ירושלים שלום...</div>
+    <p style="font-size:19px">המוקד רוחש, כמה שיחות מתקבלות במקביל.</p>
+    <p style="font-size:19px">עברו על כל שיחה והחליטו: <b style="color:#1d6fa5">פנייה שגרתית</b> או <b class="org">דורשת תשומת לב</b>?</p>
+    <button class="btn pulse callbtn" data-act="next" style="position:static;margin:14px auto 0;width:230px;height:48px;gap:10px">
+      <span class="ph" style="flex:0 0 30px;width:30px;height:30px;border-radius:50%;background:#2fbf4f;display:flex;align-items:center;justify-content:center;animation:ringp 1.4s infinite"><svg style="width:17px;height:17px;animation:shake 1.4s infinite"><use href="#phone"/></svg></span>לשיחה הראשונה
+    </button>
+  </div>
+</section>
+
+<!-- ======================= 03א–03ג שלוש השיחות – שיחה בכל שקף ======================= -->
+<!-- רקע: חדר הבקרה והפונה על המסך הגדול. בחירה בין "שגרתית" / "דורשת תשומת לב" → משוב (נכון בירוק / לא נכון בכתום),
+     התשובה הנכונה נצבעת בירוק והבחירה השגויה בכתום → "לשיחה הבאה". אחרי השיחה השלישית – פופאפ סיכום -->
+<section class="slide callslide" id="s03a" data-title="שיחה 1 – פנס שלא עובד" data-chapter="0" data-nonext="1" data-n="0" data-ans="r"
+         data-fb="פנס בודד שאינו פועל הוא תקלה שגרתית – פותחים פנייה ומעבירים לטיפול לפי מודל הטיפול.">
+  <img class="a bg" src="assets/bg-call-1.jpg" style="left:-9px;top:45px;width:1218px;height:630px" alt="">
+  <div class="bub" data-anim="popin" data-delay=".5" style="left:600px;top:58px;width:430px;--ty:80px"><small><span class="ph"><svg><use href="#phone"/></svg></span>שיחה 1 · תושבת על הקו</small>"שלום, הפנס ליד הבניין שלנו לא עובד מאתמול בערב. ברחוב חברון פינת אשר וינר, ליד הכניסה לחניה."</div>
+  <div class="callsteps" style="left:132px;top:60px"><span class="cur"><i>1</i>שיחה 1</span><span><i>2</i>שיחה 2</span><span><i>3</i>שיחה 3</span></div>
+  <div class="ans" style="left:805px;top:450px;width:380px"><button data-v="r">שגרתית</button><button data-v="a">דורשת תשומת לב</button></div>
+  <div class="cfb" style="left:805px;top:508px;width:380px"></div>
+  <button class="btn nextcall" data-act="next" style="left:805px;top:612px;width:180px;height:42px">לשיחה הבאה</button>
+</section>
+
+<section class="slide callslide" id="s03b" data-title="שיחה 2 – רמזור תקול" data-chapter="0" data-nonext="1" data-n="1" data-ans="a"
+         data-fb="רמזור תקול בצומת פעיל, ומכוניות שנכנסות בלי סדר – מפגע בטיחותי שדורש טיפול מיידי.">
+  <img class="a bg" src="assets/bg-call-2.jpg" style="left:-9px;top:45px;width:1218px;height:630px" alt="">
+  <div class="bub" data-anim="popin" data-delay=".5" style="left:560px;top:58px;width:440px;--ty:80px"><small><span class="ph"><svg><use href="#phone"/></svg></span>שיחה 2 · תושב על הקו</small>"הרמזור בצומת מעלה דרגה פינת שמואל מאיר לא עובד. המכוניות נכנסות לצומת בלי סדר, וכמעט הייתה תאונה!"</div>
+  <div class="callsteps" style="left:132px;top:60px"><span><i>1</i>שיחה 1</span><span class="cur"><i>2</i>שיחה 2</span><span><i>3</i>שיחה 3</span></div>
+  <div class="ans" style="left:805px;top:450px;width:380px"><button data-v="r">שגרתית</button><button data-v="a">דורשת תשומת לב</button></div>
+  <div class="cfb" style="left:805px;top:508px;width:380px"></div>
+  <button class="btn nextcall" data-act="next" style="left:805px;top:612px;width:180px;height:42px">לשיחה הבאה</button>
+</section>
+
+<section class="slide callslide" id="s03c" data-title="שיחה 3 – רחוב חשוך" data-chapter="0" data-nonext="1" data-n="2" data-ans="a"
+         data-fb="רחוב שלם חשוך – וגם הרחוב הסמוך – וילדים בדרך. התקלה רחבה יותר ויש בה סיכון.">
+  <img class="a bg" src="assets/bg-call-3.jpg" style="left:-9px;top:45px;width:1218px;height:630px" alt="">
+  <div class="bub" data-anim="popin" data-delay=".5" style="left:640px;top:58px;width:480px;--ty:70px"><small><span class="ph"><svg><use href="#phone"/></svg></span>שיחה 3 · תושבת על הקו</small>"כל הרחוב חשוך עכשיו, ואני רואה שגם הרחוב ליד חשוך. יש ילדים שחוזרים מהחוגים ואין בכלל תאורה – אנחנו ברחוב בר אילן פינת ירמיהו."</div>
+  <div class="callsteps" style="left:132px;top:60px"><span><i>1</i>שיחה 1</span><span><i>2</i>שיחה 2</span><span class="cur"><i>3</i>שיחה 3</span></div>
+  <div class="ans" style="left:805px;top:450px;width:380px"><button data-v="r">שגרתית</button><button data-v="a">דורשת תשומת לב</button></div>
+  <div class="cfb" style="left:805px;top:508px;width:380px"></div>
+  <button class="btn nextcall" data-act="fn:callSummary" data-sfx="finish" style="left:805px;top:612px;width:180px;height:42px">לסיכום השיחות</button>
+
+  <div class="layer" data-layer="sum">
+    <div class="dim"></div>
+    <div class="burst"></div>
+    <div class="wowcard"></div>
+    <div class="a" style="left:190px;top:165px;width:820px;height:70px;background:linear-gradient(100deg,#001930,#0b4f86 60%,#1ea0ff);border-radius:22px 22px 0 0;display:flex;align-items:center;justify-content:center;gap:12px;color:#fff;font-size:28px;font-weight:800">🏁 סיימתם את סבב השיחות!</div>
+    <div class="a" style="left:192px;top:227px;width:816px;height:8px;background:conic-gradient(#111 25%,#fff 0 50%,#111 0 75%,#fff 0) 0 0/16px 16px"></div>
+    <div class="a c" style="left:190px;top:250px;width:820px"><span class="score" id="callScore">✓ עניתם נכון על 3 מתוך 3 שיחות</span></div>
+    <div class="a c lh" style="left:200px;top:294px;width:800px;font-size:17px;white-space:nowrap">כשמסתכלים על כל פנייה בנפרד, מחליטים האם היא <b>שגרתית</b> או <b>דורשת תשומת לב</b> וטיפול מיידי.</div>
+    <div class="faces" style="left:390px;top:326px;width:420px;height:80px">
+      <svg viewBox="0 0 400 20" preserveAspectRatio="none"><path d="M0 10 Q100 -6 200 10 T400 10"/></svg>
+      <img src="assets/call-1.jpg" style="--fd:.5s" alt=""><img src="assets/call-2.jpg" style="--fd:.7s" alt=""><img src="assets/call-3.jpg" style="--fd:.9s" alt="">
+    </div>
+    <div class="a c lh" style="left:200px;top:414px;width:800px;white-space:nowrap;font-size:20px;font-weight:800;color:#1d6fa5">אבל מה קורה כשהפניות מתחילות להתחבר לתמונה רחבה יותר וליצור <span class="org">דפוס?</span></div>
+    <button class="btn pulse" data-act="next" style="left:508px;top:454px;width:185px;height:44px">גלו את התשובה</button>
+    <div class="confetti"></div>
+  </div>
+</section>
+
+<!-- ======================= 04 שלוש נקודות מבט (שקף 4 בתסריט) ======================= -->
+<!-- רקע: מאיה מצביעה על המסך הגדול (bg-chapter1) בזום אין – המסך תופס את רוב השקף, הטקסט עליו -->
+<section class="slide" id="s04" data-title="מנהלי המרוץ ב-Pit Wall – שלוש נקודות מבט" data-chapter="0">
+  <img class="a bg" src="assets/bg-chapter1.jpg" style="left:-460px;top:-7px;width:1699px;height:926px" alt="">
+  <div class="a w" style="left:460px;top:70px;width:710px;font-size:25px;font-weight:800">מנהלי המרוץ ב-<span class="sky">Pit Wall</span></div>
+  <div class="a w lh" style="left:460px;top:108px;width:710px;font-size:15.5px">בכל מרוץ, מנהלי המרוץ יושבים ב-Pit Wall: צופים ומקשיבים לכל מה שקורה לאורך המרוץ. הם אלו שרואים את הנתונים ואת תמונת המצב המלאה – עד לניצחון של הנהג.</div>
+  <div class="a w lh" style="left:460px;top:170px;width:710px;font-size:15.5px">כך גם אתם: כל פנייה המתקבלת במוקד נבחנת ומטופלת בפני עצמה. אך כמוקדנים, לא תמיד מספיק לשאול את עצמכם "האם זו פנייה שגרתית?" – <b class="sky">נדרש לשאול גם:</b></div>
+  <div class="a chips dark" style="left:460px;top:226px;width:710px;gap:8px"><span style="font-size:14px">מה קורה סביב הפנייה?</span><span style="font-size:14px">האם מתקבלות פניות נוספות / דומות?</span><span style="font-size:14px">האם אנחנו מזהים סימן לעומס?</span><span style="font-size:14px">האם קיימות הנחיות מיוחדות?</span><span style="font-size:14px">האם נדרש תיעדוף, עדכון או מעקב?</span></div>
+  <div class="a w" style="left:460px;top:316px;width:710px;font-size:18px;font-weight:800">ביחידה הזו נלמד להסתכל על עבודת המוקד דרך <span class="org">שלוש נקודות מבט:</span></div>
+  <div class="persp" data-anim="popin" data-delay=".9" style="left:960px;top:362px;width:210px"><span class="ic"><svg><use href="#icPin"/></svg></span><span><b>הפנייה</b><small>מבט בשגרה</small></span></div>
+  <div class="persp" data-anim="popin" data-delay="1.15" style="left:715px;top:362px;width:210px"><span class="ic"><svg><use href="#icPins"/></svg></span><span><b>הדפוס</b><small>מבט בעומס</small></span></div>
+  <div class="persp" data-anim="popin" data-delay="1.4" style="left:470px;top:362px;width:210px"><span class="ic"><svg><use href="#icSiren"/></svg></span><span><b>המצב</b><small>מבט בחירום</small></span></div>
+  <button class="btn pulse" data-act="next" data-delay="1.8" style="left:15px;top:607px;width:185px;height:48px">ממשיכים</button>
+</section>
+
+<!-- ======================= 05 רגע לפני ה-ZOOM IN – משמרות ונהלי עבודה (שקפים 5–6 בתסריט) ======================= -->
+<!-- שתי לשוניות "לחצו להרחבה"; כפתור ההמשך מופיע אחרי צפייה בשתיהן -->
+<section class="slide" id="s05" data-title="רגע לפני ה-ZOOM IN – משמרות ונהלי עבודה" data-chapter="0">
+  <img class="a bg" src="assets/bg-drag.jpg" style="left:0;top:45px;width:1200px;height:630px" alt="">
+  <div class="a w" style="left:300px;top:66px;width:860px;font-size:25px;font-weight:800">רגע לפני ה-<span class="sky">ZOOM IN</span></div>
+  <div class="a w" style="left:300px;top:104px;width:860px;font-size:17px">לפני שנבחין בין שגרה, עומס וחירום, עלינו להבין: <b>מהי שגרת העבודה הקבועה של המוקד?</b></div>
+  <button class="btn tab" data-act="tab:shifts" data-xp style="left:990px;top:146px;width:170px;height:44px">משמרות</button>
+  <button class="btn tab" data-act="tab:rules" data-xp style="left:805px;top:146px;width:170px;height:44px">נהלי עבודה</button>
+  <div class="a sky xphint" style="left:560px;top:156px;width:230px;font-size:17px;font-weight:800">← לחצו להרחבה</div>
+
+  <div class="tabpanel" data-panel="shifts">
+    <div class="a w" style="left:60px;top:208px;width:1100px;font-size:17px">המוקד פועל לאורך כל שעות היממה, ודרך העבודה משתנה לפי המשמרת:</div>
+    <div class="shift" style="left:900px;top:242px;width:260px;height:150px"><svg viewBox="0 0 64 64"><path class="fillarc" d="M32 32 L19 54.5 A26 26 0 1 1 58 32 Z"/><circle cx="32" cy="32" r="26"/><path d="M32 16v16M32 32l-6.5 11.3"/></svg>משמרת בוקר<small>7:00 – 15:00</small></div>
+    <div class="shift o" style="left:630px;top:242px;width:250px;height:150px"><svg viewBox="0 0 64 64"><path class="fillarc" d="M32 32 L58 32 A26 26 0 1 1 19 9.5 Z"/><circle cx="32" cy="32" r="26"/><path d="M32 16v16M32 32h13"/></svg>משמרת ערב<small>15:00 – 23:00</small></div>
+    <div class="shift o" style="left:360px;top:242px;width:250px;height:150px"><svg viewBox="0 0 64 64"><path class="fillarc" d="M32 32 L19 9.5 A26 26 0 1 1 19 54.5 Z"/><circle cx="32" cy="32" r="26"/><path d="M32 16v16M32 32l-6.5-11.3"/></svg>משמרת לילה<small>23:00 – 7:00</small></div>
+    <div class="shift o" style="left:90px;top:242px;width:250px;height:150px"><svg><use href="#icCal"/></svg>משמרת סופ״ש / חג<small>שבת וחג</small></div>
+    <div class="infobox" style="left:900px;top:410px;width:260px;height:186px;font-size:15px"><b class="t sky">בבוקר</b>הפניות מועברות למחלקות בהתאם לשעות הפעילות, באמצעות ה-CRM.<br><b>בפניות דחופות או בטיחותיות, ובהעברת פנייה לגורמי חוץ – נדרש גם להתקשר.</b></div>
+    <div class="infobox o" style="left:90px;top:410px;width:790px;height:186px"><b class="t org">בערב, בלילה, בסופ״ש ובחג</b>רוב המחלקות כבר מסיימות פעילות או אינן פעילות (שבת/חג), ולכן נתעד את הפנייה ב-CRM.<br><b>בפניות דחופות או בטיחותיות</b>, ואם הפנייה אינה סובלת דיחוי ליום המחרת – בודקים בדף הכוננות ויוצרים קשר טלפוני עם הגורם התורן, או פועלים בהתאם להנחיית האחמ״ש.</div>
+  </div>
+
+  <div class="tabpanel" data-panel="rules">
+    <ul class="checklist" style="left:60px;top:212px;width:1100px">
+      <li>יש להגיע 10 דק' לפני תחילת המשמרת, לפתוח מערכות ולקרוא את התדריך</li>
+      <li>בכל איחור / ירידה ממשמרת, יש לעדכן את עמדת האחמ״ש ואת אחראית סידור העבודה</li>
+      <li>יש להירשם בדף ההפסקות ולעדכן את האחמ״ש כאשר מגיע התור להפסקה</li>
+      <li>בכל שיחה חלה חובת הזדהות ("מוקד שלום, מדבר/ת...")</li>
+      <li>יש לתעד כל שיחה במערכת ה-CRM</li>
+      <li>יש לנתב את כל ההודעות! במהלך המשמרת ובסיומה</li>
+      <li>יש לעבור על פניות "לא שייך למחלקה" במהלך המשמרת</li>
+      <li>יש להעביר טלפונית, לגורם הרלוונטי, כל הודעת בטיחות – ולציין למי הועברה</li>
+      <li>יש לעקוב אחר תצוגת "כל מה שחשוב לי" במהלך המשמרת, כדי להישאר מעודכנים</li>
+      <li>יש להגיש סידור עבודה באפליקציה בלבד, עד יום שני בשעה 13:00 – הסידור מתפרסם אחת לשבועיים</li>
+      <li>יש לשמור על סביבת עבודה נקייה</li>
+      <li>יש להציג / לשלוח אישור מחלה בעת היעדרות בעקבות מחלה</li>
+    </ul>
+  </div>
+  <button class="btn pulse gate" data-act="next" style="left:15px;top:607px;width:200px;height:48px">לקיר המסכים</button>
+</section>
+
+<!-- ======================= 06 קיר המסכים – Pit Wall (שקף 7 בתסריט) ======================= -->
+<section class="slide hub" id="s06" data-title="מסכי ה-Pit Wall (המוקד)" data-chapter="0" data-done="0"></section>
+
+<!-- ======================= 07 שגרה – סידור מודל הטיפול (גרירה) (שקף 8 בתסריט) ======================= -->
+<section class="slide dd" id="s07" data-title="שגרה – סדרו את מודל הטיפול בפנייה" data-chapter="1" data-nonext="1">
+  <img class="a bg" src="assets/bg-drag.jpg" style="left:0;top:45px;width:1200px;height:630px" alt="">
+  <div class="a w" style="left:360px;top:72px;width:800px;font-size:23px;font-weight:800">בשגרה מתמקדים בפנייה</div>
+  <div class="a w" style="left:360px;top:112px;width:800px;font-size:15.5px;line-height:1.35">המוקדנים – אתם – נקודת הפתיחה של הפנייה ושל תהליך הטיפול, כפי שראיתם ביחידות הקודמות.<br><b>בואו נראה מה אתם זוכרים: גררו את השלבים וסדרו נכונה את מודל הטיפול בפנייה.</b></div>
+  <img class="dd-num" src="assets/dd-1.png" style="left:1042px;top:182px" alt="1">
+  <img class="dd-num" src="assets/dd-2.png" style="left:816px;top:182px" alt="2">
+  <img class="dd-num" src="assets/dd-3.png" style="left:590px;top:182px" alt="3">
+  <img class="dd-num" src="assets/dd-4.png" style="left:364px;top:182px" alt="4">
+  <img class="dd-num" src="assets/dd-5.png" style="left:138px;top:182px" alt="5">
+  <div class="dd-slot" data-slot="1" style="left:972px;top:240px"></div>
+  <div class="dd-slot" data-slot="2" style="left:746px;top:240px"></div>
+  <div class="dd-slot" data-slot="3" style="left:520px;top:240px"></div>
+  <div class="dd-slot" data-slot="4" style="left:294px;top:240px"></div>
+  <div class="dd-slot" data-slot="5" style="left:68px;top:240px"></div>
+  <div class="a c sky" style="left:68px;top:388px;width:1094px;font-size:14px;font-weight:800">מחסן אפשרויות:</div>
+  <div class="dd-card" data-order="3" style="left:972px;top:420px">סיווג פנייה</div>
+  <div class="dd-card" data-order="1" style="left:746px;top:420px">פתיחת הדיווח</div>
+  <div class="dd-card" data-order="5" style="left:520px;top:420px">סגירת פנייה</div>
+  <div class="dd-card" data-order="2" style="left:294px;top:420px">איסוף נתונים</div>
+  <div class="dd-card" data-order="4" style="left:68px;top:420px">העברה לגורם המטפל</div>
+  <button class="dd-check" disabled style="left:72px;top:590px;width:165px">בדיקה</button>
+  <button class="btn dd-next" data-act="next" style="left:72px;top:590px;width:165px;height:44px;display:none">ממשיכים</button>
+  <!-- משובי הגרירה מופיעים למטה (במחסן שהתרוקן) בלי האפלה – כך רואים את הכרטיסים שסומנו בירוק / בכתום -->
+  <div class="layer" data-layer="fb-ok">
+    <div class="fbtop ok" style="left:200px;top:410px;width:800px">
+      <div class="hd"><img class="vx" src="assets/v.png" alt=""><b class="grn" style="font-size:24px">מדויק להפליא!</b><b style="font-size:18px">זהו מודל הטיפול בפנייה.</b><button class="btn" data-act="next" style="position:static;margin-right:auto;width:150px;height:40px">ממשיכים</button></div>
+      <p>פתיחת הדיווח ← איסוף נתונים ← סיווג פנייה ← העברה לגורם המטפל ← סגירת פנייה. בשקף הבא נחזור בקצרה על כל שלב.</p>
+    </div>
+  </div>
+  <div class="layer" data-layer="fb-retry">
+    <div class="fbtop bad" style="left:200px;top:410px;width:800px">
+      <div class="hd"><img class="vx" src="assets/x.png" alt=""><b class="org" style="font-size:24px">לא מדויק…</b><b style="font-size:18px">נסו שוב!</b><button class="btn" data-act="fn:ddRetry" style="position:static;margin-right:auto;width:150px;height:40px">נסו שוב</button></div>
+      <p>השלבים שסומנו <b class="org">בכתום</b> אינם במקום הנכון. השלבים שסומנו <b style="color:#7ea31a">בירוק</b> נשארים במקומם.</p>
+    </div>
+  </div>
+  <div class="layer" data-layer="fb-bad">
+    <div class="fbtop bad" style="left:200px;top:410px;width:800px">
+      <div class="hd"><img class="vx" src="assets/x.png" alt=""><b class="org" style="font-size:24px">לא מדויק…</b><b style="font-size:18px">שימו לב לסדר השלבים.</b><button class="btn" data-act="fn:ddShow" style="position:static;margin-right:auto;width:150px;height:40px">לסדר הנכון</button></div>
+      <p>קודם מקשיבים ופותחים את הדיווח, אחר כך אוספים נתונים ומסווגים את הפנייה, ורק לאחר מכן מעבירים לגורם המטפל ובסוף – סגירת הפנייה.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 08 פניות בשגרה – מודל הטיפול (שקף 9 בתסריט) ======================= -->
+<!-- תמונה מעוצבת מלאה: "פניות בשגרה – מודל הטיפול בפנייה" (5 השלבים כלולים בתמונה) -->
+<section class="slide" id="s08" data-title="פניות בשגרה – מודל הטיפול בפנייה" data-chapter="1">
+  <div class="a bg" style="left:0;top:45px;width:1200px;height:630px;background:linear-gradient(#132034,#0b1626)"></div>
+  <img class="a bg" src="assets/bg-model.jpg" style="left:0;top:45px;width:1200px;height:540px" alt="פניות בשגרה: כל פנייה – גם בשגרה, גם בעומס וגם בחירום – מטופלת לפי מודל הטיפול בפנייה. 1 פתיחת הדיווח. 2 איסוף נתונים. 3 סיווג פנייה. 4 העברה לגורם המטפל. 5 סגירת פנייה.">
+  <button class="btn pulse" data-act="next" style="left:15px;top:607px;width:230px;height:48px">למסך הגדרות הפנייה</button>
+</section>
+
+<!-- ======================= 09 מסך הגדרות הפנייה – סכנה / זמן ושעה / גורם מטפל (שקפים 10–13 בתסריט) ======================= -->
+<section class="slide" id="s09" data-title="מסך הגדרות הפנייה – מה יכול להשפיע על הפנייה" data-chapter="1">
+  <!-- מאיה יושבת מול המסך הגדול; על המסך 3 אייקונים "לחצו להרחבה" – כל אחד פותח שכבה (פופאפ מעוצב: הכותרת וה-X בתמונה, הטקסט באזור הלבן) -->
+  <img class="a bg" src="assets/bg-chapter2.jpg" style="left:0;top:45px;width:1200px;height:634px" alt="">
+  <div class="a sky" style="left:290px;top:64px;width:530px;font-size:23px;font-weight:800">נכנסתם למסך הגדרות הפנייה</div>
+  <div class="a w lh" style="left:290px;top:102px;width:530px;font-size:16px">לכל מידע המתקבל על הפנייה יש השפעה על האופן שבו תסווג הפנייה ועל מי שיטפל בה.<br><b>לחצו על כל אייקון להרחבה על "מה יכול להשפיע" על כל פנייה המתקבלת במוקד.</b></div>
+  <div class="shift tile" data-act="layer:danger" data-xp style="left:652px;top:200px;width:160px;height:140px"><svg><use href="#icDanger"/></svg>סכנה</div>
+  <div class="shift tile" data-act="layer:time" data-xp style="left:472px;top:200px;width:160px;height:140px"><svg><use href="#icClock"/></svg>זמן / שעה</div>
+  <div class="shift tile" data-act="layer:handler" data-xp style="left:292px;top:200px;width:160px;height:140px"><svg><use href="#icHandler"/></svg>גורם מטפל</div>
+  <button class="btn pulse gate" data-act="next" style="left:15px;top:607px;width:185px;height:48px">ממשיכים</button>
+
+  <!-- פופאפים מעוצבים: הכותרת וה-X בתמונה (ה-X סוגר). הטקסט זורם מלמעלה למטה: בלוק רחב באזור הלבן העליון, והמשך בפינה הימנית-תחתונה -->
+  <div class="layer pop2" data-layer="danger">
+    <img class="a" src="assets/bg-danger.jpg" style="left:0;top:45px;width:1200px;height:630px" alt="סכנה – האם יש כאן סיכון מיוחד?">
+    <button class="xhot" data-act="close" style="left:27px;top:73px" aria-label="סגירה"></button>
+    <div class="a popcol" style="left:300px;top:196px;width:860px">
+      <p>פניות הדורשות <b>תשומת לב מיוחדת</b> הן פניות שיש בהן סכנה לאנשים, לרכוש או למרחב הציבורי.</p>
+      <div class="ex"><b>לדוגמה:</b> רמזור שלא עובד, בור פתוח, חפץ בנתיב נסיעה, מבנים מסוכנים, מקרר עם דלתות ועוד.</div>
+      <h4>בכל נושא בטיחותי נדרש:</h4>
+      <ul class="dots row"><li>להעביר את הפנייה <b>טלפונית</b></li><li>לרשום <b>למי הועברה</b> הפנייה</li><li>לבצע <b>מעקב</b> עד שהפנייה נסגרת</li></ul>
+      <h4>לפני שמעבירים, יש לוודא:</h4>
+      <p><b>תיאור ברור של הסיכון:</b> איפה זה נמצא, מה בדיוק הסכנה, האם יש חסימה, והאם נדרש טיפול מהיר.</p>
+      <p>בהתאם לסכנה, יש לדווח לגורם המטפל הרלוונטי – בתוך העירייה, או גורם חיצוני לעירייה כמו: חברת חשמל, בזק, דפו (הרכבת הקלה) ועוד.</p>
+    </div>
+    <div class="a popcol" style="left:830px;top:478px;width:290px"><div class="note"><b>שימו לב:</b> לחברות חיצוניות לעירייה אין את ה-CRM שלנו, ולכן אנחנו נדרשים <b>לוודא טיפול ולסגור את הפנייה.</b> רשימת המידע המלאה – במערכת ניהול הידע.</div></div>
+  </div>
+
+  <div class="layer pop2" data-layer="time">
+    <img class="a" src="assets/bg-timeui.jpg" style="left:0;top:45px;width:1200px;height:630px" alt="זמן / שעה">
+    <button class="xhot" data-act="close" style="left:27px;top:73px" aria-label="סגירה"></button>
+    <div class="a popcol" style="left:300px;top:186px;width:860px">
+      <p style="font-weight:800;color:#1d6fa5">אותה פנייה יכולה לקבל מסלול טיפול שונה לפי השעה שבה היא מתקבלת.</p>
+      <p>לכל מחלקה יש <b>שעות פעילות מוגדרות</b>. בשעות הפעילות, הפנייה עוברת בדרך כלל למחלקה או לגורם המטפל הרלוונטי. לאחר שעות הפעילות – ברוב המקרים <b>החל מהשעה 15:30</b> – המחלקות אינן עובדות. לכן, בפנייה המתקבלת בערב, בלילה, בסוף שבוע או בחג, עלינו לבדוק:</p>
+      <ul class="dots row"><li>האם קיים כונן / תורן למחלקה?</li><li>האם יש גורם ספציפי שמטפל בנושא?</li><li>האם הפנייה דחופה או בטיחותית?</li><li>האם צריך להציף לאחמ״ש לפני ההעברה?</li></ul>
+      <p>פנייה <b>שאינה דחופה</b> וניתן לטפל בה למחרת – פותחים כפי שלמדנו. פנייה <b>שדורשת טיפול מיידי</b> – פונים טלפונית לכונן / לתורן הרלוונטי.</p>
+      <div class="boxrow">
+        <div class="ex" style="flex:1.6"><b>לדוגמה:</b> גדר פרוצה באתר בנייה – <b>ביום:</b> למחלקת פיקוח על הבנייה. <b>אחרי 15:30:</b> לכונן המחלקה. <b>בסיום הכוננות</b> (אמצע שבוע – 00:00): לצוות 4.</div>
+        <div class="note" style="flex:1">רשימת הכוננות המלאה מתפרסמת במערכת ניהול הידע – הקפידו להתעדכן בה.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="layer pop2" data-layer="handler">
+    <img class="a" src="assets/bg-emerg.jpg" style="left:0;top:45px;width:1200px;height:630px" alt="גורם מטפל">
+    <button class="xhot" data-act="close" style="left:27px;top:73px" aria-label="סגירה"></button>
+    <div class="a popcol" style="left:290px;top:200px;width:875px">
+      <p style="font-size:16px">כל פנייה שמגיעה למוקד מטופלת על ידי אגף, מחלקה עירונית או גוף חוץ־ארגוני: מים וביוב, תקשורת, חשמל, כבאות, משטרה, תשתיות או תחבורה.</p>
+      <h4>לפני שמעבירים נבדוק:</h4>
+      <ul class="dots row"><li>מי אחראי בפועל על התחום?</li><li>האם נדרשת פתיחת פנייה בלבד, או גם העברה נוספת?</li><li>האם הגורם המטפל מחולק לפי אזור?</li><li>האם יש ספק שמחייב הצפה לאחמ״ש?</li></ul>
+      <div class="ex"><b>גורם בעירייה:</b> מעבירים את הפנייה ב-CRM או טלפונית, בהתאם לדחיפות ולשעה שבה היא מתקבלת. <b>זכרו!</b> ישנם אגפים ומחלקות המחולקים למרחבים / אזורים / נפות – כך תוכלו לסווג נכון את הפנייה ולפנות לגורם הרלוונטי גם במשמרות ערב ובמקרים דחופים.<br><span style="color:#1d6fa5"><b>לדוגמה:</b> המאור והגננות – לפי אזורים; תברואה וניקיון – לפי נפות.</span></div>
+      <div class="boxrow">
+        <div class="ex g" style="flex:1.4"><b>גורם חיצוני:</b> פותחים את הפנייה ב-CRM, ומפנים לגורם החיצוני בטלפון או בפתיחת פנייה באתר שלו.</div>
+        <div class="note" style="flex:1"><b>יש ספק?</b> בדקו במערכת ניהול הידע מהו המסלול הנכון.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 10 שגרה: מבט ממוקד – סיכום (שקף 14 בתסריט) ======================= -->
+<section class="slide" id="s10" data-title="שגרה: מבט ממוקד – סיכום" data-chapter="1">
+  <!-- הטקסט על המסך, מימין ליד של מאיה -->
+  <img class="a bg" src="assets/bg-point.jpg" style="left:0;top:46px;width:1200px;height:654px" alt="">
+  <div class="a f16 w" style="left:660px;top:98px;width:485px;font-weight:800">שגרה: <span class="sky">מבט ממוקד</span></div>
+  <div class="a w lh" style="left:660px;top:132px;width:485px;font-size:15px">
+    <p>בשגרה אתם מתמקדים בפנייה שמולכם: בודקים מה קרה, איפה זה קרה, מה רמת הדחיפות, איך נכון לסווג את הפנייה ומי הגורם שצריך להמשיך את הטיפול.</p>
+    <p style="margin-top:7px">לפני שמעבירים פנייה, בודקים מה יכול להשפיע על מסלול הטיפול:</p>
+    <div class="chips dark" style="margin-top:6px"><span>סכנה</span><span>זמן ושעה</span><span>גורם מטפל</span></div>
+    <p style="margin-top:8px">כאשר כל פנייה מטופלת ומתועדת נכון – תמונת המצב ברורה.</p>
+    <p style="margin-top:5px;font-weight:800;color:var(--sky)">אבל מה קורה כשלא מדובר בפנייה אחת, אלא במספר פניות שמתחילות להצביע על אותו דפוס?</p>
+  </div>
+  <button class="btn pulse" data-act="next" style="left:15px;top:607px;width:200px;height:48px">חזרה לקיר המסכים</button>
+</section>
+
+<!-- ======================= 11 קיר המסכים (2) (שקף 15 בתסריט) ======================= -->
+<section class="slide hub" id="s11" data-title="מסכי ה-Pit Wall (2)" data-chapter="2" data-done="1"></section>
+
+<!-- ======================= 12 עומס – מזהים את הדפוס (שקף 16 בתסריט) ======================= -->
+<!-- תמונת ירושלים ועליה 4 נקודות חמות (לפי התסריט). לחיצה על נקודה פותחת חלונית קטנה לידה, והנקודה נצבעת בירוק.
+     אחרי כל הנקודות – מסך כחול שקוף עם הנציגה ובועת דיבור עם המסר המסכם + כפתור המשך -->
+<section class="slide" id="s12" data-title="עומס – מזהים את הדפוס" data-chapter="2">
+  <img class="a bg" src="assets/bg-jerusalem.jpg" style="left:0;top:45px;width:1200px;height:675px" alt="">
+  <div class="a bg" style="left:0;top:45px;width:1200px;height:630px;background:linear-gradient(to left,rgba(0,12,26,.55),rgba(0,12,26,0) 60%)"></div>
+  <div class="glass" style="left:610px;top:60px;width:570px;height:170px;padding:14px 20px 14px 78px">
+    <div style="font-size:23px;font-weight:800">עומס – <span class="sky">מזהים את הדפוס</span></div>
+    <div class="lh" style="font-size:15.5px;margin-top:6px">בשגרה התמקדנו בפנייה אחת: מה קרה? איפה זה קרה? איך מסווגים? למי מעבירים? אבל עומס לא תמיד מתחיל בהכרזה – הוא מתחיל <b class="org">בדפוס של סימנים.</b></div>
+    <div class="sky" style="font-size:16px;font-weight:800;margin-top:6px">לחצו על המקומות המסומנים במפה להרחבה</div>
+  </div>
+  <!-- הנציגה "מדברת" את הטקסט: עיגול עם תמונתה בצד שמאל של המלבן -->
+  <div class="avatar" data-anim="popin" data-delay=".4" style="left:560px;top:86px"><img src="assets/maya-explain.png" alt="הנציגה מאיה"></div>
+
+  <div class="pin" data-act="layer:sign1" data-xp style="left:90px;top:150px"><div class="pi"><svg viewBox="0 0 40 52"><path d="M20 50S3 31 3 19a17 17 0 0 1 34 0c0 12-17 31-17 31z"/><circle cx="20" cy="19" r="11.5"/></svg><span>1</span></div><div class="lbl">ריבוי פניות בזמן קצר</div></div>
+  <div class="pin" data-act="layer:sign2" data-xp style="left:330px;top:255px"><div class="pi"><svg viewBox="0 0 40 52"><path d="M20 50S3 31 3 19a17 17 0 0 1 34 0c0 12-17 31-17 31z"/><circle cx="20" cy="19" r="11.5"/></svg><span>2</span></div><div class="lbl">אותה תופעה חוזרת</div></div>
+  <div class="pin" data-act="layer:sign3" data-xp style="left:640px;top:318px"><div class="pi"><svg viewBox="0 0 40 52"><path d="M20 50S3 31 3 19a17 17 0 0 1 34 0c0 12-17 31-17 31z"/><circle cx="20" cy="19" r="11.5"/></svg><span>3</span></div><div class="lbl">אותו אזור</div></div>
+  <div class="pin" data-act="layer:sign4" data-xp style="left:900px;top:470px"><div class="pi"><svg viewBox="0 0 40 52"><path d="M20 50S3 31 3 19a17 17 0 0 1 34 0c0 12-17 31-17 31z"/><circle cx="20" cy="19" r="11.5"/></svg><span>4</span></div><div class="lbl">רמת דחיפות</div></div>
+
+  <!-- אחרי שנפתחו כל המקומות: מסך כחול שקוף, הנציגה ובועת דיבור עם המסר המסכם -->
+  <div class="a gate" style="left:0;top:45px;width:1200px;height:630px;background:rgba(0,25,48,.82)"></div>
+  <img class="a gate" src="assets/maya-explain.png" style="left:850px;top:110px;width:290px" alt="הנציגה מאיה">
+  <div class="speech tail-right gate" style="left:250px;top:200px;width:560px;--ty:80px;padding:22px 28px">
+    <div class="t" style="font-size:26px">עומס מזוהה דרך <span class="org">חזרתיות:</span></div>
+    <div class="chips" style="margin-top:12px;gap:10px"><span style="font-size:18px">כמות</span><span style="font-size:18px">דמיון</span><span style="font-size:18px">אזור</span><span style="font-size:18px">גורם מטפל</span><span style="font-size:18px">דחיפות</span></div>
+  </div>
+  <button class="btn pulse gate" data-act="next" style="left:15px;top:607px;width:185px;height:48px">ממשיכים</button>
+
+  <!-- חלוניות קטנות ליד כל נקודה (טקסט לפי התסריט) -->
+  <div class="layer" data-layer="sign1">
+    <div class="minipop" style="left:252px;top:118px;width:300px"><button class="mclose" data-act="close" aria-label="סגירה">✕</button>
+      <b>ריבוי פניות בזמן קצר</b><p>כשנכנסות הרבה פניות בזמן קצר, קצב העבודה משתנה.</p></div>
+  </div>
+  <div class="layer" data-layer="sign2">
+    <div class="minipop" style="left:120px;top:318px;width:310px"><button class="mclose" data-act="close" aria-label="סגירה">✕</button>
+      <b>אותה תופעה חוזרת</b><p>כאשר כמה תושבים מתארים בעיה דומה, ייתכן שלא מדובר בפניות נפרדות אלא בתופעה אחת שמופיעה בכמה מקומות.</p><p class="exl"><b>לדוגמה:</b> חפץ על הכביש.</p></div>
+  </div>
+  <div class="layer" data-layer="sign3">
+    <div class="minipop" style="left:802px;top:255px;width:310px"><button class="mclose" data-act="close" aria-label="סגירה">✕</button>
+      <b>אותו אזור</b><p>אם כמה פניות מגיעות מאותה שכונה, צומת, מוסד ציבורי או אזור סמוך, המיקום עצמו הופך לסימן.</p><p class="exl"><b>לדוגמה:</b> שכונה שלמה ללא אור / חשמל.</p></div>
+  </div>
+  <div class="layer" data-layer="sign4">
+    <div class="minipop" style="left:690px;top:400px;width:310px"><button class="mclose" data-act="close" aria-label="סגירה">✕</button>
+      <b>רמת דחיפות</b><p>כאשר מספר תושבים פונים במקביל וכולם מדווחים על פניות דחופות.</p><p class="exl"><b>לדוגמה:</b> עצים שנפלו ברחבי העיר, עפו עצמים שונים במרחב, הפרעה לתנועה.</p></div>
+  </div>
+</section>
+
+<!-- ======================= 13 עומס – מסך עדכון המשמרת (שקף 17 בתסריט) ======================= -->
+<section class="slide" id="s13" data-title="עומס – מסך עדכון המשמרת" data-chapter="2">
+  <img class="a bg" src="assets/bg-screen.jpg" style="left:0;top:45px;width:1200px;height:630px" alt="">
+  <div class="scr-title">עומס – זיהוי סימנים</div>
+  <div class="scr-txt"><p>קראו את הנתונים על מסך המוקדן – ותענו על השאלה בשקף הבא.</p></div>
+  <div class="crm" style="left:60px;top:165px;width:860px;height:268px">
+    <div class="bar"><span>עדכון משמרת</span><small>משמרת בוקר · 10:30</small></div>
+    <table>
+      <tr><th style="width:70px">שעה</th><th style="width:110px">פונה</th><th>תיאור הדיווח</th><th style="width:210px">מיקום</th><th style="width:70px">סטטוס</th></tr>
+      <tr class="row" style="--rd:.7s"><td class="t">10:18</td><td>תושב</td><td>מדווח על כתם שחור על הכביש</td><td>רחוב יפו, ליד התחנה המרכזית</td><td><span class="st">חדש</span></td></tr>
+      <tr class="row" style="--rd:1.5s"><td class="t">10:23</td><td>תושבת</td><td>מדווחת כי כמעט החליקה עם הרכב</td><td>שדרות שז״ר</td><td><span class="st">חדש</span></td></tr>
+      <tr class="row" style="--rd:2.3s"><td class="t">10:27</td><td>בעלת עסק</td><td>מדווחת כי ראתה עכשיו רוכב קורקינט מחליק ממשהו שיש על הכביש</td><td>רחוב יפו פינת שרי ישראל</td><td><span class="st">חדש</span></td></tr>
+    </table>
+  </div>
+  <div class="incoming" data-delay="3" style="left:250px;top:452px;width:670px"><span class="ph"><svg><use href="#phone"/></svg></span>במקביל, ממשיכות להיכנס שיחות נוספות למוקד...<span class="cnt">4 ממתינות</span></div>
+  <img class="a flip" src="assets/maya-think.png" style="left:955px;top:200px;width:210px;transform:scaleX(-1)" alt="מאיה חושבת ומסתכלת על המסך">
+  <button class="btn pulse" data-act="next" data-delay="3.3" style="left:15px;top:607px;width:185px;height:48px">לשאלה</button>
+</section>
+
+<!-- ======================= 14 עומס – זיהוי סימנים (רב-ברירה) (שקף 18 בתסריט) ======================= -->
+<!-- זום אין על הרקע: המסך הגדול מכיל את כל השאלה, והנציגה נראית משמאל. תשובות נכונות: 1, 3, 4 (רק תשובה 2 שגויה).
+     אחרי "בדיקה": התשובות נשארות גלויות (נכונה = ירוק, בחירה שגויה = כתום), והמשוב מופיע מתחת למסך -->
+<section class="slide choice" id="s14" data-title="עומס – זיהוי סימנים (שאלה)" data-chapter="2" data-multi="1">
+  <img class="a bg" src="assets/bg-look.jpg" style="left:-272px;top:9px;width:1500px;height:844px" alt="">
+  <div class="a w" style="left:590px;top:66px;width:585px;font-size:23px;font-weight:800">עומס – <span class="sky">זיהוי סימנים</span></div>
+  <div class="a w" style="left:590px;top:102px;width:585px;font-size:17.5px;font-weight:800">מה במסך עדכון המשמרת יכול להעיד שמתחיל עומס?</div>
+  <div class="a sky" style="left:590px;top:130px;width:585px;font-size:14.5px;font-weight:700">סמנו את כל הסימנים שזיהיתם (ניתן לסמן יותר מתשובה אחת)</div>
+  <button class="opt" data-correct="1" style="left:890px;top:164px;width:285px;height:64px;font-size:15.5px">מספר פניות התקבלו בזמן קצר</button>
+  <button class="opt" style="left:590px;top:164px;width:285px;height:64px;font-size:15.5px">בכל אחת מהפניות נדרש טיפול של גורם עירוני אחר</button>
+  <button class="opt" data-correct="1" style="left:890px;top:240px;width:285px;height:64px;font-size:15.5px">פניות מאותו אזור או מאזור סמוך</button>
+  <button class="opt" data-correct="1" style="left:590px;top:240px;width:285px;height:64px;font-size:15.5px">נושא דומה או תופעה דומה חוזרים בכמה פניות</button>
+  <button class="check" disabled style="left:590px;top:322px;width:130px;height:38px">בדיקה</button>
+  <div class="layer inline" data-layer="fb-ok">
+    <div class="fbtop ok fbsm" style="left:225px;top:470px;width:895px">
+      <div class="hd"><img class="vx" src="assets/v.png" alt=""><b class="grn" style="font-size:24px">מדויק להפליא!</b><b style="font-size:18px">זיהיתם את הדפוס.</b><button class="btn" data-act="next" style="position:static;margin-right:auto;width:150px;height:40px">ממשיכים</button></div>
+      <p>עומס לא מזוהה רק לפי מספר הפניות, אלא <b>לפי החיבור ביניהן:</b> פניות שמתקבלות בזמן קצר, מאותו אזור או מאזור סמוך, ועוסקות בנושא דומה או בתופעה שחוזרת בכמה ניסוחים.</p>
+      <p>כל פנייה צריכה להיבדק ולקבל טיפול – אך כשהפניות מתחילות להתחבר לדפוס, כבר לא מסתכלים רק על השיחה הבודדת, אלא <b>מזהים את הדפוס ומטפלים.</b></p>
+    </div>
+  </div>
+  <div class="layer inline" data-layer="fb-bad">
+    <div class="fbtop bad fbsm" style="left:225px;top:470px;width:895px">
+      <div class="hd"><img class="vx" src="assets/x.png" alt=""><b class="org" style="font-size:24px">לא מדויק…</b><b style="font-size:18px">שימו לב לדפוס.</b><button class="btn" data-act="next" style="position:static;margin-right:auto;width:150px;height:40px">ממשיכים</button></div>
+      <p>התשובות הנכונות מסומנות <b style="color:#7ea31a">בירוק</b>. עומס לא מזוהה רק לפי מספר הפניות, אלא <b>לפי החיבור ביניהן:</b> פניות שמתקבלות <b>בזמן קצר</b>, <b>מאותו אזור או מאזור סמוך</b>, ועוסקות <b>בנושא דומה</b>.</p>
+      <p>כל פנייה צריכה להיבדק ולקבל טיפול – אך כשהפניות מתחילות להתחבר לדפוס, כבר לא מסתכלים רק על השיחה הבודדת, אלא <b>מזהים את הדפוס ומטפלים.</b></p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 15 עומס – אופן טיפול (רב-ברירה) (שקף 19 בתסריט) ======================= -->
+<!-- זום אין על הרקע: השאלה בתוך המסך הגדול, הנציגה משמאל. לפי התסריט: תשובות 3, 4, 6 שגויות → נכונות: 1, 2, 5. המשוב מתחת למסך -->
+<section class="slide choice" id="s15" data-title="עומס – אופן טיפול (שאלה)" data-chapter="2" data-multi="1">
+  <img class="a bg" src="assets/bg-room5.jpg" style="left:-266px;top:3px;width:1500px;height:818px" alt="">
+  <div class="a w" style="left:505px;top:64px;width:670px;font-size:23px;font-weight:800">עומס – <span class="sky">אופן טיפול</span></div>
+  <div class="a w" style="left:505px;top:100px;width:670px;font-size:17.5px;font-weight:800">זיהיתם סימנים לעומס. מה נכון לעשות עכשיו?</div>
+  <div class="a sky" style="left:505px;top:127px;width:670px;font-size:14.5px;font-weight:700">ניתן לסמן יותר מתשובה אחת</div>
+  <button class="opt" data-correct="1" style="left:847px;top:156px;width:328px;height:58px;font-size:15.5px">להמשיך לפתוח ולתעד כל פנייה לפי מודל הטיפול</button>
+  <button class="opt" data-correct="1" style="left:505px;top:156px;width:328px;height:58px;font-size:15.5px">להציף לאחמ״ש שיש כמה פניות דומות מאותו אזור</button>
+  <button class="opt" style="left:847px;top:222px;width:328px;height:58px;font-size:15.5px">לציין בתיעוד את הקשר האפשרי לפניות נוספות</button>
+  <button class="opt" style="left:505px;top:222px;width:328px;height:58px;font-size:15.5px">להמתין לעוד פניות כדי לוודא שמדובר בעומס</button>
+  <button class="opt" data-correct="1" style="left:847px;top:288px;width:328px;height:58px;font-size:15.5px">לתת תשומת לב גבוהה יותר לפנייה בנושא בטיחותי</button>
+  <button class="opt" style="left:505px;top:288px;width:328px;height:58px;font-size:15.5px">לסגור פניות דומות כדי לא ליצור כפילות</button>
+  <button class="check" disabled style="left:505px;top:360px;width:130px;height:38px">בדיקה</button>
+  <div class="layer inline" data-layer="fb-ok">
+    <div class="fbtop ok fbsm" style="left:225px;top:470px;width:895px">
+      <div class="hd"><img class="vx" src="assets/v.png" alt=""><b class="grn" style="font-size:24px">מדויק להפליא!</b><b style="font-size:18px">כך מטפלים בעומס.</b><button class="btn" data-act="next" style="position:static;margin-right:auto;width:150px;height:40px">ממשיכים</button></div>
+      <p>מודל הטיפול בפנייה הוא המודל שמוביל אותנו – לא משנה אם אנחנו בשגרה או בעומס. לכן <b>ממשיכים לפתוח, לסווג, לתעד ולהעביר</b> את הפניות לטיפול, בהתאם למה שלמדנו.</p>
+      <p>ברגע שמזהים את הדפוס, מחברים בין הפניות לפי סימני הזיהוי ומבינים שמדובר בעומס – <b>מציפים את המידע לאחמ״ש</b>, ונותנים תשומת לב גבוהה יותר לפניות בטיחותיות.</p>
+    </div>
+  </div>
+  <div class="layer inline" data-layer="fb-bad">
+    <div class="fbtop bad fbsm" style="left:225px;top:470px;width:895px">
+      <div class="hd"><img class="vx" src="assets/x.png" alt=""><b class="org" style="font-size:24px">לא מדויק…</b><b style="font-size:18px">מודל הטיפול ממשיך להוביל.</b><button class="btn" data-act="next" style="position:static;margin-right:auto;width:150px;height:40px">ממשיכים</button></div>
+      <p>מודל הטיפול בפנייה הוא המודל שמוביל אותנו – לא משנה אם אנחנו בשגרה או בעומס. לכן <b>ממשיכים לפתוח, לסווג, לתעד ולהעביר</b> את הפניות לטיפול, בהתאם למה שלמדנו.</p>
+      <p>התשובות הנכונות מסומנות <b style="color:#7ea31a">בירוק</b>: להמשיך לפתוח ולתעד כל פנייה, להציף לאחמ״ש, ולתת תשומת לב גבוהה יותר לפנייה בנושא בטיחותי. לא ממתינים לעוד פניות ולא סוגרים פניות דומות.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 16 עומס הוא לא רק דפוס (שקף 20 בתסריט – פופאפ) ======================= -->
+<section class="slide" id="s16" data-title="עומס הוא לא רק דפוס" data-chapter="2">
+  <img class="a bg" src="assets/bg-stand.jpg" style="left:0;top:46px;width:1200px;height:654px" alt="">
+  <div class="a f16 w" style="left:587px;top:98px;width:556px;font-weight:800">עומס הוא <span class="org">לא רק דפוס</span></div>
+  <div class="a w lh" style="left:587px;top:134px;width:556px;font-size:15.5px">
+    <p>לעיתים העומס <b class="sky">צפוי מראש</b>, בעקבות אירועים המתרחשים בעיר:</p>
+    <div class="chips dark" style="margin-top:6px"><span>מרתונים</span><span>חגים</span><span>מצעדים</span><span>אירועי מזג אוויר</span></div>
+    <p style="margin-top:8px">במקרים אלו המוקד נערך לעומס מבעוד מועד, עם <b class="sky">דף הנחיות מסודר</b> שעוזר לנו לדעת איך להתנהל נכון.</p>
+    <p style="margin-top:8px">וכשאנחנו מזהים דפוס ומציפים את העומס לאחמ״ש – האחמ״ש רואה את התמונה הכוללת ועוזר לכוון: האם נדרשות הנחיות מיוחדות, ומה התיעדוף המתאים לפניות המגיעות.</p>
+  </div>
+  <div class="speech tail-right" data-anim="popin" data-delay="1" style="left:20px;top:196px;width:380px;--ty:62px;padding:14px 18px;border-color:var(--green);--tail:var(--green)">
+    <div class="t" style="font-size:21px;display:flex;align-items:center;gap:8px"><img src="assets/ic-love-g.png" style="width:30px" alt=""><span class="grn">זכרו!</span></div>
+    <p style="font-size:17px">צוות המוקד נמצא שם כדי לעזור לכם – <b>בכל דבר.</b></p>
+  </div>
+  <button class="btn pulse" data-act="next" style="left:15px;top:607px;width:200px;height:48px">חזרה לקיר המסכים</button>
+</section>
+
+<!-- ======================= 17 קיר המסכים (3) (שקף 21 בתסריט) ======================= -->
+<section class="slide hub" id="s17" data-title="מסכי ה-Pit Wall (3)" data-chapter="3" data-done="2"></section>
+
+<!-- ======================= 18 חירום – עובדים לפי תמונת מצב (שקף 22 בתסריט) ======================= -->
+<section class="slide" id="s18" data-title="חירום – עובדים לפי תמונת מצב" data-chapter="3">
+  <img class="a bg" src="assets/bg-question.jpg" style="left:0;top:46px;width:1200px;height:641px" alt="">
+  <div class="a w" style="left:430px;top:74px;width:725px;font-size:25px;font-weight:800">חירום – עובדים לפי <span class="org">תמונת מצב</span></div>
+  <div class="a w lh" style="left:430px;top:116px;width:725px;font-size:17px">בשגרה ובעומס אנחנו מטפלים בכל פנייה לפי מודל הטיפול: מקשיבים, מתחקרים, מתעדים, מסווגים ומעבירים לגורם המתאים.</div>
+  <div class="a org" style="left:430px;top:170px;width:725px;font-size:20px;font-weight:800">בחירום, תמונת העבודה משתנה.</div>
+  <div class="a w lh" style="left:430px;top:204px;width:725px;font-size:17px">בחירום, העירייה ואגפיה לא עובדים במתכונת רגילה. עדיין עלינו <b class="sky">לפתוח את הפנייה ולתעד</b> – אך המשך הטיפול בפנייה ייעשה לפי:</div>
+  <div class="icoitem" data-anim="popin" data-delay=".8" style="left:925px;top:268px;width:230px"><svg viewBox="0 0 64 64"><path d="M16 6h24l10 10v42H16z"/><path d="M40 6v10h10M24 30h18M24 39h18M24 48h12"/></svg><span>ההנחיות הרלוונטיות לחירום באותה העת</span></div>
+  <div class="icoitem" data-anim="popin" data-delay="1" style="left:678px;top:268px;width:230px"><svg><use href="#icCal"/></svg><span>דף כוננות ותורנים מעודכן</span></div>
+  <div class="icoitem" data-anim="popin" data-delay="1.2" style="left:430px;top:268px;width:230px"><svg><use href="#icSiren"/></svg><span>חמ״לים או קבוצות חירום רלוונטיות</span></div>
+  <div class="a sky" style="left:430px;top:396px;width:725px;font-size:19px;font-weight:800">והכול בהנחיית האחמ״ש / הנהלת המוקד.</div>
+  <button class="btn pulse" data-act="next" style="left:15px;top:607px;width:185px;height:48px">ממשיכים</button>
+</section>
+
+<!-- ======================= 19 חירום – אופן פעולה: 5 שאלות להרחבה (שקפים 23–24 בתסריט) ======================= -->
+<section class="slide" id="s19" data-title="חירום – אופן פעולה" data-chapter="3">
+  <img class="a bg" src="assets/bg-drag.jpg" style="left:0;top:45px;width:1200px;height:630px" alt="">
+  <div class="a w" style="left:300px;top:64px;width:860px;font-size:24px;font-weight:800">חירום – <span class="org">אופן פעולה</span></div>
+  <div class="a w lh" style="left:300px;top:100px;width:860px;font-size:15.5px">בשעת חירום עלינו לתעד את כל הפניות המתקבלות <b class="sky">על התגית הרלוונטית, בהתאם לאירוע.</b><br>מכיוון שאגפי העירייה לא עובדים במתכונת רגילה בשעת חירום, עלינו להבין בכל תחקור פנייה מה מחייב פעולה בשעת חירום.</div>
+  <div class="a sky xphint" style="left:300px;top:158px;width:860px;font-size:16px;font-weight:800">לחצו על השאלות להרחבה</div>
+  <div class="qtile" style="left:958px;top:205px"><div class="q" data-act="fn:qopen" data-xp><i>1</i>מה סוג הפנייה?<br>מידע או טיפול?</div><div class="ans">האם התושב מבקש הנחיה, מידע רלוונטי לאירוע, או מדווח על תקלה שדורשת טיפול?</div></div>
+  <div class="qtile" style="left:736px;top:205px"><div class="q" data-act="fn:qopen" data-xp><i>2</i>לאיזה נושא חירום הפנייה שייכת?</div><div class="ans">פיקוד העורף, מקלט ציבורי, מקלט פרטי, מקלט בבית ספר, רווחה, מפגע בטיחותי, תשתית או גורם חוץ־ארגוני.</div></div>
+  <div class="qtile" style="left:514px;top:205px"><div class="q" data-act="fn:qopen" data-xp><i>3</i>איפה זה קורה?</div><div class="ans">כתובת, שכונה, מוסד או מיקום מדויק במרחב הציבורי.</div></div>
+  <div class="qtile" style="left:292px;top:205px"><div class="q" data-act="fn:qopen" data-xp><i>4</i>האם יש סכנה מיידית?</div><div class="ans">האם המצב עלול לסכן אנשים או לגרום לנזק אם לא יטופל עכשיו? למשל: אש, הצפה, חסימה, מפגע בטיחותי או חוסר גישה למרחב מוגן.</div></div>
+  <div class="qtile" style="left:70px;top:205px"><div class="q" data-act="fn:qopen" data-xp><i>5</i>מה אומרת ההנחיה העדכנית?</div><div class="ans">איזה סיווג לפתוח, איזו תגית להוסיף, והאם לפנות לכונן, לחמ״ל, לקבוצת חירום או לאחמ״ש.</div></div>
+  <button class="btn pulse gate" data-act="next" style="left:15px;top:607px;width:185px;height:48px">ממשיכים</button>
+</section>
+
+<!-- ======================= 20 חירום – מוסרים רק מידע מוסמך + אתם לא לבד (שקף 24 בתסריט – פופאפים) ======================= -->
+<section class="slide" id="s20" data-title="חירום – מוסרים רק מידע מוסמך" data-chapter="3" data-nonext="1">
+  <img class="a bg" src="assets/bg-point.jpg" style="left:0;top:46px;width:1200px;height:654px" alt="">
+  <div class="a" style="left:590px;top:98px;width:550px;display:flex;align-items:center;gap:10px">
+    <span style="flex:0 0 36px;height:36px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center"><img src="assets/ic-warning.png" style="width:21px" alt=""></span>
+    <span class="org" style="font-size:22px;font-weight:800">חשוב לזכור: מוסרים רק מידע מוסמך!</span>
+  </div>
+  <div class="dobox no" style="left:590px;top:142px;width:550px"><b class="t"><i>✕</i>לא מוסרים לתושב</b>מידע ששמענו באתרי חדשות, בקבוצות וואטסאפ, בטלגרם או מגורמים לא רשמיים – גם אם נשמע אמין.</div>
+  <div class="dobox yes" style="left:590px;top:236px;width:550px"><b class="t"><i>✓</i>מוסרים לתושב</b>אך ורק מידע שהתקבל מגורם מוסמך בתוך המוקד: <b>מהאחמ״ש, מהנהלת המוקד או מדף ההנחיות העדכני.</b></div>
+  <button class="btn pulse" data-act="layer:team" style="left:590px;top:332px;width:260px;height:44px">ומי עוד נמצא איתכם במוקד?</button>
+  <div class="layer" data-layer="team">
+    <div class="dim"></div>
+    <div class="card" style="left:270px;top:170px;width:660px;height:340px"></div>
+    <img class="a" src="assets/ic-love-g.png" style="left:568px;top:140px;width:64px" alt="">
+    <div class="a c" style="left:270px;top:214px;width:660px;font-size:28px;font-weight:800">אתם לא לבד!</div>
+    <div class="a c lh" style="left:310px;top:262px;width:580px;font-size:17px">בזמן חירום יושבים איתכם במוקד, פיזית, גורמים שונים – אשר נותנים מענה ממוקד ולפי הצורך:</div>
+    <div class="a chips" style="left:310px;top:326px;width:580px;justify-content:center"><span style="font-size:17px">מכלול תפעול</span><span style="font-size:17px">יקל״ר</span><span style="font-size:17px">רווחה</span></div>
+    <button class="btn" data-act="next" style="left:508px;top:420px;width:185px;height:44px">ממשיכים</button>
+  </div>
+</section>
+
+<!-- ======================= 21 חירום – אתם חלק מתמונת המצב (שקף 25 בתסריט) ======================= -->
+<section class="slide" id="s21" data-title="חירום – אתם חלק מתמונת המצב" data-chapter="3">
+  <img class="a bg" src="assets/bg-content.jpg" style="left:0;top:46px;width:1204px;height:685px" alt="">
+  <div class="a f16 w" style="left:400px;top:94px;width:735px;font-weight:800">חירום – <span class="sky">אתם חלק מתמונת המצב</span></div>
+  <div class="a w lh" style="left:400px;top:128px;width:735px;font-size:15px">
+    <p>שעת חירום יכולה להיות מלחיצה גם עבורנו, המוקדנים. זה טבעי להרגיש עומס, לחץ, חוסר ודאות או דאגה – במיוחד כשנכנסות הרבה שיחות, כשהתושבים נשמעים חרדים, וכשגם אתם חלק מאותה מציאות.</p>
+    <p style="margin-top:6px;font-size:18px;font-weight:800;color:var(--sky)">אתם לא לבד בעמדה!</p>
+    <p style="margin-top:4px">בשגרה, בעומס וכמובן בזמן חירום – יש סביבנו אחמ״ש, נציגים בכירים, הנהלת מוקד וצוות שמחזיק יחד את המשמרת. כשמשהו לא ברור, כשיש ספק מקצועי, שיחה קשה או כשאנחנו מרגישים מוצפים – <b>מציפים.</b></p>
+  </div>
+  <div class="tip" style="left:961px;top:318px;width:182px;height:144px"><b>עוצרים רגע כשצריך</b>אם שיחה הייתה קשה או מערערת – עדכנו את האחמ״ש ובקשו הכוונה.</div>
+  <div class="tip" style="left:767px;top:318px;width:182px;height:144px;border-top-color:var(--orange)"><b>לא מקבלים החלטות לבד כשיש ספק</b>אם אתם לא בטוחים – זו סיבה טובה לשאול ולהתייעץ, ולספק את המידע הנכון ביותר.</div>
+  <div class="tip" style="left:573px;top:318px;width:182px;height:144px;border-top-color:var(--green)"><b>שומרים על שפה רגועה מול התושב</b>גם כשהתושב לחוץ, התפקיד שלנו הוא לתת מענה ברור, מוסמך ומכבד.</div>
+  <div class="tip" style="left:379px;top:318px;width:182px;height:144px;border-top-color:#9b7bd8"><b>נשענים על ההנחיות</b>ההנחיות, דף הכוננות והאחמ״ש נועדו לעזור לכם לפעול נכון גם כשאין ודאות מלאה.</div>
+  <button class="btn pulse" data-act="next" style="left:15px;top:607px;width:200px;height:48px">חזרה לקיר המסכים</button>
+</section>
+
+<!-- ======================= 22 קיר המסכים (4) – כל המסכים הושלמו ======================= -->
+<section class="slide hub" id="s22" data-title="מסכי ה-Pit Wall (4)" data-chapter="4" data-done="3"></section>
+
+<!-- ======================= 23 סיכום – המרוץ מסתיים (שקף 26 בתסריט) ======================= -->
+<section class="slide" id="s23" data-title="המרוץ מסתיים, אך העיבוד רק מתחיל" data-chapter="4">
+  <img class="a bg" src="assets/bg-end.jpg" style="left:-5px;top:45px;width:1213px;height:638px" alt="">
+  <div class="a w" style="left:340px;top:64px;width:829px;font-size:23px;font-weight:800">המרוץ מסתיים, <span class="sky">אך העיבוד רק מתחיל</span></div>
+  <div class="a w lh" style="left:480px;top:98px;width:689px;font-size:15px">בסיום המרוץ, צוות ה-Pit Wall כבר מעבד את המרוץ למסקנות ולמידה להמשך. כך גם כאן: בכל פנייה חשוב להבין מה התושב מדווח, ובאיזו תמונת מצב הפנייה מתקבלת – <b>שגרה, עומס או חירום</b> – כך תנהלו את הפניות בצורה המקצועית ביותר.</div>
+  <div class="sumcol" style="left:905px;top:180px;width:264px;height:244px;border-color:var(--sky)"><div class="h" style="background:var(--sky)">שגרה | <small>מבט על הפנייה</small></div><p>בשגרה מתמקדים בפנייה שמולנו: מה קרה, איפה זה קרה, מה רמת הדחיפות, איך נכון לסווג, מי הגורם המטפל ומה חשוב לתעד.</p><p class="k"><span class="sky">הדגש:</span> טיפול מדויק, מסודר ומתועד בכל פנייה.</p></div>
+  <div class="sumcol" style="left:625px;top:180px;width:264px;height:244px;border-color:var(--orange)"><div class="h" style="background:var(--orange)">עומס | <small>מבט על הדפוס</small></div><p>בעומס מרימים מבט מעבר לשיחה הבודדת: האם מתקבלות כמה פניות בזמן קצר? האם הן מגיעות מאותו אזור? האם אותו נושא או גורם מטפל חוזרים בכמה פניות?</p><p class="k"><span class="org">הדגש:</span> ממשיכים לטפל בכל פנייה, אבל מזהים את הדפוס ומציפים לאחמ״ש.</p></div>
+  <div class="sumcol" style="left:345px;top:180px;width:264px;height:244px;border-color:var(--red)"><div class="h" style="background:var(--red);color:#fff">חירום | <small>מבט על תמונת האירוע</small></div><p>בחירום הפנייה נבדקת בתוך תמונת מצב רחבה יותר. העירייה לא עובדת בהכרח במתכונת רגילה – בודקים מה אומרת ההנחיה העדכנית, מי הגורם הזמין לטיפול, והאם נדרש כונן, חמ״ל, קבוצת חירום או אחמ״ש.</p><p class="k"><span style="color:#ff8a8d">הדגש:</span> להבין מה מחייב פעולה עכשיו, ולפעול לפי הנחיות החירום והכוננות.</p></div>
+  <div class="glass c" style="left:345px;top:436px;width:824px;padding:10px 16px;font-size:18px;font-weight:800;color:var(--sky);line-height:1.3">אותו מודל טיפול מלווה אותנו תמיד – אבל תמונת המצב קובעת מה צריך לבדוק, למי מציפים ואיך ממשיכים בטיפול.</div>
+  <button class="btn pulse" data-act="layer:done" data-sfx="finish" style="left:15px;top:607px;width:185px;height:48px;font-size:18.7px">יציאה 🏁</button>
+  <div class="layer" data-layer="done">
+    <div class="dim"></div>
+    <div class="toast"><img src="assets/speedo-6b.png" style="width:150px;margin:0 auto 8px" alt=""><div class="f27" style="font-weight:800">🏁 חציתם את קו הסיום!</div><div class="f16" style="margin-top:8px">סיימתם את יחידה 6 – Pit Wall: חמ״ל המרוץ.</div></div>
+  </div>
+</section>
+
+<!-- ======================= CONTROLS ======================= -->
+<div id="controls">
+  <button class="navbtn" id="btnPrev" aria-label="הקודם"><svg><use href="#arrowR"/></svg></button>
+  <button class="navbtn" id="btnNext" aria-label="הבא"><svg><use href="#arrowL"/></svg></button>
+</div>
+
+<!-- hub template (נשכפל לכל .slide.hub): שגרה מימין, עומס באמצע, חירום משמאל -->
+<template id="hubTpl">
+  <!-- הכותרת "מסכי ה-Pit Wall (המוקד)" כלולה בתמונה; תוויות המסכים בחלק העליון של כל מסך -->
+  <img class="a bg" src="assets/bg-hub.jpg" style="left:0;top:45px;width:1200px;height:675px" alt="מסכי ה-Pit Wall (המוקד)">
+  <div class="scr" data-station="1" data-go="s07" style="left:812px;top:112px;width:374px;height:286px"><div class="tag" style="top:188px;bottom:auto;transform:translate(-50%,-50%)"><img class="num" src="assets/num-1.png" alt="">שגרה – מבט ממוקד<img class="flag" src="assets/ic-finish-flag.png" alt=""></div></div>
+  <div class="scr" data-station="2" data-go="s12" style="left:412px;top:192px;width:378px;height:206px"><div class="tag" style="top:108px;bottom:auto;transform:translate(-50%,-50%)"><img class="num" src="assets/num-2.png" alt="">עומס – מזהים את הדפוס<img class="flag" src="assets/ic-finish-flag.png" alt=""></div></div>
+  <div class="scr" data-station="3" data-go="s18" style="left:12px;top:112px;width:378px;height:286px"><div class="tag" style="top:188px;bottom:auto;transform:translate(-50%,-50%)"><img class="num" src="assets/num-3.png" alt="">חירום – תמונת מצב<img class="flag" src="assets/ic-finish-flag.png" alt=""></div></div>
+  <div class="glass" style="left:390px;top:440px;width:420px;height:50px;display:flex;align-items:center;justify-content:center">
+    <div class="hubhint" style="font-size:18px;font-weight:800;color:var(--sky)">לחצו על מסך השגרה להרחבה</div>
+  </div>
+</template>
+
+</div>
+
+<script>
+(function(){
+  const stage = document.getElementById('stage');
+  const master = document.getElementById('master');
+  const menuSpans = [...document.querySelectorAll('#menu span')];
+  const btnNext = document.getElementById('btnNext');
+  const btnPrev = document.getElementById('btnPrev');
+
+  /* ---- sounds (assets/sfx/*.wav) ---- */
+  const SFX = {};
+  ['click', 'correct', 'wrong', 'ring', 'start', 'finish', 'finishline'].forEach(n => { const a = new Audio(`assets/sfx/${n}.wav`); a.preload = 'auto'; SFX[n] = a; });
+  const VOL = { click: .6, finishline: .7, ring: .6 };
+  let rally = null, rallyPending = false;
+  function startRally(){
+    rallyPending = false;
+    if (muted) return;
+    if (!rally) { rally = new Audio('assets/sfx/rally.mp3'); rally.preload = 'auto'; }
+    clearInterval(rally._fade); rally.volume = .8; rally.currentTime = 0;
+    rally.play().catch(() => { rallyPending = true; });
+  }
+  function stopRally(){
+    rallyPending = false;
+    if (!rally || rally.paused) return;
+    clearInterval(rally._fade);
+    rally._fade = setInterval(() => { rally.volume = Math.max(0, rally.volume - .08); if (rally.volume <= 0) { clearInterval(rally._fade); rally.pause(); } }, 50);
+  }
+  let muted = false;
+  try { muted = localStorage.getItem('u6-muted') === '1'; } catch (e) {}
+  const soundBtn = document.getElementById('sound');
+  soundBtn.classList.toggle('muted', muted);
+  soundBtn.addEventListener('click', e => {
+    e.stopPropagation(); muted = !muted; soundBtn.classList.toggle('muted', muted);
+    try { localStorage.setItem('u6-muted', muted ? '1' : '0'); } catch (err) {}
+    if (!muted) play('click'); else stopRally();
+  });
+  function play(n){
+    if (muted || !SFX[n]) return;
+    const a = SFX[n].cloneNode(); a.volume = VOL[n] ?? 1; a.play().catch(() => {});
+  }
+
+  /* ---- build hub slides (Pit Wall) ---- */
+  const tpl = document.getElementById('hubTpl');
+  const HINT = ['לחצו על מסך השגרה להרחבה', 'לחצו על המסך הבא: עומס', 'לחצו על המסך הבא: חירום', 'כל המסכים הושלמו – ממשיכים לקו הסיום!'];
+  document.querySelectorAll('.slide.hub').forEach(s => {
+    s.appendChild(tpl.content.cloneNode(true));
+    const done = +s.dataset.done;
+    s.querySelectorAll('.scr').forEach(c => {
+      const n = +c.dataset.station;
+      c.classList.add(n <= done ? 'done' : n === done + 1 ? 'next' : 'locked');
+    });
+    s.querySelector('.hubhint').textContent = HINT[done];
+    if (done === 3) {
+      const b = document.createElement('button');
+      b.className = 'btn pulse'; b.dataset.act = 'next'; b.textContent = 'לקו הסיום 🏁';
+      b.style.cssText = 'left:15px;top:607px;width:185px;height:48px';
+      s.appendChild(b);
+    }
+  });
+
+  const slides = [...document.querySelectorAll('.slide')];
+  const idx = id => slides.findIndex(s => s.id === id);
+  let cur = 0, k = 1;
+
+  function fit(){
+    k = Math.min(window.innerWidth / 1200, window.innerHeight / 675);
+    stage.style.transform = `translate(-50%,-50%) scale(${k})`;
+  }
+  window.addEventListener('resize', fit); fit();
+
+  /* ---- entrance animations: every visible element rises in, one after the other ---- */
+  function animate(root, base = 0, step = .06){
+    const els = [...root.children].filter(el => !el.classList.contains('bg') && !el.classList.contains('layer') && !el.classList.contains('gate')
+      && !el.classList.contains('vx') && !el.classList.contains('dim') && !el.classList.contains('tabpanel') && el.tagName !== 'TEMPLATE'
+      && !(el.tagName === 'BUTTON' && el.closest('.layer')));   // feedback buttons are always visible
+    els.forEach((el, i) => {
+      el.classList.remove('in'); if (el.dataset.anim) el.style.animation = 'none';
+      void el.offsetWidth;                          // restart the animation
+      const d = el.dataset.delay !== undefined ? +el.dataset.delay : base + Math.min(i * step, 1);
+      el.style.setProperty('--d', d + 's');
+      el.classList.add('in');
+      if (el.dataset.anim) el.style.animation = `${el.dataset.anim} .7s ease ${d}s both`;
+    });
+  }
+
+  /* ---- navigation: ← (left side) = forward, → (right side) = back.
+         the forward arrow is hidden while the slide has its own "continue" button (also a .gate one that is not shown yet),
+         or when the slide manages its own flow (data-nonext="1").
+         on the Pit Wall hub it stays greyed out until all three screens are done ---- */
+  function updateNav(){
+    const s = slides[cur];
+    // a 'continue' button of the slide that is actually displayed (a not-yet-shown .gate / .after-video still counts: the learner must finish first)
+    const ownBtn = [...s.querySelectorAll('[data-act="next"]')].some(b => { const l = b.closest('.layer'); return (!l || l.classList.contains('show')) && b.offsetParent !== null; });
+    // after returning to an interaction that was already completed, the forward arrow is always available
+    const completed = s.classList.contains('checked') || s.classList.contains('called') || s.dataset.solved === '1';
+    btnNext.classList.toggle('gone', cur === slides.length - 1 || ownBtn || ((s.dataset.nonext === '1' || s.classList.contains('choice')) && !completed));
+    btnNext.classList.toggle('disabled', s.classList.contains('hub') && +s.dataset.done < 3);
+    btnPrev.classList.toggle('gone', cur === 0);
+  }
+  function go(i){
+    if (i < 0 || i >= slides.length) return;
+    const old = slides[cur];
+    old.classList.remove('active'); hideLayers(old);
+    cur = i;
+    const s = slides[cur];
+    s.classList.add('active');
+    master.classList.toggle('hidden', s.dataset.master === '0');
+    menuSpans.forEach((m, j) => m.classList.toggle('cur', j === +s.dataset.chapter));
+    if (!s.classList.contains('checked')) s.querySelectorAll('.check').forEach(c => c.style.display = '');
+    animate(s, .15);
+    s.querySelectorAll('.tabpanel.on').forEach(p => animate(p, .1, .04));
+    if (i === 0) startRally(); else stopRally();   // opening: rally-car sound
+    old.querySelectorAll('video').forEach(v => v.pause());
+    startVideo(s);
+    if (s.classList.contains('callslide')) layoutCall(s);
+    if (s.classList.contains('callslide') && !s.classList.contains('called')) { clearTimeout(s._rt); s._rt = setTimeout(() => { if (slides[cur] === s) play('ring'); }, 500); }   // incoming call rings
+    if (s.id === 's23') { clearTimeout(s._ft); s._ft = setTimeout(() => { if (slides[cur] === s) play('finishline'); }, 500); }
+    updateNav();
+  }
+  const next = () => go(cur + 1);
+  btnNext.addEventListener('click', () => {
+    const s = slides[cur];
+    if (s.classList.contains('hub')) { const nx = s.querySelector('.scr.next'); if (nx) return go(idx(nx.dataset.go)); }
+    next();
+  });
+  btnPrev.addEventListener('click', () => go(cur - 1));
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') btnNext.click();        // RTL: left = forward
+    else if (e.key === 'ArrowRight') btnPrev.click();  // right = back
+  });
+  document.addEventListener('pointerdown', e => {
+    if (rallyPending && cur === 0 && !e.target.closest('[data-act]')) startRally();   // sound was blocked until the first click
+  }, { capture: true });
+
+  /* ---- layers ---- */
+  function showLayer(s, name){
+    const l = s.querySelector(`.layer[data-layer="${name}"]`); if (!l) return;
+    l.classList.add('show');
+    l.querySelectorAll('.vx').forEach(v => { v.style.animation = 'none'; void v.offsetWidth; v.style.animation = ''; });
+    animate(l.querySelector('.fbbox') || l, .05, .05);
+    // questions stay visible under their feedback (the answers are marked green / orange)
+    if (name === 'fb-ok') play('correct');                              // sounds only on question feedback
+    else if (name === 'fb-bad' || name === 'fb-retry') play('wrong');
+    updateNav();
+  }
+  function hideLayers(s){ s.querySelectorAll('.layer.show').forEach(l => l.classList.remove('show')); s.classList.remove('answered'); if (s === slides[cur]) updateNav(); }
+
+  /* ---- "click to expand": when every [data-xp] on the slide was opened, the .gate elements appear ---- */
+  function seen(s, el){
+    el.classList.add('seen');
+    const all = [...s.querySelectorAll('[data-xp]')];
+    if (all.length && all.every(x => x.classList.contains('seen')) && !s.classList.contains('explored')) {
+      s.classList.add('explored');
+      s.querySelectorAll('.xphint').forEach(h => h.classList.add('done'));
+      s.querySelectorAll('.gate').forEach((g, i) => setTimeout(() => g.classList.add('shown'), 250 + i * 250));
+    }
+  }
+
+  const fns = {};
+  stage.addEventListener('click', e => {
+    const a = e.target.closest('[data-act]'); if (!a) return;
+    const s = a.closest('.slide'), act = a.dataset.act;
+    if (a.dataset.sfx) play(a.dataset.sfx); else if (act !== 'next') play('click');   // no sound when moving between slides
+    if (act === 'next') next();
+    else if (act === 'close') hideLayers(s);
+    else if (act.startsWith('layer:')) { hideLayers(s); showLayer(s, act.slice(6)); }   // one popup at a time
+    else if (act.startsWith('tab:')) showTab(s, a, act.slice(4));
+    else if (act.startsWith('fn:')) fns[act.slice(3)](s, a);
+    if (a.hasAttribute('data-xp')) seen(s, a);
+  });
+
+  /* ---- tabs (slide 05) ---- */
+  function showTab(s, btn, name){
+    s.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t === btn));
+    s.querySelectorAll('.tabpanel').forEach(p => {
+      const on = p.dataset.panel === name; p.classList.toggle('on', on);
+      if (on) { animate(p, .05, .05); p.querySelectorAll('.checklist li').forEach((li, i) => li.style.setProperty('--cd', (.3 + i * .12) + 's')); }
+    });
+  }
+
+  /* ---- emergency question tiles (slide 19) ---- */
+  fns.qopen = (s, q) => q.closest('.qtile').classList.add('open');
+
+  /* ---- hub screens ---- */
+  document.querySelectorAll('.scr').forEach(c => c.addEventListener('click', () => {
+    if (c.classList.contains('locked')) return;
+    play('click'); go(idx(c.dataset.go));
+  }));
+
+  /* ---- call slides (03א–03ג): answer -> feedback ("נכון!" green / "לא נכון…" orange); the correct answer turns green
+         and a wrong choice orange -> "לשיחה הבאה". The last call opens the summary popup with the score ---- */
+  const callRes = [];   // per call: true / false
+  // answers, feedback and the next button sit right under the caller's bubble, at the bubble's width
+  function layoutCall(s){
+    const bub = s.querySelector('.bub'), ans = s.querySelector('.ans'), fb = s.querySelector('.cfb'), nx = s.querySelector('.nextcall');
+    const L = bub.offsetLeft, W = bub.offsetWidth;
+    let y = bub.offsetTop + bub.offsetHeight + 14;
+    [ans, fb].forEach(e => { e.style.left = L + 'px'; e.style.width = W + 'px'; });
+    ans.style.top = y + 'px'; y += 48 + 10;
+    fb.style.top = y + 'px'; if (fb.classList.contains('show')) y += fb.offsetHeight + 10;
+    nx.style.left = L + 'px'; nx.style.top = y + 'px';
+  }
+  document.querySelectorAll('.slide.callslide').forEach(s => {
+    const n = +s.dataset.n;
+    const btns = [...s.querySelectorAll('.ans button')], fb = s.querySelector('.cfb');
+    btns.forEach(b => b.addEventListener('click', () => {
+      if (s.classList.contains('called')) return;
+      s.classList.add('called');
+      const ok = b.dataset.v === s.dataset.ans; callRes[n] = ok;
+      btns.forEach(x => { x.disabled = true; if (x.dataset.v === s.dataset.ans) x.classList.add('right'); });
+      if (!ok) b.classList.add('wrong');
+      fb.className = 'cfb show ' + (ok ? 'ok' : 'bad');
+      fb.innerHTML = `<img src="assets/${ok ? 'v' : 'x'}.png" alt=""><span>${ok ? '<b class="res grn">נכון!</b>' : '<b class="res org">לא נכון…</b>'} ${s.dataset.fb}</span>`;
+      // progress pills on this and the following call slides
+      document.querySelectorAll(`.callslide .callsteps span:nth-child(${n + 1})`).forEach(sp => sp.classList.add(ok ? 'ok' : 'bad'));
+      s.querySelector('.nextcall').classList.add('show');
+      layoutCall(s);
+      play(ok ? 'correct' : 'wrong');
+    }));
+  });
+  fns.callSummary = s => {
+    const right = callRes.filter(Boolean).length;
+    const sc = document.getElementById('callScore');
+    sc.textContent = `✓ עניתם נכון על ${right} מתוך 3 שיחות`;
+    sc.classList.toggle('mid', right < 3);
+    const conf = s.querySelector('.confetti'); conf.innerHTML = '';
+    const COL = ['#6CCFF6', '#F99D26', '#B2D234', '#fff', '#1EA0FF'];
+    for (let j = 0; j < 46; j++) {
+      const e = document.createElement('i');
+      e.style.cssText = `left:${Math.random() * 1200}px;background:${COL[j % COL.length]};--t:${2.4 + Math.random() * 1.8}s;--cd:${Math.random() * .9}s;--dx:${(Math.random() - .5) * 220}px;--r:${(Math.random() > .5 ? 1 : -1) * (360 + Math.random() * 540)}deg`;
+      conf.appendChild(e);
+    }
+    showLayer(s, 'sum');
+  };
+
+  /* ---- videos: play once and hold the last frame (slide 01) ---- */
+  function startVideo(s){
+    const v = s.querySelector('video'); if (!v) return;
+    // slide 02: when the video ends, the .after-video elements come in (dark layer, Maya, bubble, button)
+    s.classList.remove('vdone'); clearTimeout(s._vf);
+    if (s.querySelector('.after-video')) {
+      const done = () => { s._watched = true; if (!s.classList.contains('vdone')) { s.classList.add('vdone'); if (slides[cur] === s) updateNav(); } };
+      v.onended = done; v.onerror = done;
+      s._vf = setTimeout(done, 20000);   // safety net if the video cannot play
+      if (s._watched) done();            // coming back: the explanation is shown right away
+    }
+    v.pause(); try { v.currentTime = 0; } catch (e) {}
+    const p = v.play(); if (p && p.catch) p.catch(() => v.addEventListener('canplay', () => v.play().catch(() => {}), { once: true }));
+  }
+  document.addEventListener('pointerdown', () => { const v = slides[cur].querySelector('video'); if (v && v.paused && !v.ended && v.currentTime < .1) v.play().catch(() => {}); }, { capture: true });
+
+  /* ---- choice questions: answer(s) -> "בדיקה" -> correct / incorrect layer ---- */
+  document.querySelectorAll('.slide.choice').forEach(s => {
+    const multi = s.dataset.multi === '1';
+    const opts = [...s.querySelectorAll('.opt')], chk = s.querySelector('.check');
+    opts.forEach(o => o.addEventListener('click', () => {
+      play('click');
+      if (multi) o.classList.toggle('sel');
+      else { opts.forEach(x => x.classList.remove('sel')); o.classList.add('sel'); }
+      chk.disabled = !s.querySelector('.opt.sel');
+    }));
+    chk.addEventListener('click', () => {
+      if (!s.querySelector('.opt.sel')) return;
+      chk.style.display = 'none';   // no "בדיקה" once the answer was checked
+      const ok = opts.every(o => o.classList.contains('sel') === (o.dataset.correct === '1'));
+      s.classList.add('checked');
+      opts.forEach(o => { if (o.dataset.correct === '1') o.classList.add('right'); else if (o.classList.contains('sel')) o.classList.add('wrong'); });
+      showLayer(s, ok ? 'fb-ok' : 'fb-bad');
+    });
+  });
+
+  /* ---- drag & drop (slide 07) ---- */
+  (function(){
+    const s = document.getElementById('s07');
+    const cards = [...s.querySelectorAll('.dd-card')];
+    const slots = [...s.querySelectorAll('.dd-slot')];
+    const chk = s.querySelector('.dd-check');
+    const home = new Map(cards.map(c => [c, {l: c.style.left, t: c.style.top}]));
+    const place = new Map(); // slot -> card
+    let tries = 0, solved = false;
+    const slotOf = c => [...place.entries()].find(([, v]) => v === c)?.[0];
+    function toHome(c){ const h = home.get(c); c.style.left = h.l; c.style.top = h.t; const sl = slotOf(c); if (sl) place.delete(sl); }
+    function toSlot(c, sl){
+      const prev = place.get(sl), from = slotOf(c);
+      if (from) place.delete(from);
+      if (prev && prev !== c) { if (from) { place.set(from, prev); prev.style.left = from.style.left; prev.style.top = from.style.top; } else toHome(prev); }
+      place.set(sl, c); c.style.left = sl.style.left; c.style.top = sl.style.top;
+    }
+    function refresh(){ chk.disabled = place.size !== slots.length; cards.forEach(c => c.classList.remove('right', 'wrong')); }
+    cards.forEach(c => c.addEventListener('pointerdown', e => {
+      if (solved) return;
+      e.preventDefault(); c.setPointerCapture(e.pointerId);
+      const W = c.offsetWidth, H = c.offsetHeight;
+      const r = stage.getBoundingClientRect();
+      const ox = (e.clientX - r.left) / k - parseFloat(c.style.left), oy = (e.clientY - r.top) / k - parseFloat(c.style.top);
+      c.classList.add('dragging');
+      let over = null;
+      const move = ev => {
+        const x = (ev.clientX - r.left) / k - ox, y = (ev.clientY - r.top) / k - oy;
+        c.style.left = x + 'px'; c.style.top = y + 'px';
+        const cx = x + W / 2, cy = y + H / 2;
+        over = slots.find(sl => { const l = parseFloat(sl.style.left), t = parseFloat(sl.style.top); return cx > l && cx < l + W && cy > t && cy < t + H; }) || null;
+        slots.forEach(sl => sl.classList.toggle('over', sl === over));
+      };
+      const up = () => {
+        c.removeEventListener('pointermove', move); c.removeEventListener('pointerup', up);
+        c.classList.remove('dragging'); slots.forEach(sl => sl.classList.remove('over'));
+        if (over) toSlot(c, over); else toHome(c);
+        refresh();
+      };
+      c.addEventListener('pointermove', move); c.addEventListener('pointerup', up);
+    }));
+    chk.addEventListener('click', () => {
+      let ok = true;
+      place.forEach((c, sl) => { const good = c.dataset.order === sl.dataset.slot; c.classList.add(good ? 'right' : 'wrong'); if (!good) ok = false; });
+      chk.style.display = 'none';
+      if (ok) { solved = true; s.dataset.solved = '1'; showLayer(s, 'fb-ok'); }
+      else if (++tries < 2) showLayer(s, 'fb-retry');
+      else showLayer(s, 'fb-bad');
+    });
+    fns.ddRetry = () => {
+      chk.style.display = '';
+      hideLayers(s);
+      [...place.entries()].forEach(([sl, c]) => { if (c.dataset.order !== sl.dataset.slot) toHome(c); });
+      refresh(); place.forEach(c => c.classList.add('right'));
+    };
+    fns.ddShow = () => {   // after the second miss: arrange the correct order
+      hideLayers(s); solved = true; s.dataset.solved = '1';
+      cards.forEach(c => { const sl = slots.find(x => x.dataset.slot === c.dataset.order); place.set(sl, c); c.style.left = sl.style.left; c.style.top = sl.style.top; c.classList.remove('wrong'); c.classList.add('right'); });
+      chk.disabled = true; s.querySelector('.dd-next').style.display = 'flex';
+    };
+  })();
+
+  window.lesson = { go: id => go(typeof id === 'number' ? id : idx(id)) };
+  go(0);
+})();
+</script>
+</body>
+</html>
