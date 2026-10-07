@@ -205,9 +205,9 @@ b{font-weight:800}
 .speech{position:absolute;background:#fff;border:2px solid var(--navy);border-radius:22px;padding:16px 22px;color:var(--navy);box-shadow:0 8px 24px rgba(0,0,0,.45)}
 .speech::before,.speech::after{content:"";position:absolute;width:0;height:0;border-style:solid}
 .speech.tail-right::before{right:-28px;top:var(--ty,60px);border-width:13px 0 13px 28px;border-color:transparent transparent transparent var(--tail,var(--navy))}
-.speech.tail-right::after{right:-24px;top:calc(var(--ty,60px) + 2px);border-width:11px 0 11px 25px;border-color:transparent transparent transparent #fff}
+.speech.tail-right::after{right:-24px;top:calc(var(--ty,60px) + 2.5px);border-width:10.5px 0 10.5px 27px;margin-right:-1px;border-color:transparent transparent transparent #fff}
 .speech.tail-left::before{left:-28px;top:var(--ty,60px);border-width:13px 28px 13px 0;border-color:transparent var(--navy) transparent transparent}
-.speech.tail-left::after{left:-24px;top:calc(var(--ty,60px) + 2px);border-width:11px 25px 11px 0;border-color:transparent #fff transparent transparent}
+.speech.tail-left::after{left:-24px;top:calc(var(--ty,60px) + 2.5px);border-width:10.5px 27px 10.5px 0;margin-left:-1px;border-color:transparent #fff transparent transparent}
 .speech .t{font-size:21px;font-weight:800;line-height:1.2;margin-bottom:6px}
 .speech p{font-size:16px;line-height:1.4}
 .speech p+p{margin-top:7px}
@@ -740,7 +740,7 @@ b{font-weight:800}
     </table>
   </div>
   <div class="incoming" data-delay="3" style="left:250px;top:452px;width:670px"><span class="ph"><svg><use href="#phone"/></svg></span>במקביל, ממשיכות להיכנס שיחות נוספות למוקד...<span class="cnt">4 ממתינות</span></div>
-  <img class="a flip" src="assets/maya-think.png" style="left:955px;top:200px;width:210px;transform:scaleX(-1)" alt="מאיה חושבת ומסתכלת על המסך">
+  <img class="a flip" src="assets/maya-think.png" style="left:955px;top:200px;width:210px;transform:scaleX(-1);clip-path:inset(0 16px 0 16px)" alt="מאיה חושבת ומסתכלת על המסך">
   <button class="btn pulse" data-act="next" data-delay="3.3" style="left:15px;top:607px;width:185px;height:48px">לשאלה</button>
 </section>
 
@@ -860,6 +860,8 @@ b{font-weight:800}
   </div>
   <div class="dobox no" style="left:590px;top:142px;width:550px"><b class="t"><i>✕</i>לא מוסרים לתושב</b>מידע ששמענו באתרי חדשות, בקבוצות וואטסאפ, בטלגרם או מגורמים לא רשמיים – גם אם נשמע אמין.</div>
   <div class="dobox yes" style="left:590px;top:236px;width:550px"><b class="t"><i>✓</i>מוסרים לתושב</b>אך ורק מידע שהתקבל מגורם מוסמך בתוך המוקד: <b>מהאחמ״ש, מהנהלת המוקד או מדף ההנחיות העדכני.</b></div>
+  <!-- היד של מאיה מעל המלבן הירוק: עותק של הרקע, חתוך בצורת היד והאמה, מעל המלבנים -->
+  <img class="a bg" src="assets/bg-point.jpg" style="left:0;top:46px;width:1200px;height:654px;pointer-events:none;z-index:2;clip-path:polygon(566px 300px,580px 268px,590px 249px,594px 236px,596px 228px,601px 229px,602px 240px,611px 240px,621px 232px,631px 230px,633px 237px,627px 247px,618px 255px,606px 263px,597px 270px,591px 285px,590px 300px)" alt="">
   <button class="btn pulse" data-act="layer:team" style="left:590px;top:332px;width:260px;height:44px">ומי עוד נמצא איתכם במוקד?</button>
   <div class="layer" data-layer="team">
     <div class="dim"></div>
@@ -891,16 +893,18 @@ b{font-weight:800}
 <!-- ======================= 22 קיר המסכים (4) – כל המסכים הושלמו ======================= -->
 <section class="slide hub" id="s22" data-title="מסכי ה-Pit Wall (4)" data-chapter="4" data-done="3"></section>
 
-<!-- ======================= 23 סיכום – המרוץ מסתיים (שקף 26 בתסריט) ======================= -->
+<!-- ======================= 23 סיכום – המרוץ מסתיים, אך העיבוד רק מתחיל (שקף 26 בתסריט – חלק 1) ======================= -->
+<!-- תמונה מעוצבת מלאה: הנציגה בקו הסיום ובועת הדיבור (הטקסט כלול בתמונה) -->
 <section class="slide" id="s23" data-title="המרוץ מסתיים, אך העיבוד רק מתחיל" data-chapter="4">
-  <img class="a bg" src="assets/bg-end.jpg" style="left:-5px;top:45px;width:1213px;height:638px" alt="">
-  <div class="a w" style="left:340px;top:64px;width:829px;font-size:23px;font-weight:800">המרוץ מסתיים, <span class="sky">אך העיבוד רק מתחיל</span></div>
-  <div class="a w lh" style="left:480px;top:98px;width:689px;font-size:15px">בסיום המרוץ, צוות ה-Pit Wall כבר מעבד את המרוץ למסקנות ולמידה להמשך. כך גם כאן: בכל פנייה חשוב להבין מה התושב מדווח, ובאיזו תמונת מצב הפנייה מתקבלת – <b>שגרה, עומס או חירום</b> – כך תנהלו את הפניות בצורה המקצועית ביותר.</div>
-  <div class="sumcol" style="left:905px;top:180px;width:264px;height:244px;border-color:var(--sky)"><div class="h" style="background:var(--sky)">שגרה | <small>מבט על הפנייה</small></div><p>בשגרה מתמקדים בפנייה שמולנו: מה קרה, איפה זה קרה, מה רמת הדחיפות, איך נכון לסווג, מי הגורם המטפל ומה חשוב לתעד.</p><p class="k"><span class="sky">הדגש:</span> טיפול מדויק, מסודר ומתועד בכל פנייה.</p></div>
-  <div class="sumcol" style="left:625px;top:180px;width:264px;height:244px;border-color:var(--orange)"><div class="h" style="background:var(--orange)">עומס | <small>מבט על הדפוס</small></div><p>בעומס מרימים מבט מעבר לשיחה הבודדת: האם מתקבלות כמה פניות בזמן קצר? האם הן מגיעות מאותו אזור? האם אותו נושא או גורם מטפל חוזרים בכמה פניות?</p><p class="k"><span class="org">הדגש:</span> ממשיכים לטפל בכל פנייה, אבל מזהים את הדפוס ומציפים לאחמ״ש.</p></div>
-  <div class="sumcol" style="left:345px;top:180px;width:264px;height:244px;border-color:var(--red)"><div class="h" style="background:var(--red);color:#fff">חירום | <small>מבט על תמונת האירוע</small></div><p>בחירום הפנייה נבדקת בתוך תמונת מצב רחבה יותר. העירייה לא עובדת בהכרח במתכונת רגילה – בודקים מה אומרת ההנחיה העדכנית, מי הגורם הזמין לטיפול, והאם נדרש כונן, חמ״ל, קבוצת חירום או אחמ״ש.</p><p class="k"><span style="color:#ff8a8d">הדגש:</span> להבין מה מחייב פעולה עכשיו, ולפעול לפי הנחיות החירום והכוננות.</p></div>
-  <div class="glass c" style="left:345px;top:436px;width:824px;padding:10px 16px;font-size:18px;font-weight:800;color:var(--sky);line-height:1.3">אותו מודל טיפול מלווה אותנו תמיד – אבל תמונת המצב קובעת מה צריך לבדוק, למי מציפים ואיך ממשיכים בטיפול.</div>
-  <button class="btn pulse" data-act="layer:done" data-sfx="finish" style="left:15px;top:607px;width:185px;height:48px;font-size:18.7px">יציאה 🏁</button>
+  <img class="a bg" src="assets/bg-finish.webp" style="left:0;top:45px;width:1200px;height:630px;object-fit:cover" alt="המרוץ מסתיים, אך העיבוד רק מתחיל. בסיום המרוץ, צוות ה-Pit-Wall כבר מעבד את המרוץ למסקנות ולמידה להמשך. כך גם כאן: בכל פנייה חשוב להבין מה התושב מדווח ובאיזו תמונת מצב הפנייה מתקבלת: שגרה, עומס או חירום – כך תנהלו את הפניות בצורה המקצועית ביותר.">
+  <button class="btn pulse" data-act="next" data-delay="1" style="left:15px;top:607px;width:185px;height:48px">ממשיכים</button>
+</section>
+
+<!-- ======================= 24 סיכום – שגרה / עומס / חירום על מסכי המוקד (שקף 26 בתסריט – חלק 2) ======================= -->
+<!-- תמונה מעוצבת מלאה: שלושת המסכים (הטקסט כלול בתמונה) + כפתור יציאה -->
+<section class="slide" id="s24" data-title="שגרה, עומס וחירום – סיכום" data-chapter="4">
+  <img class="a bg" src="assets/bg-summary.webp" style="left:0;top:45px;width:1200px;height:630px;object-fit:cover" alt="שגרה | מבט על הפנייה: בשגרה מתמקדים בפנייה שמולנו – מה קרה, איפה זה קרה, מה רמת הדחיפות, איך נכון לסווג, מי הגורם המטפל ומה חשוב לתעד. הדגש: טיפול מדויק, מסודר ומתועד בכל פנייה. עומס | מבט על הדפוס: בעומס מרימים מבט מעבר לשיחה הבודדת – האם מתקבלות כמה פניות בזמן קצר? האם הן מגיעות מאותו אזור? האם אותו נושא או גורם מטפל חוזרים בכמה פניות? הדגש: ממשיכים לטפל בכל פנייה, אבל מזהים את הדפוס ומציפים לאחמ״ש. חירום | מבט על המצב בשטח: בחירום מתמקדים בתמונה הרחבה – מה קורה בשטח, אילו גורמי חירום פועלים, ומה ההשפעה על התושבים. הדגש: תיאום, עדכון שוטף ומעקב עד סגירה.">
+  <button class="btn pulse" data-act="layer:done" data-sfx="finish" data-delay="1" style="left:15px;top:607px;width:185px;height:48px;font-size:18.7px">יציאה 🏁</button>
   <div class="layer" data-layer="done">
     <div class="dim"></div>
     <div class="toast"><img src="assets/speedo-6b.png" style="width:150px;margin:0 auto 8px" alt=""><div class="f27" style="font-weight:800">🏁 חציתם את קו הסיום!</div><div class="f16" style="margin-top:8px">סיימתם את יחידה 6 – Pit Wall: חמ״ל המרוץ.</div></div>
