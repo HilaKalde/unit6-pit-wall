@@ -207,6 +207,12 @@ b{font-weight:800}
 .speech::before{content:"";position:absolute;width:26px;height:26px;background:#fff;top:var(--ty,60px);border:0 solid var(--tail,var(--navy));transform:rotate(45deg)}
 .speech.tail-right::before{right:-15px;border-top-width:2px;border-right-width:2px;border-top-right-radius:4px}
 .speech.tail-left::before{left:-15px;border-bottom-width:2px;border-left-width:2px;border-bottom-left-radius:4px}
+.bubble2 svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 8px 16px rgba(0,0,0,.45))}
+.bubble2 svg path{fill:#fff;stroke:var(--green);stroke-width:3;stroke-linejoin:round}
+.bubble2 .b2in{position:absolute;color:var(--navy)}
+.bubble2 .b2t{display:flex;align-items:center;gap:10px;font-size:23px;font-weight:800;color:#7ea31a;line-height:1.1}
+.bubble2 .b2t img{width:34px;height:34px}
+.bubble2 p{font-size:17.5px;line-height:1.4;margin-top:8px}
 .speech .t{font-size:21px;font-weight:800;line-height:1.2;margin-bottom:6px}
 .speech p{font-size:16px;line-height:1.4}
 .speech p+p{margin-top:7px}
@@ -812,9 +818,13 @@ b{font-weight:800}
     <p style="margin-top:8px">במקרים אלו המוקד נערך לעומס מבעוד מועד, עם <b class="sky">דף הנחיות מסודר</b> שעוזר לנו לדעת איך להתנהל נכון.</p>
     <p style="margin-top:8px">וכשאנחנו מזהים דפוס ומציפים את העומס לאחמ״ש – האחמ״ש רואה את התמונה הכוללת ועוזר לכוון: האם נדרשות הנחיות מיוחדות, ומה התיעדוף המתאים לפניות המגיעות.</p>
   </div>
-  <div class="speech tail-right" data-anim="popin" data-delay="1" style="left:20px;top:196px;width:380px;--ty:62px;padding:14px 18px;border-color:var(--green);--tail:var(--green)">
-    <div class="t" style="font-size:21px;display:flex;align-items:center;gap:8px"><img src="assets/ic-love-g.png" style="width:30px" alt=""><span class="grn">זכרו!</span></div>
-    <p style="font-size:17px">צוות המוקד נמצא שם כדי לעזור לכם – <b>בכל דבר.</b></p>
+  <!-- בועת דיבור "זכרו!": גוף הבועה והזנב מצוירים כקו מתאר אחד (SVG) – אין תפר בין הבועה לזנב; הזנב מצביע אל הנציגה -->
+  <div class="a bubble2" data-anim="popin" data-delay="1" style="left:16px;top:188px;width:424px;height:112px">
+    <svg viewBox="0 0 424 112" aria-hidden="true"><path d="M24 3H352Q379 3 379 30V46Q393 58 419 70Q392 74 379 80V82Q379 109 352 109H24Q3 109 3 88V24Q3 3 24 3Z"/></svg>
+    <div class="b2in" style="left:24px;top:16px;width:336px">
+      <div class="b2t"><img src="assets/ic-love-g.png" alt=""><span>זכרו!</span></div>
+      <p>צוות המוקד נמצא שם כדי לעזור לכם – <b>בכל דבר.</b></p>
+    </div>
   </div>
   <button class="btn pulse" data-act="next" style="left:15px;top:607px;width:200px;height:48px">חזרה לקיר המסכים</button>
 </section>
