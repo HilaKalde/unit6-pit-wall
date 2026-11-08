@@ -71,6 +71,9 @@ b{font-weight:800}
 .navbtn svg{width:34px;height:34px}
 #btnNext{left:15px}
 #btnPrev{left:1133px}
+#stage.framed #btnNext{left:40px;top:584px}
+#stage.framed #btnPrev{left:1108px;top:584px}
+.slide.framed .btn[style*="left:15px"],.slide.framed .btn[style*="left: 15px"]{left:40px!important;top:584px!important}
 .navbtn.gone{display:none}
 .navbtn.disabled{opacity:.35;pointer-events:none;filter:grayscale(1)}
 
@@ -107,6 +110,8 @@ b{font-weight:800}
 .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
 .chips span{background:#eaf8fe;border:1.5px solid var(--sky);border-radius:20px;padding:4px 14px;font-size:15px;font-weight:700}
 .chips.dark span{background:rgba(108,207,246,.15);color:#fff}
+.chips.ic span{display:inline-flex;align-items:center;gap:7px;padding:4px 14px 4px 12px}
+.chips.ic svg{width:22px;height:22px;flex:none;fill:none;stroke:var(--sky);stroke-width:3.6;stroke-linecap:round;stroke-linejoin:round}
 .dots li{list-style:none;position:relative;padding-right:16px}
 .dots li::before{content:"";position:absolute;right:0;top:.55em;width:7px;height:7px;border-radius:50%;background:var(--sky)}
 .dots.o li::before{background:var(--orange)}
@@ -175,7 +180,7 @@ b{font-weight:800}
 .callslide .nextcall{display:none}
 .callslide .nextcall.show{display:flex;animation:rise .4s ease .5s both}
 .persp{position:absolute;display:flex;align-items:center;gap:12px;color:#fff}
-.icoitem{position:absolute;display:flex;align-items:center;gap:10px;color:#fff;font-size:16.5px;font-weight:700;line-height:1.3}
+.icoitem{position:absolute;display:flex;align-items:center;gap:10px;color:#fff;font-size:18px;font-weight:700;line-height:1.3}
 .icoitem svg{flex:0 0 46px;width:46px;height:46px;fill:none;stroke:#1EA0FF;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 4px rgba(30,160,255,.55))}
 .persp .ic{flex:0 0 auto;display:flex;align-items:center;justify-content:center}
 .persp svg{width:56px;height:56px;fill:none;stroke:#1EA0FF;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 4px rgba(30,160,255,.6))}
@@ -212,7 +217,7 @@ b{font-weight:800}
 .bubble2 .b2in{position:absolute;color:var(--navy)}
 .bubble2 .b2t{display:flex;align-items:center;gap:10px;font-size:23px;font-weight:800;color:#7ea31a;line-height:1.1}
 .bubble2 .b2t img{width:34px;height:34px}
-.bubble2 p{font-size:17.5px;line-height:1.4;margin-top:8px}
+.bubble2 p{font-size:15.5px;line-height:1.4;margin-top:8px}
 .speech .t{font-size:21px;font-weight:800;line-height:1.2;margin-bottom:6px}
 .speech p{font-size:16px;line-height:1.4}
 .speech p+p{margin-top:7px}
@@ -300,7 +305,7 @@ b{font-weight:800}
 @keyframes scrglow{0%,100%{box-shadow:0 0 0 2px rgba(108,207,246,.45)}50%{box-shadow:0 0 0 4px rgba(108,207,246,1),0 0 34px rgba(108,207,246,.85)}}
 .scr.done .tag{border-color:var(--orange);color:var(--orange)}
 .scr.done .tag .flag{display:block}
-.scr.locked{background:rgba(0,10,20,.6);cursor:default}
+.scr.locked{background:rgba(0,10,20,.2);cursor:default}
 .scr.locked .tag{border-color:var(--gray);color:#aaa}
 .scr.locked .tag img{filter:grayscale(1) opacity(.6)}
 
@@ -321,10 +326,11 @@ b{font-weight:800}
 .signhead{display:flex;align-items:center;gap:12px}
 .avatar{position:absolute;width:120px;height:120px;border-radius:50%;overflow:hidden;border:4px solid var(--sky);background:radial-gradient(circle at 50% 35%,#2a6fa8,#001930);box-shadow:0 0 0 4px rgba(0,25,48,.6),0 0 22px rgba(108,207,246,.6)}
 .avatar img{position:absolute;left:-14px;top:6px;width:148px;max-width:none}
-.minipop{position:absolute;background:#fff;border-radius:14px;border-top:5px solid var(--orange);box-shadow:0 8px 24px rgba(0,0,0,.5);padding:12px 16px 12px 40px;color:var(--navy);font-size:15.5px;line-height:1.38;animation:popin .35s ease both}
+.minipop{position:absolute;background:#fff;border-radius:14px;border-top:5px solid var(--orange);box-shadow:0 8px 24px rgba(0,0,0,.5);padding:12px 16px;color:var(--navy);font-size:15.5px;line-height:1.38;animation:popin .35s ease both}
 .minipop > b{display:block;font-size:18px;margin-bottom:3px}
 .minipop p.exl{margin-top:6px;background:#eef8fd;border-radius:8px;padding:5px 9px}
-.mclose{position:absolute;left:8px;top:8px;width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;font-size:14px;display:flex;align-items:center;justify-content:center}
+.minipop .mnext{display:none;position:static;width:150px;height:40px;margin:10px auto 0}   /* appears once every point was opened: closes the pop-up and brings up the closing screen */
+.slide.explored .minipop .mnext{display:flex}
 .signhead .n{flex:0 0 44px;height:44px;border-radius:50%;background:var(--orange);color:var(--navy);font-size:24px;font-weight:800;display:flex;align-items:center;justify-content:center}
 .signhead b{font-size:24px}
 
@@ -353,8 +359,6 @@ b{font-weight:800}
 .qtile .q{position:absolute;left:0;right:0;top:0;height:100px;border-radius:14px;background:rgba(0,25,48,.85);border:1.5px solid rgba(30,160,255,.75);box-shadow:0 0 16px rgba(30,160,255,.25);color:#fff;font-size:17.5px;font-weight:800;line-height:1.22;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px 14px 10px 14px;cursor:pointer;transition:background .15s,transform .15s}
 .qtile .q:hover{background:rgba(30,160,255,.25);transform:scale(1.03)}
 .qtile .q i{position:absolute;top:-13px;right:50%;margin-right:-15px;width:30px;height:30px;border-radius:50%;background:var(--orange);color:var(--navy);font-style:normal;font-size:16px;display:flex;align-items:center;justify-content:center}
-.qtile .q::after{content:"+";position:absolute;left:10px;bottom:6px;width:22px;height:22px;border-radius:50%;background:var(--sky);color:var(--navy);font-size:19px;line-height:21px;text-align:center;transition:transform .3s}
-.qtile.open .q::after{transform:rotate(45deg)}
 .qtile.open .q{border-color:var(--green)}
 .qtile .ans{position:absolute;left:8px;right:8px;top:108px;height:192px;background:#fff;border-radius:12px;border-top:5px solid var(--sky);padding:12px 14px;font-size:17px;line-height:1.38;color:var(--navy);box-shadow:0 4px 12px rgba(0,0,0,.35);display:none}
 .qtile.open .ans{display:block;animation:dropin .45s ease both}
@@ -374,6 +378,83 @@ b{font-weight:800}
 .sumcol .h small{font-size:15px;font-weight:700}
 .sumcol p{padding:8px 14px 0}
 .sumcol p.k{font-weight:700}
+
+/* ---- תיקוני משוב (אוקטובר 2026) ---- */
+/* קיר המסכים: כותרת HTML (מכסה את הכותרת המצוירת) + ההנחיה בראש המסך */
+.hubtitle{position:absolute;border-radius:14px;background:linear-gradient(160deg,#001930,#04305a);border:2px solid var(--orange);box-shadow:0 6px 22px rgba(0,0,0,.55);text-align:center;color:#fff;overflow:hidden}
+.hubtitle::before{content:"";position:absolute;left:0;right:0;top:0;height:8px;background:conic-gradient(#111 25%,#fff 0 50%,#111 0 75%,#fff 0) 0 0/16px 16px}
+.hubtitle .ht1{font-size:32px;font-weight:800;line-height:1.1;margin-top:20px}
+.hubtitle .ht2{font-size:16.5px;font-weight:700;color:rgba(255,255,255,.88);margin-top:4px}
+.hubhint{display:inline-block;margin-top:10px;background:rgba(108,207,246,.16);border:1.5px solid var(--sky);border-radius:20px;padding:3px 18px;font-size:17.5px;font-weight:800;color:var(--sky)}
+.hubhint[hidden]{display:none}
+/* חלוניות קטנות: לא חוסמות את שאר הנקודות במפה – אפשר לעבור ישר לנקודה אחרת בלי לסגור */
+.layer.passive{pointer-events:none}
+.layer.passive .minipop{pointer-events:auto}
+/* שקף 05: מסך פתיחה עם שני אריחים, ואחרי בחירה – סרגל לשוניות */
+.slide:not(.tabbed) .tab{display:none}
+.slide.tabbed .landing{display:none}
+.shift.tile small{font-size:15px;font-weight:600;max-width:240px;line-height:1.25}
+/* שקף 04: שאלות להרחבה בעיצוב אחיד */
+.dots.q2{display:grid;grid-template-columns:1fr 1fr;gap:7px 28px;font-size:16.5px;line-height:1.3}
+.dots.q2 li{margin:0}
+/* שקף 08: שלבי מודל הטיפול */
+.mstep{position:absolute;width:200px;height:350px;border-radius:16px;background:rgba(0,25,48,.8);border:1.5px solid rgba(108,207,246,.65);box-shadow:0 0 18px rgba(30,160,255,.2);padding:34px 14px 14px;color:#fff;text-align:center}
+.mstep .mn{position:absolute;left:75px;top:-25px;width:50px;height:50px}
+.mstep>svg{display:block;width:56px;height:56px;margin:2px auto 4px;fill:none;stroke:#1EA0FF;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 4px rgba(30,160,255,.55))}
+.mstep h3{font-size:20px;line-height:1.15;color:var(--sky);min-height:46px;display:flex;align-items:center;justify-content:center}
+.mstep p{font-size:15.5px;line-height:1.4;margin-top:8px;color:rgba(255,255,255,.9)}
+.mstep p.ml{font-weight:800;font-size:17px;color:#fff;margin-top:6px}
+.mstep:not(.last)::after{content:"\203A";position:absolute;left:-21px;top:150px;width:24px;font-size:34px;line-height:1;color:var(--orange);text-align:center;font-weight:800}
+/* שקף 09: חלון הרחבה אחיד (כרטיס לבן, כותרת כהה, צבע הדגשה אחד) */
+.pop3 .pcard{position:absolute;background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 14px 44px rgba(0,0,0,.6);color:var(--navy)}
+.pop3 .phead{height:84px;background:linear-gradient(100deg,#001930,#0b4f86);display:flex;align-items:center;gap:16px;padding:0 32px 0 90px;color:#fff;border-bottom:5px solid var(--orange)}
+.pop3 .phead svg{flex:0 0 52px;width:52px;height:52px;fill:none;stroke:var(--sky);stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
+.pop3 .phead b{display:block;font-size:30px;line-height:1.1}
+.pop3 .phead span{font-size:18px;font-weight:700;color:var(--sky)}
+.pop3 .pclose{position:absolute;left:22px;top:22px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.16);border:2px solid rgba(255,255,255,.6);color:#fff;font-size:20px;line-height:1;display:flex;align-items:center;justify-content:center;transition:background .15s}
+.pop3 .pclose:hover{background:rgba(255,255,255,.32)}
+.pop3 .mnext{display:none;left:76px;top:21px;width:150px;height:42px}   /* appears once all three topics were opened: goes straight to the next slide */
+.slide.explored .pop3 .mnext{display:flex}
+.pop3 .pbody{padding:22px 36px 16px;font-size:18px;line-height:1.42}
+.pop3 .pbody p+p,.pop3 .pbody p+ul,.pop3 .pbody ul+p{margin-top:8px}
+.pop3 .pbody .lead{font-size:20px;font-weight:700;color:#1d6fa5}
+.pop3 .pbody h4{font-size:18px;font-weight:400;color:#1d6fa5;margin-top:28px;margin-bottom:4px}
+.pop3 .pbody .gap{margin-top:18px}
+.pop3 .pbody .ex,.pop3 .pbody .note{background:#f3f6f9;border-right:4px solid #8fb4cf;border-radius:8px;padding:10px 16px;margin-top:16px}
+.pop3 .pbody .boxrow{margin-top:14px}
+.pop3 .thumbs{display:flex;gap:14px;margin-top:12px}
+.pop3 .thumbs figure{flex:1;margin:0}
+.pop3 .thumbs img{display:block;width:100%;height:92px;object-fit:cover;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.pop3 .thumbs figcaption{font-size:14.5px;font-weight:700;text-align:center;margin-top:4px}
+.pop3.dg .pbody h4{margin-top:16px}
+/* שקף 16: אירועים צפויים */
+.evrow{position:absolute;display:flex;gap:10px}
+.evrow .shift{position:static;flex:1;height:104px;font-size:16.5px;gap:4px}
+.evrow .shift svg{width:42px;height:42px}
+/* שקף 20: מה מוסרים / לא מוסרים */
+.trow{position:absolute;display:flex;gap:14px;align-items:flex-start;color:#fff;font-size:17px;line-height:1.4;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.2)}
+.trow i{flex:0 0 38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:19px;font-weight:800}
+.trow i.no{background:var(--red);color:#fff}
+.trow i.yes{background:var(--green);color:var(--navy)}
+.trow b{display:block;font-size:20px;margin-bottom:2px}
+/* שקף 24: סיכום – שלושה כרטיסים באותו גודל ובאותה הדגשה */
+.sumcard{position:absolute;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 8px 28px rgba(0,0,0,.5);color:var(--navy);display:flex;flex-direction:column}
+.sumcard .sh{height:74px;display:flex;align-items:center;gap:14px;padding:0 18px;color:#fff}
+.sumcard .sh svg{flex:0 0 42px;width:42px;height:42px;fill:none;stroke:#fff;stroke-width:3.6;stroke-linecap:round;stroke-linejoin:round}
+.sumcard .sh b{display:block;font-size:26px;line-height:1.05}
+.sumcard .sh small{font-size:16px;font-weight:700}
+.sc-blue .sh{background:linear-gradient(100deg,#0b4f86,#1e88e5)}
+.sc-org .sh{background:linear-gradient(100deg,#b8650b,#F99D26)}
+.sc-red .sh{background:linear-gradient(100deg,#a51d22,#E5484D)}
+.sumcard .sb{flex:1;padding:18px 20px 0;font-size:17.5px;line-height:1.4}
+.sumcard .lead{font-size:20px;font-weight:800;margin-bottom:10px}
+.sumcard .sb .dots li{margin-top:7px}
+.dots.r li::before{background:var(--red)}
+.sumcard .em{margin:0 14px 14px;padding:12px 14px;min-height:112px;border-radius:10px;font-size:17px;line-height:1.4}
+.sumcard .em b{font-size:19px}
+.sc-blue .em{background:#eaf3fc;border-right:5px solid #1e88e5}
+.sc-org .em{background:#fff3e0;border-right:5px solid var(--orange)}
+.sc-red .em{background:#fdeceb;border-right:5px solid var(--red)}
 </style>
 </head>
 <body>
@@ -454,7 +535,7 @@ b{font-weight:800}
 <section class="slide callslide" id="s03a" data-title="שיחה 1 – פנס שלא עובד" data-chapter="0" data-nonext="1" data-n="0" data-ans="r"
          data-fb="פנס בודד שאינו פועל הוא תקלה שגרתית – פותחים פנייה ומעבירים לטיפול לפי מודל הטיפול.">
   <img class="a bg" src="assets/bg-call-1.jpg" style="left:-9px;top:45px;width:1218px;height:630px" alt="">
-  <div class="bub" data-anim="popin" data-delay=".5" style="left:600px;top:58px;width:430px;--ty:80px"><small><span class="ph"><svg><use href="#phone"/></svg></span>שיחה 1 · תושבת על הקו</small>"שלום, הפנס ליד הבניין שלנו לא עובד מאתמול בערב. ברחוב חברון פינת אשר וינר, ליד הכניסה לחניה."</div>
+  <div class="bub" data-anim="popin" data-delay=".5" style="left:600px;top:58px;width:430px;--ty:56px"><small><span class="ph"><svg><use href="#phone"/></svg></span>שיחה 1 · אזרחית על הקו</small>"שלום, הפנס ליד הבניין שלנו לא עובד מאתמול בערב. בדרך חברון פינת אשר וינר, ליד הכניסה לחניה."</div>
   <div class="callsteps" style="left:132px;top:60px"><span class="cur"><i>1</i>שיחה 1</span><span><i>2</i>שיחה 2</span><span><i>3</i>שיחה 3</span></div>
   <div class="ans" style="left:805px;top:450px;width:380px"><button data-v="r">שגרתית</button><button data-v="a">דורשת תשומת לב</button></div>
   <div class="cfb" style="left:805px;top:508px;width:380px"></div>
@@ -464,7 +545,7 @@ b{font-weight:800}
 <section class="slide callslide" id="s03b" data-title="שיחה 2 – רמזור תקול" data-chapter="0" data-nonext="1" data-n="1" data-ans="a"
          data-fb="רמזור תקול בצומת פעיל, ומכוניות שנכנסות בלי סדר – מפגע בטיחותי שדורש טיפול מיידי.">
   <img class="a bg" src="assets/bg-call-2.jpg" style="left:-9px;top:45px;width:1218px;height:630px" alt="">
-  <div class="bub" data-anim="popin" data-delay=".5" style="left:560px;top:58px;width:440px;--ty:80px"><small><span class="ph"><svg><use href="#phone"/></svg></span>שיחה 2 · תושב על הקו</small>"הרמזור בצומת מעלה דרגה פינת שמואל מאיר לא עובד. המכוניות נכנסות לצומת בלי סדר, וכמעט הייתה תאונה!"</div>
+  <div class="bub" data-anim="popin" data-delay=".5" style="left:560px;top:58px;width:440px;--ty:56px"><small><span class="ph"><svg><use href="#phone"/></svg></span>שיחה 2 · אזרח על הקו</small>"הרמזור בצומת מעלה דרגה פינת שמואל מאיר לא עובד. המכוניות נכנסות לצומת בלי סדר, וכמעט הייתה תאונה!"</div>
   <div class="callsteps" style="left:132px;top:60px"><span><i>1</i>שיחה 1</span><span class="cur"><i>2</i>שיחה 2</span><span><i>3</i>שיחה 3</span></div>
   <div class="ans" style="left:805px;top:450px;width:380px"><button data-v="r">שגרתית</button><button data-v="a">דורשת תשומת לב</button></div>
   <div class="cfb" style="left:805px;top:508px;width:380px"></div>
@@ -474,7 +555,7 @@ b{font-weight:800}
 <section class="slide callslide" id="s03c" data-title="שיחה 3 – רחוב חשוך" data-chapter="0" data-nonext="1" data-n="2" data-ans="a"
          data-fb="רחוב שלם חשוך – וגם הרחוב הסמוך – וילדים בדרך. התקלה רחבה יותר ויש בה סיכון.">
   <img class="a bg" src="assets/bg-call-3.jpg" style="left:-9px;top:45px;width:1218px;height:630px" alt="">
-  <div class="bub" data-anim="popin" data-delay=".5" style="left:640px;top:58px;width:480px;--ty:70px"><small><span class="ph"><svg><use href="#phone"/></svg></span>שיחה 3 · תושבת על הקו</small>"כל הרחוב חשוך עכשיו, ואני רואה שגם הרחוב ליד חשוך. יש ילדים שחוזרים מהחוגים ואין בכלל תאורה – אנחנו ברחוב בר אילן פינת ירמיהו."</div>
+  <div class="bub" data-anim="popin" data-delay=".5" style="left:640px;top:58px;width:480px;--ty:70px"><small><span class="ph"><svg><use href="#phone"/></svg></span>שיחה 3 · אזרחית על הקו</small>"כל הרחוב חשוך עכשיו, ואני רואה שגם הרחוב ליד חשוך. יש ילדים שחוזרים מהחוגים ואין בכלל תאורה – אנחנו ברחוב בר אילן פינת ירמיהו."</div>
   <div class="callsteps" style="left:132px;top:60px"><span><i>1</i>שיחה 1</span><span><i>2</i>שיחה 2</span><span class="cur"><i>3</i>שיחה 3</span></div>
   <div class="ans" style="left:805px;top:450px;width:380px"><button data-v="r">שגרתית</button><button data-v="a">דורשת תשומת לב</button></div>
   <div class="cfb" style="left:805px;top:508px;width:380px"></div>
@@ -492,7 +573,7 @@ b{font-weight:800}
       <svg viewBox="0 0 400 20" preserveAspectRatio="none"><path d="M0 10 Q100 -6 200 10 T400 10"/></svg>
       <img src="assets/call-1.jpg" style="--fd:.5s" alt=""><img src="assets/call-2.jpg" style="--fd:.7s" alt=""><img src="assets/call-3.jpg" style="--fd:.9s" alt="">
     </div>
-    <div class="a c lh" style="left:200px;top:414px;width:800px;white-space:nowrap;font-size:20px;font-weight:800;color:#1d6fa5">אבל מה קורה כשהפניות מתחילות להתחבר לתמונה רחבה יותר וליצור <span class="org">דפוס?</span></div>
+    <div class="a c lh" style="left:200px;top:414px;width:800px;white-space:nowrap;font-size:20px;font-weight:800;color:#1d6fa5">אבל מה קורה כשהפניות מתחילות להתחבר לתמונה רחבה יותר ולייצר <span class="org">דפוס?</span></div>
     <button class="btn pulse" data-act="next" style="left:508px;top:454px;width:185px;height:44px">גלו את התשובה</button>
     <div class="confetti"></div>
   </div>
@@ -502,26 +583,33 @@ b{font-weight:800}
 <!-- רקע: מאיה מצביעה על המסך הגדול (bg-chapter1) בזום אין – המסך תופס את רוב השקף, הטקסט עליו -->
 <section class="slide" id="s04" data-title="מנהלי המרוץ ב-Pit Wall – שלוש נקודות מבט" data-chapter="0">
   <img class="a bg" src="assets/bg-chapter1.jpg" style="left:-460px;top:-7px;width:1699px;height:926px" alt="">
-  <div class="a w" style="left:460px;top:70px;width:710px;font-size:25px;font-weight:800">מנהלי המרוץ ב-<span class="sky">Pit Wall</span></div>
-  <div class="a w lh" style="left:460px;top:108px;width:710px;font-size:15.5px">בכל מרוץ, מנהלי המרוץ יושבים ב-Pit Wall: צופים ומקשיבים לכל מה שקורה לאורך המרוץ. הם אלו שרואים את הנתונים ואת תמונת המצב המלאה – עד לניצחון של הנהג.</div>
-  <div class="a w lh" style="left:460px;top:170px;width:710px;font-size:15.5px">כך גם אתם: כל פנייה המתקבלת במוקד נבחנת ומטופלת בפני עצמה. אך כמוקדנים, לא תמיד מספיק לשאול את עצמכם "האם זו פנייה שגרתית?" – <b class="sky">נדרש לשאול גם:</b></div>
-  <div class="a chips dark" style="left:460px;top:226px;width:710px;gap:8px"><span style="font-size:14px">מה קורה סביב הפנייה?</span><span style="font-size:14px">האם מתקבלות פניות נוספות / דומות?</span><span style="font-size:14px">האם אנחנו מזהים סימן לעומס?</span><span style="font-size:14px">האם קיימות הנחיות מיוחדות?</span><span style="font-size:14px">האם נדרש תיעדוף, עדכון או מעקב?</span></div>
-  <div class="a w" style="left:460px;top:316px;width:710px;font-size:18px;font-weight:800">ביחידה הזו נלמד להסתכל על עבודת המוקד דרך <span class="org">שלוש נקודות מבט:</span></div>
-  <div class="persp" data-anim="popin" data-delay=".9" style="left:960px;top:362px;width:210px"><span class="ic"><svg><use href="#icPin"/></svg></span><span><b>הפנייה</b><small>מבט בשגרה</small></span></div>
-  <div class="persp" data-anim="popin" data-delay="1.15" style="left:715px;top:362px;width:210px"><span class="ic"><svg><use href="#icPins"/></svg></span><span><b>הדפוס</b><small>מבט בעומס</small></span></div>
-  <div class="persp" data-anim="popin" data-delay="1.4" style="left:470px;top:362px;width:210px"><span class="ic"><svg><use href="#icSiren"/></svg></span><span><b>המצב</b><small>מבט בחירום</small></span></div>
+  <div class="a w" style="left:460px;top:68px;width:710px;font-size:26px;font-weight:800">מנהלי המרוץ ב-<span class="sky">Pit Wall</span></div>
+  <div class="a w lh" style="left:460px;top:112px;width:710px;font-size:16.5px">בכל מרוץ, מנהלי המרוץ יושבים ב-Pit Wall: צופים ומקשיבים לכל מה שקורה, ורואים את הנתונים ואת תמונת המצב המלאה – עד לניצחון של הנהג.</div>
+  <div class="a w lh" style="left:460px;top:176px;width:710px;font-size:16.5px">כך גם אתם: כל פנייה במוקד נבחנת ומטופלת בפני עצמה. אך כמוקדנים, לא תמיד מספיק לשאול "האם זו פנייה שגרתית?" – <b class="sky">נדרש לשאול גם:</b></div>
+  <ul class="a w dots q2" style="left:460px;top:238px;width:710px">
+    <li>מה קורה סביב הפנייה?</li><li>האם קיימות הנחיות מיוחדות?</li>
+    <li>האם מתקבלות פניות נוספות או דומות?</li><li>האם נדרש תיעדוף, עדכון או מעקב?</li>
+    <li>האם אנחנו מזהים סימן לעומס?</li>
+  </ul>
+  <div class="a w" style="left:460px;top:348px;width:710px;font-size:19px;font-weight:800">ביחידה הזו נלמד להסתכל על עבודת המוקד דרך <span class="org">שלוש נקודות מבט:</span></div>
+  <div class="persp" data-anim="popin" data-delay=".9" style="left:960px;top:394px;width:210px"><span class="ic"><svg><use href="#icPin"/></svg></span><span><b>שגרה</b><small>מבט על הפנייה</small></span></div>
+  <div class="persp" data-anim="popin" data-delay="1.15" style="left:715px;top:394px;width:210px"><span class="ic"><svg><use href="#icPins"/></svg></span><span><b>עומס</b><small>מבט על הדפוס</small></span></div>
+  <div class="persp" data-anim="popin" data-delay="1.4" style="left:470px;top:394px;width:210px"><span class="ic"><svg><use href="#icSiren"/></svg></span><span><b>חירום</b><small>מבט על המצב</small></span></div>
   <button class="btn pulse" data-act="next" data-delay="1.8" style="left:15px;top:607px;width:185px;height:48px">ממשיכים</button>
 </section>
 
 <!-- ======================= 05 רגע לפני ה-ZOOM IN – משמרות ונהלי עבודה (שקפים 5–6 בתסריט) ======================= -->
 <!-- שתי לשוניות "לחצו להרחבה"; כפתור ההמשך מופיע אחרי צפייה בשתיהן -->
-<section class="slide" id="s05" data-title="רגע לפני ה-ZOOM IN – משמרות ונהלי עבודה" data-chapter="0">
+<section class="slide framed" id="s05" data-title="רגע לפני ה-ZOOM IN – משמרות ונהלי עבודה" data-chapter="0">
   <img class="a bg" src="assets/bg-drag.jpg" style="left:0;top:45px;width:1200px;height:630px" alt="">
   <div class="a w" style="left:300px;top:66px;width:860px;font-size:25px;font-weight:800">רגע לפני ה-<span class="sky">ZOOM IN</span></div>
   <div class="a w" style="left:300px;top:104px;width:860px;font-size:17px">לפני שנבחין בין שגרה, עומס וחירום, עלינו להבין: <b>מהי שגרת העבודה הקבועה של המוקד?</b></div>
-  <button class="btn tab" data-act="tab:shifts" data-xp style="left:990px;top:146px;width:170px;height:44px">משמרות</button>
-  <button class="btn tab" data-act="tab:rules" data-xp style="left:805px;top:146px;width:170px;height:44px">נהלי עבודה</button>
-  <div class="a sky xphint" style="left:560px;top:156px;width:230px;font-size:17px;font-weight:800">← לחצו להרחבה</div>
+  <!-- מסך פתיחה: שני אריחים גדולים. לחיצה על אחד פותחת את התוכן, ומופיע סרגל לשוניות להחלפה בין שני הנושאים -->
+  <div class="a c sky xphint landing" style="left:0;top:206px;width:1200px;font-size:19px;font-weight:800">לחצו על כל אחד מהנושאים להרחבה</div>
+  <div class="shift tile landing" data-act="tab:shifts" data-xp style="left:660px;top:262px;width:300px;height:210px;font-size:26px"><svg style="width:84px;height:84px"><use href="#icClock"/></svg>משמרות<small>מתי עובדים ואיך משתנה העבודה</small></div>
+  <div class="shift tile landing o" data-act="tab:rules" data-xp style="left:240px;top:262px;width:300px;height:210px;font-size:26px"><svg style="width:84px;height:84px" viewBox="0 0 64 64"><rect x="12" y="8" width="40" height="48" rx="5"/><path d="M22 8h20v8H22zM20 28l4 4 7-8M20 42l4 4 7-8M36 30h10M36 44h10"/></svg>נהלי עבודה<small>הכללים הקבועים של המשמרת</small></div>
+  <button class="btn tab" data-act="tab:shifts" style="left:990px;top:146px;width:170px;height:44px">משמרות</button>
+  <button class="btn tab" data-act="tab:rules" style="left:805px;top:146px;width:170px;height:44px">נהלי עבודה</button>
 
   <div class="tabpanel" data-panel="shifts">
     <div class="a w" style="left:60px;top:208px;width:1100px;font-size:17px">המוקד פועל לאורך כל שעות היממה, ודרך העבודה משתנה לפי המשמרת:</div>
@@ -540,7 +628,7 @@ b{font-weight:800}
       <li>יש להירשם בדף ההפסקות ולעדכן את האחמ״ש כאשר מגיע התור להפסקה</li>
       <li>בכל שיחה חלה חובת הזדהות ("מוקד שלום, מדבר/ת...")</li>
       <li>יש לתעד כל שיחה במערכת ה-CRM</li>
-      <li>יש לנתב את כל ההודעות! במהלך המשמרת ובסיומה</li>
+      <li>יש לנתב את כל ההודעות במהלך המשמרת ובסיומה</li>
       <li>יש לעבור על פניות "לא שייך למחלקה" במהלך המשמרת</li>
       <li>יש להעביר טלפונית, לגורם הרלוונטי, כל הודעת בטיחות – ולציין למי הועברה</li>
       <li>יש לעקוב אחר תצוגת "כל מה שחשוב לי" במהלך המשמרת, כדי להישאר מעודכנים</li>
@@ -556,10 +644,10 @@ b{font-weight:800}
 <section class="slide hub" id="s06" data-title="מסכי ה-Pit Wall (המוקד)" data-chapter="0" data-done="0"></section>
 
 <!-- ======================= 07 שגרה – סידור מודל הטיפול (גרירה) (שקף 8 בתסריט) ======================= -->
-<section class="slide dd" id="s07" data-title="שגרה – סדרו את מודל הטיפול בפנייה" data-chapter="1" data-nonext="1">
+<section class="slide framed dd" id="s07" data-title="שגרה – סדרו את מודל הטיפול בפנייה" data-chapter="1" data-nonext="1">
   <img class="a bg" src="assets/bg-drag.jpg" style="left:0;top:45px;width:1200px;height:630px" alt="">
   <div class="a w" style="left:360px;top:72px;width:800px;font-size:23px;font-weight:800">בשגרה מתמקדים בפנייה</div>
-  <div class="a w" style="left:360px;top:112px;width:800px;font-size:15.5px;line-height:1.35">המוקדנים – אתם – נקודת הפתיחה של הפנייה ושל תהליך הטיפול, כפי שראיתם ביחידות הקודמות.<br><b>בואו נראה מה אתם זוכרים: גררו את השלבים וסדרו נכונה את מודל הטיפול בפנייה.</b></div>
+  <div class="a w" style="left:360px;top:112px;width:800px;font-size:15.5px;line-height:1.35">המוקדנים, אתם, נקודת הפתיחה של הפנייה ושל תהליך הטיפול.<br><b>בואו נראה מה אתם זוכרים: גררו את השלבים וסדרו נכונה את מודל הטיפול בפנייה.</b></div>
   <img class="dd-num" src="assets/dd-1.png" style="left:1042px;top:182px" alt="1">
   <img class="dd-num" src="assets/dd-2.png" style="left:816px;top:182px" alt="2">
   <img class="dd-num" src="assets/dd-3.png" style="left:590px;top:182px" alt="3">
@@ -581,9 +669,10 @@ b{font-weight:800}
   <!-- משובי הגרירה מופיעים למטה (במחסן שהתרוקן) בלי האפלה – כך רואים את הכרטיסים שסומנו בירוק / בכתום -->
   <div class="layer" data-layer="fb-ok">
     <div class="fbtop ok" style="left:200px;top:410px;width:800px">
-      <div class="hd"><img class="vx" src="assets/v.png" alt=""><b class="grn" style="font-size:24px">מדויק להפליא!</b><b style="font-size:18px">זהו מודל הטיפול בפנייה.</b><button class="btn" data-act="next" style="position:static;margin-right:auto;width:150px;height:40px">ממשיכים</button></div>
-      <p>פתיחת הדיווח ← איסוף נתונים ← סיווג פנייה ← העברה לגורם המטפל ← סגירת פנייה. בשקף הבא נחזור בקצרה על כל שלב.</p>
+      <div class="hd"><img class="vx" src="assets/v.png" alt=""><b class="grn" style="font-size:24px">מדויק להפליא!</b><b style="font-size:18px">זהו מודל הטיפול בפנייה.</b></div>
+      <p>פתיחת הדיווח ← איסוף נתונים ← סיווג פנייה ← העברה לגורם המטפל ← סגירת פנייה.</p>
     </div>
+    <button class="btn pulse" data-act="next" style="left:15px;top:607px;width:185px;height:48px">ממשיכים</button>
   </div>
   <div class="layer" data-layer="fb-retry">
     <div class="fbtop bad" style="left:200px;top:410px;width:800px">
@@ -599,67 +688,99 @@ b{font-weight:800}
   </div>
 </section>
 
-<!-- ======================= 08 פניות בשגרה – מודל הטיפול (שקף 9 בתסריט) ======================= -->
-<!-- תמונה מעוצבת מלאה: "פניות בשגרה – מודל הטיפול בפנייה" (5 השלבים כלולים בתמונה) -->
-<section class="slide" id="s08" data-title="פניות בשגרה – מודל הטיפול בפנייה" data-chapter="1">
-  <div class="a bg" style="left:0;top:45px;width:1200px;height:630px;background:linear-gradient(#132034,#0b1626)"></div>
-  <img class="a bg" src="assets/bg-model.jpg" style="left:0;top:45px;width:1200px;height:540px" alt="פניות בשגרה: כל פנייה – גם בשגרה, גם בעומס וגם בחירום – מטופלת לפי מודל הטיפול בפנייה. 1 פתיחת הדיווח. 2 איסוף נתונים. 3 סיווג פנייה. 4 העברה לגורם המטפל. 5 סגירת פנייה.">
+<!-- ======================= 08 פניות בשגרה – מודל הטיפול (שקף 11 בתסריט) ======================= -->
+<!-- 5 שלבי המודל כטקסט HTML (בכל כרטיס: כותרת, משפט פתיחה מודגש בשורה נפרדת, והפירוט מתחתיו) -->
+<section class="slide framed" id="s08" data-title="פניות בשגרה – מודל הטיפול בפנייה" data-chapter="1">
+  <img class="a bg" src="assets/bg-drag.jpg" style="left:0;top:45px;width:1200px;height:630px" alt="">
+  <div class="a w" style="left:64px;top:70px;width:1072px;font-size:34px;font-weight:800">פניות בשגרה</div>
+  <div class="a w" style="left:64px;top:118px;width:1072px;font-size:18px">כל פנייה – גם בשגרה, גם בעומס וגם בחירום – מטופלת לפי <b class="sky">מודל הטיפול בפנייה.</b></div>
+
+  <div class="mstep" style="left:936px;top:206px"><img class="mn" src="assets/dd-1.png" alt="1">
+    <svg viewBox="0 0 64 64"><path d="M10 8h32v48H10z"/><path d="M18 20h16M18 29h16M18 38h8"/><path d="M48 18l8 8-17 17-10 2 2-10z"/></svg>
+    <h3>פתיחת הדיווח</h3><p class="ml">מקשיבים ומבינים את מהות הפנייה</p><p>מה קרה? איפה זה קרה? מי מדווח? האם חסר מידע?</p></div>
+  <div class="mstep" style="left:718px;top:206px"><img class="mn" src="assets/dd-2.png" alt="2">
+    <svg viewBox="0 0 64 64"><path d="M6 8h34v24H22l-9 9v-9H6z"/><path d="M18 17c0-4 10-4 10 1 0 4-5 4-5 8M23 29v1"/><path d="M28 40h30v14l-7-5H28z"/></svg>
+    <h3>איסוף נתונים</h3><p class="ml">מתחקרים כדי להשלים את התמונה</p><p>שואלים את השאלות שיאפשרו להבין את המיקום, את היקף הבעיה ואת רמת הדחיפות.</p></div>
+  <div class="mstep" style="left:500px;top:206px"><img class="mn" src="assets/dd-3.png" alt="3">
+    <svg viewBox="0 0 64 64"><path d="M6 14h20l6 7h26v35H6z"/><path d="M16 36h22M16 45h14"/></svg>
+    <h3>סיווג פנייה</h3><p class="ml">בוחרים את הנושא המתאים</p><p>ומתעדים במערכת: פרטי הפונה, כתובת האירוע, נושא הפנייה ותיאור ברור של הדיווח.</p></div>
+  <div class="mstep" style="left:282px;top:206px"><img class="mn" src="assets/dd-4.png" alt="4">
+    <svg viewBox="0 0 64 64"><circle cx="14" cy="20" r="7"/><path d="M3 50c0-10 5-15 11-15s11 5 11 15"/><circle cx="50" cy="20" r="7"/><path d="M39 50c0-10 5-15 11-15s11 5 11 15"/><path d="M26 28h12M33 22l6 6-6 6"/></svg>
+    <h3>העברה לגורם המטפל</h3><p class="ml">מעבירים לגורם הרלוונטי</p><p>כאשר קיימת חלוקה לפי אזור, רובע או אגף – בודקים את איש הקשר המתאים לפני ההעברה.</p></div>
+  <div class="mstep last" style="left:64px;top:206px"><img class="mn" src="assets/dd-5.png" alt="5">
+    <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="22"/><path d="M21 33l8 8 15-17"/></svg>
+    <h3>סגירת פנייה</h3><p class="ml">סוגרים את הפנייה במערכת</p><p>לפי הצורך, על ידי הנציג או על ידי המחלקה המטפלת.</p></div>
+
   <button class="btn pulse" data-act="next" style="left:15px;top:607px;width:230px;height:48px">למסך הגדרות הפנייה</button>
 </section>
 
 <!-- ======================= 09 מסך הגדרות הפנייה – סכנה / זמן ושעה / גורם מטפל (שקפים 10–13 בתסריט) ======================= -->
 <section class="slide" id="s09" data-title="מסך הגדרות הפנייה – מה יכול להשפיע על הפנייה" data-chapter="1">
-  <!-- מאיה יושבת מול המסך הגדול; על המסך 3 אייקונים "לחצו להרחבה" – כל אחד פותח שכבה (פופאפ מעוצב: הכותרת וה-X בתמונה, הטקסט באזור הלבן) -->
+  <!-- מאיה יושבת מול המסך הגדול; על המסך 3 אייקונים "לחצו להרחבה" – כל אחד פותח שכבה (חלון הרחבה אחיד: כותרת, X, ותוכן) -->
   <img class="a bg" src="assets/bg-chapter2.jpg" style="left:0;top:45px;width:1200px;height:634px" alt="">
   <div class="a sky" style="left:290px;top:64px;width:530px;font-size:23px;font-weight:800">נכנסתם למסך הגדרות הפנייה</div>
-  <div class="a w lh" style="left:290px;top:102px;width:530px;font-size:16px">לכל מידע המתקבל על הפנייה יש השפעה על האופן שבו תסווג הפנייה ועל מי שיטפל בה.<br><b>לחצו על כל אייקון להרחבה על "מה יכול להשפיע" על כל פנייה המתקבלת במוקד.</b></div>
-  <div class="shift tile" data-act="layer:danger" data-xp style="left:652px;top:200px;width:160px;height:140px"><svg><use href="#icDanger"/></svg>סכנה</div>
-  <div class="shift tile" data-act="layer:time" data-xp style="left:472px;top:200px;width:160px;height:140px"><svg><use href="#icClock"/></svg>זמן / שעה</div>
-  <div class="shift tile" data-act="layer:handler" data-xp style="left:292px;top:200px;width:160px;height:140px"><svg><use href="#icHandler"/></svg>גורם מטפל</div>
+  <div class="a w lh" style="left:290px;top:102px;width:530px;font-size:16px">לכל מידע המתקבל על הפנייה יש השפעה על האופן שבו תסווג הפנייה ועל מי שיטפל בה.<br><b>לחצו על כל אייקון כדי להרחיב על הגורמים שיכולים להשפיע על הטיפול בכל פנייה המתקבלת במוקד.</b></div>
+  <div class="shift tile" data-act="layer:danger" data-xp style="left:652px;top:216px;width:160px;height:140px"><svg><use href="#icDanger"/></svg>סכנה</div>
+  <div class="shift tile" data-act="layer:time" data-xp style="left:472px;top:216px;width:160px;height:140px"><svg><use href="#icClock"/></svg>זמן / שעה</div>
+  <div class="shift tile" data-act="layer:handler" data-xp style="left:292px;top:216px;width:160px;height:140px"><svg><use href="#icHandler"/></svg>גורם מטפל</div>
   <button class="btn pulse gate" data-act="next" style="left:15px;top:607px;width:185px;height:48px">ממשיכים</button>
 
-  <!-- פופאפים מעוצבים: הכותרת וה-X בתמונה (ה-X סוגר). הטקסט זורם מלמעלה למטה: בלוק רחב באזור הלבן העליון, והמשך בפינה הימנית-תחתונה -->
-  <div class="layer pop2" data-layer="danger">
-    <img class="a" src="assets/bg-danger.jpg" style="left:0;top:45px;width:1200px;height:630px" alt="סכנה – האם יש כאן סיכון מיוחד?">
-    <button class="xhot" data-act="close" style="left:27px;top:73px" aria-label="סגירה"></button>
-    <div class="a popcol" style="left:300px;top:196px;width:860px">
-      <p>פניות הדורשות <b>תשומת לב מיוחדת</b> הן פניות שיש בהן סכנה לאנשים, לרכוש או למרחב הציבורי.</p>
-      <div class="ex"><b>לדוגמה:</b> רמזור שלא עובד, בור פתוח, חפץ בנתיב נסיעה, מבנים מסוכנים, מקרר עם דלתות ועוד.</div>
-      <h4>בכל נושא בטיחותי נדרש:</h4>
-      <ul class="dots row"><li>להעביר את הפנייה <b>טלפונית</b></li><li>לרשום <b>למי הועברה</b> הפנייה</li><li>לבצע <b>מעקב</b> עד שהפנייה נסגרת</li></ul>
-      <h4>לפני שמעבירים, יש לוודא:</h4>
-      <p><b>תיאור ברור של הסיכון:</b> איפה זה נמצא, מה בדיוק הסכנה, האם יש חסימה, והאם נדרש טיפול מהיר.</p>
-      <p>בהתאם לסכנה, יש לדווח לגורם המטפל הרלוונטי – בתוך העירייה, או גורם חיצוני לעירייה כמו: חברת חשמל, בזק, דפו (הרכבת הקלה) ועוד.</p>
-    </div>
-    <div class="a popcol" style="left:830px;top:478px;width:290px"><div class="note"><b>שימו לב:</b> לחברות חיצוניות לעירייה אין את ה-CRM שלנו, ולכן אנחנו נדרשים <b>לוודא טיפול ולסגור את הפנייה.</b> רשימת המידע המלאה – במערכת ניהול הידע.</div></div>
-  </div>
-
-  <div class="layer pop2" data-layer="time">
-    <img class="a" src="assets/bg-timeui.jpg" style="left:0;top:45px;width:1200px;height:630px" alt="זמן / שעה">
-    <button class="xhot" data-act="close" style="left:27px;top:73px" aria-label="סגירה"></button>
-    <div class="a popcol" style="left:300px;top:186px;width:860px">
-      <p style="font-weight:800;color:#1d6fa5">אותה פנייה יכולה לקבל מסלול טיפול שונה לפי השעה שבה היא מתקבלת.</p>
-      <p>לכל מחלקה יש <b>שעות פעילות מוגדרות</b>. בשעות הפעילות, הפנייה עוברת בדרך כלל למחלקה או לגורם המטפל הרלוונטי. לאחר שעות הפעילות – ברוב המקרים <b>החל מהשעה 15:30</b> – המחלקות אינן עובדות. לכן, בפנייה המתקבלת בערב, בלילה, בסוף שבוע או בחג, עלינו לבדוק:</p>
-      <ul class="dots row"><li>האם קיים כונן / תורן למחלקה?</li><li>האם יש גורם ספציפי שמטפל בנושא?</li><li>האם הפנייה דחופה או בטיחותית?</li><li>האם צריך להציף לאחמ״ש לפני ההעברה?</li></ul>
-      <p>פנייה <b>שאינה דחופה</b> וניתן לטפל בה למחרת – פותחים כפי שלמדנו. פנייה <b>שדורשת טיפול מיידי</b> – פונים טלפונית לכונן / לתורן הרלוונטי.</p>
-      <div class="boxrow">
-        <div class="ex" style="flex:1.6"><b>לדוגמה:</b> גדר פרוצה באתר בנייה – <b>ביום:</b> למחלקת פיקוח על הבנייה. <b>אחרי 15:30:</b> לכונן המחלקה. <b>בסיום הכוננות</b> (אמצע שבוע – 00:00): לצוות 4.</div>
-        <div class="note" style="flex:1">רשימת הכוננות המלאה מתפרסמת במערכת ניהול הידע – הקפידו להתעדכן בה.</div>
+  <!-- חלונות הרחבה: כרטיס לבן אחיד עם כותרת כהה (אייקון + שם הנושא), X לסגירה, ותוכן בצבע אחד בלבד -->
+  <div class="layer pop3 dg" data-layer="danger">
+    <div class="dim"></div>
+    <div class="pcard" style="left:90px;top:50px;width:1020px;height:622px">
+      <div class="phead"><svg><use href="#icDanger"/></svg><div><b>סכנה</b><span>האם יש כאן סיכון מיידי?</span></div></div>
+      <button class="pclose" data-act="close" aria-label="סגירה">✕</button>
+      <button class="btn pulse mnext" data-act="next">ממשיכים</button>
+      <div class="pbody">
+        <p class="lead">פניות הדורשות <b>תשומת לב מיוחדת</b> הן פניות שיש בהן סכנה לאנשים, לרכוש או למרחב הציבורי.</p>
+        <div class="ex"><b>לדוגמה:</b> רמזור שלא עובד, בור פתוח, חפץ בנתיב נסיעה, מבנים מסוכנים, מקרר עם דלתות ועוד.</div>
+        <div class="thumbs"><figure><img src="assets/danger-1.jpg" alt="רמזור שלא עובד"><figcaption>רמזור שלא עובד</figcaption></figure><figure><img src="assets/danger-2.jpg" alt="בור פתוח"><figcaption>בור פתוח</figcaption></figure><figure><img src="assets/danger-3.jpg" alt="חפץ בנתיב נסיעה"><figcaption>חפץ בנתיב נסיעה</figcaption></figure><figure><img src="assets/danger-4.jpg" alt="מבנה מסוכן"><figcaption>מבנה מסוכן</figcaption></figure><figure><img src="assets/danger-5.jpg" alt="מקרר עם דלתות"><figcaption>מקרר עם דלתות</figcaption></figure></div>
+        <h4>בכל נושא בטיחותי נדרש:</h4>
+        <ul class="dots row"><li>להעביר את הפנייה <b>טלפונית</b></li><li>לרשום <b>למי הועברה</b> הפנייה</li><li>לבצע <b>מעקב</b> עד שהפנייה נסגרת</li></ul>
+        <h4>לפני שמעבירים יש לוודא:</h4>
+        <p><b>תיאור ברור של הסיכון:</b> איפה זה נמצא, מה בדיוק הסכנה, האם יש חסימה, והאם נדרש טיפול מהיר.</p>
+        <p>בהתאם לסכנה, יש לדווח לגורם המטפל הרלוונטי – בתוך העירייה, או גורם חיצוני לעירייה כמו: חברת חשמל, בזק, דפו (הרכבת הקלה) ועוד.</p>
+        <div class="note"><b>שימו לב:</b> לחברות חיצוניות לעירייה אין את ה-CRM שלנו, ולכן אנחנו נדרשים <b>לוודא טיפול ולסגור את הפנייה.</b> רשימת הנושאים המלאה – במערכת ניהול הידע.</div>
       </div>
     </div>
   </div>
 
-  <div class="layer pop2" data-layer="handler">
-    <img class="a" src="assets/bg-emerg.jpg" style="left:0;top:45px;width:1200px;height:630px" alt="גורם מטפל">
-    <button class="xhot" data-act="close" style="left:27px;top:73px" aria-label="סגירה"></button>
-    <div class="a popcol" style="left:290px;top:200px;width:875px">
-      <p style="font-size:16px">כל פנייה שמגיעה למוקד מטופלת על ידי אגף, מחלקה עירונית או גוף חוץ־ארגוני: מים וביוב, תקשורת, חשמל, כבאות, משטרה, תשתיות או תחבורה.</p>
-      <h4>לפני שמעבירים נבדוק:</h4>
-      <ul class="dots row"><li>מי אחראי בפועל על התחום?</li><li>האם נדרשת פתיחת פנייה בלבד, או גם העברה נוספת?</li><li>האם הגורם המטפל מחולק לפי אזור?</li><li>האם יש ספק שמחייב הצפה לאחמ״ש?</li></ul>
-      <div class="ex"><b>גורם בעירייה:</b> מעבירים את הפנייה ב-CRM או טלפונית, בהתאם לדחיפות ולשעה שבה היא מתקבלת. <b>זכרו!</b> ישנם אגפים ומחלקות המחולקים למרחבים / אזורים / נפות – כך תוכלו לסווג נכון את הפנייה ולפנות לגורם הרלוונטי גם במשמרות ערב ובמקרים דחופים.<br><span style="color:#1d6fa5"><b>לדוגמה:</b> המאור והגננות – לפי אזורים; תברואה וניקיון – לפי נפות.</span></div>
-      <div class="boxrow">
-        <div class="ex g" style="flex:1.4"><b>גורם חיצוני:</b> פותחים את הפנייה ב-CRM, ומפנים לגורם החיצוני בטלפון או בפתיחת פנייה באתר שלו.</div>
-        <div class="note" style="flex:1"><b>יש ספק?</b> בדקו במערכת ניהול הידע מהו המסלול הנכון.</div>
+  <div class="layer pop3" data-layer="time">
+    <div class="dim"></div>
+    <div class="pcard" style="left:90px;top:62px;width:1020px;height:604px">
+      <div class="phead"><svg><use href="#icClock"/></svg><div><b>זמן / שעה</b><span>מתי הפנייה מתקבלת?</span></div></div>
+      <button class="pclose" data-act="close" aria-label="סגירה">✕</button>
+      <button class="btn pulse mnext" data-act="next">ממשיכים</button>
+      <div class="pbody">
+        <p class="lead">אותה פנייה יכולה לקבל מסלול טיפול שונה לפי השעה שבה היא מתקבלת.</p>
+        <p>לכל מחלקה יש <b>שעות פעילות מוגדרות</b>. בשעות הפעילות, הפנייה עוברת בדרך כלל למחלקה או לגורם המטפל הרלוונטי.</p>
+        <p class="gap"><b>לאחר שעות הפעילות</b> – ברוב המקרים <b>החל מהשעה 15:30</b> – המחלקות אינן פעילות. לכן, בפנייה המתקבלת בערב, בלילה, בסוף שבוע או בחג, עלינו לבדוק:</p>
+        <ul class="dots row"><li>האם קיים <b>כונן / תורן</b> למחלקה?</li><li>האם יש <b>גורם ספציפי</b> שמטפל בנושא?</li><li>האם הפנייה <b>דחופה או בטיחותית</b>?</li><li>האם צריך <b>להציף לאחמ״ש</b> לפני ההעברה?</li></ul>
+        <p class="gap">פנייה <b>שאינה דחופה</b> וניתן לטפל בה למחרת – פותחים כפי שלמדנו. פנייה <b>שדורשת טיפול מיידי</b> – פונים טלפונית לכונן / לתורן הרלוונטי.</p>
+        <div class="boxrow">
+          <div class="ex" style="flex:1.6"><b>לדוגמה:</b> גדר פרוצה באתר בנייה – <b>ביום:</b> למחלקת פיקוח על הבנייה. <b>אחרי 15:30:</b> לכונן המחלקה. <b>בסיום הכוננות</b> (אמצע שבוע – 00:00): לצוות 4.</div>
+          <div class="note" style="flex:1">רשימת הכוננות המלאה מתפרסמת במערכת ניהול הידע – הקפידו להתעדכן בה.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="layer pop3" data-layer="handler">
+    <div class="dim"></div>
+    <div class="pcard" style="left:90px;top:62px;width:1020px;height:604px">
+      <div class="phead"><svg><use href="#icHandler"/></svg><div><b>גורם מטפל</b><span>מי יטפל בפנייה?</span></div></div>
+      <button class="pclose" data-act="close" aria-label="סגירה">✕</button>
+      <button class="btn pulse mnext" data-act="next">ממשיכים</button>
+      <div class="pbody">
+        <p class="lead">כל פנייה שמגיעה למוקד מטופלת על ידי אגף, מחלקה עירונית או גוף חוץ־ארגוני: מים וביוב, תקשורת, חשמל, כבאות, משטרה, תשתיות או תחבורה.</p>
+        <h4>לפני שמעבירים נבדוק:</h4>
+        <ul class="dots row"><li>מי אחראי בפועל על התחום?</li><li>האם נדרשת פתיחת פנייה בלבד או גם העברה נוספת?</li><li>האם הגורם המטפל מחולק לפי אזור?</li><li>האם יש ספק שמחייב הצפה לאחמ״ש?</li></ul>
+        <div class="ex gap"><b>גורם בעירייה:</b> מעבירים את הפנייה ב-CRM או טלפונית, בהתאם לדחיפות ולשעה שבה היא מתקבלת. <b>זכרו!</b> ישנם אגפים ומחלקות המחולקים למרחבים / אזורים / נפות – כך תוכלו לסווג נכון את הפנייה ולפנות לגורם הרלוונטי גם במשמרות ערב ובמקרים דחופים.<br><b>לדוגמה:</b> המאור והגננות – לפי אזורים; תברואה – לפי נפות.</div>
+        <div class="boxrow">
+          <div class="ex" style="flex:1.4"><b>גורם חיצוני:</b> פותחים את הפנייה ב-CRM, ומפנים לגורם החיצוני בטלפון או בפתיחת פנייה באתר שלו.</div>
+          <div class="note" style="flex:1"><b>יש ספק?</b> בדקו במערכת ניהול הידע מהו המסלול הנכון.</div>
+        </div>
       </div>
     </div>
   </div>
@@ -673,7 +794,7 @@ b{font-weight:800}
   <div class="a w lh" style="left:660px;top:132px;width:485px;font-size:15px">
     <p>בשגרה אתם מתמקדים בפנייה שמולכם: בודקים מה קרה, איפה זה קרה, מה רמת הדחיפות, איך נכון לסווג את הפנייה ומי הגורם שצריך להמשיך את הטיפול.</p>
     <p style="margin-top:7px">לפני שמעבירים פנייה, בודקים מה יכול להשפיע על מסלול הטיפול:</p>
-    <div class="chips dark" style="margin-top:6px"><span>סכנה</span><span>זמן ושעה</span><span>גורם מטפל</span></div>
+    <div class="chips dark ic" style="margin-top:6px"><span><svg><use href="#icDanger"/></svg>סכנה</span><span><svg><use href="#icClock"/></svg>זמן ושעה</span><span><svg><use href="#icHandler"/></svg>גורם מטפל</span></div>
     <p style="margin-top:8px">כאשר כל פנייה מטופלת ומתועדת נכון – תמונת המצב ברורה.</p>
     <p style="margin-top:5px;font-weight:800;color:var(--sky)">אבל מה קורה כשלא מדובר בפנייה אחת, אלא במספר פניות שמתחילות להצביע על אותו דפוס?</p>
   </div>
@@ -697,10 +818,10 @@ b{font-weight:800}
   <!-- הנציגה "מדברת" את הטקסט: עיגול עם תמונתה בצד שמאל של המלבן -->
   <div class="avatar" data-anim="popin" data-delay=".4" style="left:560px;top:86px"><img src="assets/maya-explain.png" alt="הנציגה מאיה"></div>
 
-  <div class="pin" data-act="layer:sign1" data-xp style="left:90px;top:150px"><div class="pi"><svg viewBox="0 0 40 52"><path d="M20 50S3 31 3 19a17 17 0 0 1 34 0c0 12-17 31-17 31z"/><circle cx="20" cy="19" r="11.5"/></svg><span>1</span></div><div class="lbl">ריבוי פניות בזמן קצר</div></div>
-  <div class="pin" data-act="layer:sign2" data-xp style="left:330px;top:255px"><div class="pi"><svg viewBox="0 0 40 52"><path d="M20 50S3 31 3 19a17 17 0 0 1 34 0c0 12-17 31-17 31z"/><circle cx="20" cy="19" r="11.5"/></svg><span>2</span></div><div class="lbl">אותה תופעה חוזרת</div></div>
-  <div class="pin" data-act="layer:sign3" data-xp style="left:640px;top:318px"><div class="pi"><svg viewBox="0 0 40 52"><path d="M20 50S3 31 3 19a17 17 0 0 1 34 0c0 12-17 31-17 31z"/><circle cx="20" cy="19" r="11.5"/></svg><span>3</span></div><div class="lbl">אותו אזור</div></div>
-  <div class="pin" data-act="layer:sign4" data-xp style="left:900px;top:470px"><div class="pi"><svg viewBox="0 0 40 52"><path d="M20 50S3 31 3 19a17 17 0 0 1 34 0c0 12-17 31-17 31z"/><circle cx="20" cy="19" r="11.5"/></svg><span>4</span></div><div class="lbl">רמת דחיפות</div></div>
+  <div class="pin" data-act="layer:sign1" data-xp style="left:90px;top:150px"><div class="pi"><svg viewBox="0 0 40 52"><path d="M20 50S3 31 3 19a17 17 0 0 1 34 0c0 12-17 31-17 31z"/><circle cx="20" cy="19" r="11.5"/></svg></div><div class="lbl">ריבוי פניות בזמן קצר</div></div>
+  <div class="pin" data-act="layer:sign2" data-xp style="left:330px;top:255px"><div class="pi"><svg viewBox="0 0 40 52"><path d="M20 50S3 31 3 19a17 17 0 0 1 34 0c0 12-17 31-17 31z"/><circle cx="20" cy="19" r="11.5"/></svg></div><div class="lbl">אותה תופעה חוזרת</div></div>
+  <div class="pin" data-act="layer:sign3" data-xp style="left:640px;top:318px"><div class="pi"><svg viewBox="0 0 40 52"><path d="M20 50S3 31 3 19a17 17 0 0 1 34 0c0 12-17 31-17 31z"/><circle cx="20" cy="19" r="11.5"/></svg></div><div class="lbl">אותו אזור</div></div>
+  <div class="pin" data-act="layer:sign4" data-xp style="left:900px;top:470px"><div class="pi"><svg viewBox="0 0 40 52"><path d="M20 50S3 31 3 19a17 17 0 0 1 34 0c0 12-17 31-17 31z"/><circle cx="20" cy="19" r="11.5"/></svg></div><div class="lbl">רמת דחיפות</div></div>
 
   <!-- אחרי שנפתחו כל המקומות: מסך כחול שקוף, הנציגה ובועת דיבור עם המסר המסכם -->
   <div class="a gate" style="left:0;top:45px;width:1200px;height:630px;background:rgba(0,25,48,.82)"></div>
@@ -712,35 +833,35 @@ b{font-weight:800}
   <button class="btn pulse gate" data-act="next" style="left:15px;top:607px;width:185px;height:48px">ממשיכים</button>
 
   <!-- חלוניות קטנות ליד כל נקודה (טקסט לפי התסריט) -->
-  <div class="layer" data-layer="sign1">
-    <div class="minipop" style="left:252px;top:118px;width:300px"><button class="mclose" data-act="close" aria-label="סגירה">✕</button>
-      <b>ריבוי פניות בזמן קצר</b><p>כשנכנסות הרבה פניות בזמן קצר, קצב העבודה משתנה.</p></div>
+  <div class="layer passive" data-layer="sign1">
+    <div class="minipop" style="left:252px;top:118px;width:300px">
+      <b>ריבוי פניות בזמן קצר</b><p>כשנכנסות הרבה פניות בזמן קצר, קצב העבודה משתנה.</p><button class="btn pulse mnext" data-act="close">ממשיכים</button></div>
   </div>
-  <div class="layer" data-layer="sign2">
-    <div class="minipop" style="left:120px;top:318px;width:310px"><button class="mclose" data-act="close" aria-label="סגירה">✕</button>
-      <b>אותה תופעה חוזרת</b><p>כאשר כמה תושבים מתארים בעיה דומה, ייתכן שלא מדובר בפניות נפרדות אלא בתופעה אחת שמופיעה בכמה מקומות.</p><p class="exl"><b>לדוגמה:</b> חפץ על הכביש.</p></div>
+  <div class="layer passive" data-layer="sign2">
+    <div class="minipop" style="left:120px;top:318px;width:310px">
+      <b>אותה תופעה חוזרת</b><p>כאשר כמה אזרחים מתארים בעיה דומה, ייתכן שלא מדובר בפניות נפרדות אלא בתופעה אחת שמופיעה בכמה מקומות.</p><p class="exl"><b>לדוגמה:</b> חפץ על הכביש.</p><button class="btn pulse mnext" data-act="close">ממשיכים</button></div>
   </div>
-  <div class="layer" data-layer="sign3">
-    <div class="minipop" style="left:802px;top:255px;width:310px"><button class="mclose" data-act="close" aria-label="סגירה">✕</button>
-      <b>אותו אזור</b><p>אם כמה פניות מגיעות מאותה שכונה, צומת, מוסד ציבורי או אזור סמוך, המיקום עצמו הופך לסימן.</p><p class="exl"><b>לדוגמה:</b> שכונה שלמה ללא אור / חשמל.</p></div>
+  <div class="layer passive" data-layer="sign3">
+    <div class="minipop" style="left:802px;top:255px;width:310px">
+      <b>אותו אזור</b><p>אם כמה פניות מגיעות מאותה שכונה, צומת, מוסד ציבורי או אזור סמוך, המיקום עצמו הופך לסימן.</p><p class="exl"><b>לדוגמה:</b> שכונה שלמה ללא אור / חשמל.</p><button class="btn pulse mnext" data-act="close">ממשיכים</button></div>
   </div>
-  <div class="layer" data-layer="sign4">
-    <div class="minipop" style="left:690px;top:400px;width:310px"><button class="mclose" data-act="close" aria-label="סגירה">✕</button>
-      <b>רמת דחיפות</b><p>כאשר מספר תושבים פונים במקביל וכולם מדווחים על פניות דחופות.</p><p class="exl"><b>לדוגמה:</b> עצים שנפלו ברחבי העיר, עפו עצמים שונים במרחב, הפרעה לתנועה.</p></div>
+  <div class="layer passive" data-layer="sign4">
+    <div class="minipop" style="left:690px;top:400px;width:310px">
+      <b>רמת דחיפות</b><p>כאשר מספר אזרחים פונים במקביל וכולם מדווחים על פניות דחופות.</p><p class="exl"><b>לדוגמה:</b> עצים שנפלו ברחבי העיר, עפו עצמים שונים במרחב, הפרעה לתנועה.</p><button class="btn pulse mnext" data-act="close">ממשיכים</button></div>
   </div>
 </section>
 
 <!-- ======================= 13 עומס – מסך עדכון המשמרת (שקף 17 בתסריט) ======================= -->
-<section class="slide" id="s13" data-title="עומס – מסך עדכון המשמרת" data-chapter="2">
+<section class="slide framed" id="s13" data-title="עומס – מסך עדכון המשמרת" data-chapter="2">
   <img class="a bg" src="assets/bg-screen.jpg" style="left:0;top:45px;width:1200px;height:630px" alt="">
   <div class="scr-title">עומס – זיהוי סימנים</div>
-  <div class="scr-txt"><p>קראו את הנתונים על מסך המוקדן – ותענו על השאלה בשקף הבא.</p></div>
+  <div class="scr-txt"><p>קראו את הנתונים על מסך המוקדן וענו על השאלה בשקף הבא.</p></div>
   <div class="crm" style="left:60px;top:165px;width:860px;height:268px">
     <div class="bar"><span>עדכון משמרת</span><small>משמרת בוקר · 10:30</small></div>
     <table>
       <tr><th style="width:70px">שעה</th><th style="width:110px">פונה</th><th>תיאור הדיווח</th><th style="width:210px">מיקום</th><th style="width:70px">סטטוס</th></tr>
-      <tr class="row" style="--rd:.7s"><td class="t">10:18</td><td>תושב</td><td>מדווח על כתם שחור על הכביש</td><td>רחוב יפו, ליד התחנה המרכזית</td><td><span class="st">חדש</span></td></tr>
-      <tr class="row" style="--rd:1.5s"><td class="t">10:23</td><td>תושבת</td><td>מדווחת כי כמעט החליקה עם הרכב</td><td>שדרות שז״ר</td><td><span class="st">חדש</span></td></tr>
+      <tr class="row" style="--rd:.7s"><td class="t">10:18</td><td>אזרח</td><td>מדווח על כתם שחור על הכביש</td><td>רחוב יפו, ליד התחנה המרכזית</td><td><span class="st">חדש</span></td></tr>
+      <tr class="row" style="--rd:1.5s"><td class="t">10:23</td><td>אזרחית</td><td>מדווחת כי כמעט החליקה עם הרכב</td><td>שדרות שז״ר</td><td><span class="st">חדש</span></td></tr>
       <tr class="row" style="--rd:2.3s"><td class="t">10:27</td><td>בעלת עסק</td><td>מדווחת כי ראתה עכשיו רוכב קורקינט מחליק ממשהו שיש על הכביש</td><td>רחוב יפו פינת שרי ישראל</td><td><span class="st">חדש</span></td></tr>
     </table>
   </div>
@@ -764,17 +885,20 @@ b{font-weight:800}
   <button class="check" disabled style="left:590px;top:322px;width:130px;height:38px">בדיקה</button>
   <div class="layer inline" data-layer="fb-ok">
     <div class="fbtop ok fbsm" style="left:225px;top:470px;width:895px">
-      <div class="hd"><img class="vx" src="assets/v.png" alt=""><b class="grn" style="font-size:24px">מדויק להפליא!</b><b style="font-size:18px">זיהיתם את הדפוס.</b><button class="btn" data-act="next" style="position:static;margin-right:auto;width:150px;height:40px">ממשיכים</button></div>
-      <p>עומס לא מזוהה רק לפי מספר הפניות, אלא <b>לפי החיבור ביניהן:</b> פניות שמתקבלות בזמן קצר, מאותו אזור או מאזור סמוך, ועוסקות בנושא דומה או בתופעה שחוזרת בכמה ניסוחים.</p>
+      <div class="hd"><img class="vx" src="assets/v.png" alt=""><b class="grn" style="font-size:24px">מדויק להפליא!</b><b style="font-size:18px">זיהיתם את הדפוס.</b></div>
+      <p>עומס לא מזוהה רק לפי מספר הפניות, אלא <b>לפי החיבור ביניהן:</b> פניות שמתקבלות בזמן קצר, מאותו אזור או מאזור סמוך, ועוסקות בנושא דומה או בתופעה שחוזרת בכמה פניות.</p>
       <p>כל פנייה צריכה להיבדק ולקבל טיפול – אך כשהפניות מתחילות להתחבר לדפוס, כבר לא מסתכלים רק על השיחה הבודדת, אלא <b>מזהים את הדפוס ומטפלים.</b></p>
     </div>
+    <button class="btn pulse" data-act="next" style="left:15px;top:607px;width:185px;height:48px">ממשיכים</button>
   </div>
   <div class="layer inline" data-layer="fb-bad">
     <div class="fbtop bad fbsm" style="left:225px;top:470px;width:895px">
-      <div class="hd"><img class="vx" src="assets/x.png" alt=""><b class="org" style="font-size:24px">לא מדויק…</b><b style="font-size:18px">שימו לב לדפוס.</b><button class="btn" data-act="next" style="position:static;margin-right:auto;width:150px;height:40px">ממשיכים</button></div>
-      <p>התשובות הנכונות מסומנות <b style="color:#7ea31a">בירוק</b>. עומס לא מזוהה רק לפי מספר הפניות, אלא <b>לפי החיבור ביניהן:</b> פניות שמתקבלות <b>בזמן קצר</b>, <b>מאותו אזור או מאזור סמוך</b>, ועוסקות <b>בנושא דומה</b>.</p>
+      <div class="hd"><img class="vx" src="assets/x.png" alt=""><b class="org" style="font-size:24px">לא מדויק…</b><b style="font-size:18px">שימו לב לדפוס.</b></div>
+      <p>התשובות הנכונות מסומנות <b style="color:#7ea31a">בירוק</b>.</p>
+      <p>עומס לא מזוהה רק לפי מספר הפניות, אלא <b>לפי החיבור ביניהן:</b> פניות שמתקבלות <b>בזמן קצר</b>, <b>מאותו אזור או מאזור סמוך</b>, ועוסקות <b>בנושא דומה או בתופעה שחוזרת בכמה פניות</b>.</p>
       <p>כל פנייה צריכה להיבדק ולקבל טיפול – אך כשהפניות מתחילות להתחבר לדפוס, כבר לא מסתכלים רק על השיחה הבודדת, אלא <b>מזהים את הדפוס ומטפלים.</b></p>
     </div>
+    <button class="btn pulse" data-act="next" style="left:15px;top:607px;width:185px;height:48px">ממשיכים</button>
   </div>
 </section>
 
@@ -786,25 +910,27 @@ b{font-weight:800}
   <div class="a w" style="left:505px;top:100px;width:670px;font-size:17.5px;font-weight:800">זיהיתם סימנים לעומס. מה נכון לעשות עכשיו?</div>
   <div class="a sky" style="left:505px;top:127px;width:670px;font-size:14.5px;font-weight:700">ניתן לסמן יותר מתשובה אחת</div>
   <button class="opt" data-correct="1" style="left:847px;top:156px;width:328px;height:58px;font-size:15.5px">להמשיך לפתוח ולתעד כל פנייה לפי מודל הטיפול</button>
-  <button class="opt" data-correct="1" style="left:505px;top:156px;width:328px;height:58px;font-size:15.5px">להציף לאחמ״ש שיש כמה פניות דומות מאותו אזור</button>
-  <button class="opt" style="left:847px;top:222px;width:328px;height:58px;font-size:15.5px">לציין בתיעוד את הקשר האפשרי לפניות נוספות</button>
-  <button class="opt" style="left:505px;top:222px;width:328px;height:58px;font-size:15.5px">להמתין לעוד פניות כדי לוודא שמדובר בעומס</button>
+  <button class="opt" data-correct="1" style="left:527px;top:156px;width:306px;height:58px;font-size:15.5px">להציף לאחמ״ש שיש כמה פניות דומות מאותו אזור</button>
+  <button class="opt" style="left:847px;top:222px;width:328px;height:58px;font-size:15.5px">להפסיק לפתוח פניות חדשות עד שהעומס יסתיים</button>
+  <button class="opt" style="left:527px;top:222px;width:306px;height:58px;font-size:15.5px">להמתין לעוד פניות כדי לוודא שמדובר בעומס</button>
   <button class="opt" data-correct="1" style="left:847px;top:288px;width:328px;height:58px;font-size:15.5px">לתת תשומת לב גבוהה יותר לפנייה בנושא בטיחותי</button>
-  <button class="opt" style="left:505px;top:288px;width:328px;height:58px;font-size:15.5px">לסגור פניות דומות כדי לא ליצור כפילות</button>
+  <button class="opt" style="left:527px;top:288px;width:306px;height:58px;font-size:15.5px">לסגור פניות דומות כדי לא ליצור כפילות</button>
   <button class="check" disabled style="left:505px;top:360px;width:130px;height:38px">בדיקה</button>
   <div class="layer inline" data-layer="fb-ok">
     <div class="fbtop ok fbsm" style="left:225px;top:470px;width:895px">
-      <div class="hd"><img class="vx" src="assets/v.png" alt=""><b class="grn" style="font-size:24px">מדויק להפליא!</b><b style="font-size:18px">כך מטפלים בעומס.</b><button class="btn" data-act="next" style="position:static;margin-right:auto;width:150px;height:40px">ממשיכים</button></div>
+      <div class="hd"><img class="vx" src="assets/v.png" alt=""><b class="grn" style="font-size:24px">מדויק להפליא!</b><b style="font-size:18px">כך מטפלים בעומס.</b></div>
       <p>מודל הטיפול בפנייה הוא המודל שמוביל אותנו – לא משנה אם אנחנו בשגרה או בעומס. לכן <b>ממשיכים לפתוח, לסווג, לתעד ולהעביר</b> את הפניות לטיפול, בהתאם למה שלמדנו.</p>
-      <p>ברגע שמזהים את הדפוס, מחברים בין הפניות לפי סימני הזיהוי ומבינים שמדובר בעומס – <b>מציפים את המידע לאחמ״ש</b>, ונותנים תשומת לב גבוהה יותר לפניות בטיחותיות.</p>
+      <p>ברגע שמזהים את הדפוס, מחברים בין הפניות לפי סימני הזיהוי ומבינים שמדובר בעומס, <b>עלינו להציף את המידע לאחמ״ש.</b></p>
     </div>
+    <button class="btn pulse" data-act="next" style="left:15px;top:607px;width:185px;height:48px">ממשיכים</button>
   </div>
   <div class="layer inline" data-layer="fb-bad">
     <div class="fbtop bad fbsm" style="left:225px;top:470px;width:895px">
-      <div class="hd"><img class="vx" src="assets/x.png" alt=""><b class="org" style="font-size:24px">לא מדויק…</b><b style="font-size:18px">מודל הטיפול ממשיך להוביל.</b><button class="btn" data-act="next" style="position:static;margin-right:auto;width:150px;height:40px">ממשיכים</button></div>
+      <div class="hd"><img class="vx" src="assets/x.png" alt=""><b class="org" style="font-size:24px">לא מדויק…</b></div>
       <p>מודל הטיפול בפנייה הוא המודל שמוביל אותנו – לא משנה אם אנחנו בשגרה או בעומס. לכן <b>ממשיכים לפתוח, לסווג, לתעד ולהעביר</b> את הפניות לטיפול, בהתאם למה שלמדנו.</p>
-      <p>התשובות הנכונות מסומנות <b style="color:#7ea31a">בירוק</b>: להמשיך לפתוח ולתעד כל פנייה, להציף לאחמ״ש, ולתת תשומת לב גבוהה יותר לפנייה בנושא בטיחותי. לא ממתינים לעוד פניות ולא סוגרים פניות דומות.</p>
+      <p>התשובות הנכונות מסומנות <b style="color:#7ea31a">בירוק</b>: להמשיך לפתוח ולתעד כל פנייה, להציף לאחמ״ש, ולתת תשומת לב גבוהה יותר לפנייה בנושא בטיחותי. לא ממתינים לעוד פניות, לא סוגרים פניות דומות ולא מפסיקים לפתוח פניות חדשות.</p>
     </div>
+    <button class="btn pulse" data-act="next" style="left:15px;top:607px;width:185px;height:48px">ממשיכים</button>
   </div>
 </section>
 
@@ -812,16 +938,19 @@ b{font-weight:800}
 <section class="slide" id="s16" data-title="עומס הוא לא רק דפוס" data-chapter="2">
   <img class="a bg" src="assets/bg-stand.jpg" style="left:0;top:46px;width:1200px;height:654px" alt="">
   <div class="a f16 w" style="left:587px;top:98px;width:556px;font-weight:800">עומס הוא <span class="org">לא רק דפוס</span></div>
-  <div class="a w lh" style="left:587px;top:134px;width:556px;font-size:15.5px">
-    <p>לעיתים העומס <b class="sky">צפוי מראש</b>, בעקבות אירועים המתרחשים בעיר:</p>
-    <div class="chips dark" style="margin-top:6px"><span>מרתונים</span><span>חגים</span><span>מצעדים</span><span>אירועי מזג אוויר</span></div>
-    <p style="margin-top:8px">במקרים אלו המוקד נערך לעומס מבעוד מועד, עם <b class="sky">דף הנחיות מסודר</b> שעוזר לנו לדעת איך להתנהל נכון.</p>
-    <p style="margin-top:8px">וכשאנחנו מזהים דפוס ומציפים את העומס לאחמ״ש – האחמ״ש רואה את התמונה הכוללת ועוזר לכוון: האם נדרשות הנחיות מיוחדות, ומה התיעדוף המתאים לפניות המגיעות.</p>
+  <div class="a w lh" style="left:587px;top:136px;width:556px;font-size:16px">לעיתים העומס <b class="sky">צפוי מראש</b>, בעקבות אירועים המתרחשים בעיר:</div>
+  <div class="evrow" style="left:587px;top:178px;width:556px">
+    <div class="shift"><svg viewBox="0 0 64 64"><circle cx="38" cy="12" r="6"/><path d="M30 24l-10 8 6 6M30 24l12 4 6 10M34 30l-4 12-12 8M34 42l10 6 2 10"/></svg>מרתונים</div>
+    <div class="shift o"><svg><use href="#icCal"/></svg>חגים</div>
+    <div class="shift"><svg viewBox="0 0 64 64"><path d="M16 58V8M16 10h34l-8 10 8 10H16"/></svg>מצעדים</div>
+    <div class="shift o"><svg viewBox="0 0 64 64"><path d="M20 40a12 12 0 0 1 2-23 16 16 0 0 1 30 4 10 10 0 0 1-2 19H20z"/><path d="M34 44l-5 9h7l-4 9"/></svg>אירועי מזג אוויר</div>
   </div>
+  <div class="a w lh" style="left:587px;top:300px;width:556px;font-size:16px">במקרים אלו המוקד נערך לעומס מבעוד מועד, עם <b class="sky">דף הנחיות מסודר</b> שעוזר לנו לדעת איך להתנהל נכון.</div>
+  <div class="a w lh" style="left:587px;top:366px;width:556px;font-size:16px">האחמ״ש רואה את התמונה הכוללת ועוזר לכוון: האם נדרשות הנחיות מיוחדות, ומה התיעדוף המתאים לפניות המגיעות.</div>
   <!-- בועת דיבור "זכרו!": גוף הבועה והזנב מצוירים כקו מתאר אחד (SVG) – אין תפר בין הבועה לזנב; הזנב מצביע אל הנציגה -->
-  <div class="a bubble2" data-anim="popin" data-delay="1" style="left:16px;top:188px;width:424px;height:112px">
+  <div class="a bubble2" data-anim="popin" data-delay="1" style="left:10px;top:196px;width:370px;height:98px">
     <svg viewBox="0 0 424 112" aria-hidden="true"><path d="M24 3H352Q379 3 379 30V46Q393 58 419 70Q392 74 379 80V82Q379 109 352 109H24Q3 109 3 88V24Q3 3 24 3Z"/></svg>
-    <div class="b2in" style="left:24px;top:16px;width:336px">
+    <div class="b2in" style="left:20px;top:12px;width:295px;font-size:15px">
       <div class="b2t"><img src="assets/ic-love-g.png" alt=""><span>זכרו!</span></div>
       <p>צוות המוקד נמצא שם כדי לעזור לכם – <b>בכל דבר.</b></p>
     </div>
@@ -835,24 +964,24 @@ b{font-weight:800}
 <!-- ======================= 18 חירום – עובדים לפי תמונת מצב (שקף 22 בתסריט) ======================= -->
 <section class="slide" id="s18" data-title="חירום – עובדים לפי תמונת מצב" data-chapter="3">
   <img class="a bg" src="assets/bg-question.jpg" style="left:0;top:46px;width:1200px;height:641px" alt="">
-  <div class="a w" style="left:430px;top:74px;width:725px;font-size:25px;font-weight:800">חירום – עובדים לפי <span class="org">תמונת מצב</span></div>
-  <div class="a w lh" style="left:430px;top:116px;width:725px;font-size:17px">בשגרה ובעומס אנחנו מטפלים בכל פנייה לפי מודל הטיפול: מקשיבים, מתחקרים, מתעדים, מסווגים ומעבירים לגורם המתאים.</div>
-  <div class="a org" style="left:430px;top:170px;width:725px;font-size:20px;font-weight:800">בחירום, תמונת העבודה משתנה.</div>
-  <div class="a w lh" style="left:430px;top:204px;width:725px;font-size:17px">בחירום, העירייה ואגפיה לא עובדים במתכונת רגילה. עדיין עלינו <b class="sky">לפתוח את הפנייה ולתעד</b> – אך המשך הטיפול בפנייה ייעשה לפי:</div>
-  <div class="icoitem" data-anim="popin" data-delay=".8" style="left:925px;top:268px;width:230px"><svg viewBox="0 0 64 64"><path d="M16 6h24l10 10v42H16z"/><path d="M40 6v10h10M24 30h18M24 39h18M24 48h12"/></svg><span>ההנחיות הרלוונטיות לחירום באותה העת</span></div>
-  <div class="icoitem" data-anim="popin" data-delay="1" style="left:678px;top:268px;width:230px"><svg><use href="#icCal"/></svg><span>דף כוננות ותורנים מעודכן</span></div>
-  <div class="icoitem" data-anim="popin" data-delay="1.2" style="left:430px;top:268px;width:230px"><svg><use href="#icSiren"/></svg><span>חמ״לים או קבוצות חירום רלוונטיות</span></div>
-  <div class="a sky" style="left:430px;top:396px;width:725px;font-size:19px;font-weight:800">והכול בהנחיית האחמ״ש / הנהלת המוקד.</div>
+  <div class="a w" style="left:482px;top:74px;width:673px;font-size:25px;font-weight:800">חירום – עובדים לפי <span class="org">תמונת מצב</span></div>
+  <div class="a w lh" style="left:482px;top:116px;width:673px;font-size:17px">בשגרה ובעומס אנחנו מטפלים בכל פנייה לפי מודל הטיפול: מקשיבים, מתחקרים, מתעדים, מסווגים ומעבירים לגורם המתאים.</div>
+  <div class="a org" style="left:482px;top:170px;width:673px;font-size:20px;font-weight:800">בחירום, תמונת העבודה משתנה.</div>
+  <div class="a w lh" style="left:482px;top:204px;width:673px;font-size:17px">בחירום, העירייה ואגפיה לא עובדים במתכונת רגילה. עדיין עלינו <b class="sky">לפתוח את הפנייה ולתעד</b> – אך המשך הטיפול בפנייה ייעשה לפי:</div>
+  <div class="icoitem" data-anim="popin" data-delay=".8" style="left:940px;top:268px;width:215px"><svg viewBox="0 0 64 64"><path d="M16 6h24l10 10v42H16z"/><path d="M40 6v10h10M24 30h18M24 39h18M24 48h12"/></svg><span>ההנחיות הרלוונטיות לחירום באותה העת</span></div>
+  <div class="icoitem" data-anim="popin" data-delay="1" style="left:712px;top:268px;width:215px"><svg><use href="#icCal"/></svg><span>דף כוננות ותורנים מעודכן</span></div>
+  <div class="icoitem" data-anim="popin" data-delay="1.2" style="left:484px;top:268px;width:215px"><svg><use href="#icSiren"/></svg><span>חמ״לים או קבוצות חירום רלוונטיות</span></div>
+  <div class="a sky" style="left:482px;top:392px;width:673px;font-size:30px;line-height:1.2;font-weight:800">הכול בהנחיית האחמ״ש / הנהלת המוקד.</div>
   <button class="btn pulse" data-act="next" style="left:15px;top:607px;width:185px;height:48px">ממשיכים</button>
 </section>
 
 <!-- ======================= 19 חירום – אופן פעולה: 5 שאלות להרחבה (שקפים 23–24 בתסריט) ======================= -->
-<section class="slide" id="s19" data-title="חירום – אופן פעולה" data-chapter="3">
+<section class="slide framed" id="s19" data-title="חירום – אופן פעולה" data-chapter="3">
   <img class="a bg" src="assets/bg-drag.jpg" style="left:0;top:45px;width:1200px;height:630px" alt="">
   <div class="a w" style="left:300px;top:64px;width:860px;font-size:24px;font-weight:800">חירום – <span class="org">אופן פעולה</span></div>
   <div class="a w lh" style="left:300px;top:100px;width:860px;font-size:15.5px">בשעת חירום עלינו לתעד את כל הפניות המתקבלות <b class="sky">על התגית הרלוונטית, בהתאם לאירוע.</b><br>מכיוון שאגפי העירייה לא עובדים במתכונת רגילה בשעת חירום, עלינו להבין בכל תחקור פנייה מה מחייב פעולה בשעת חירום.</div>
   <div class="a sky xphint" style="left:300px;top:158px;width:860px;font-size:16px;font-weight:800">לחצו על השאלות להרחבה</div>
-  <div class="qtile" style="left:958px;top:205px"><div class="q" data-act="fn:qopen" data-xp><i>1</i>מה סוג הפנייה?<br>מידע או טיפול?</div><div class="ans">האם התושב מבקש הנחיה, מידע רלוונטי לאירוע, או מדווח על תקלה שדורשת טיפול?</div></div>
+  <div class="qtile" style="left:958px;top:205px"><div class="q" data-act="fn:qopen" data-xp><i>1</i>מה סוג הפנייה?<br>מידע או טיפול?</div><div class="ans">האם האזרח מבקש הנחיה, מידע רלוונטי לאירוע, או מדווח על תקלה שדורשת טיפול?</div></div>
   <div class="qtile" style="left:736px;top:205px"><div class="q" data-act="fn:qopen" data-xp><i>2</i>לאיזה נושא חירום הפנייה שייכת?</div><div class="ans">פיקוד העורף, מקלט ציבורי, מקלט פרטי, מקלט בבית ספר, רווחה, מפגע בטיחותי, תשתית או גורם חוץ־ארגוני.</div></div>
   <div class="qtile" style="left:514px;top:205px"><div class="q" data-act="fn:qopen" data-xp><i>3</i>איפה זה קורה?</div><div class="ans">כתובת, שכונה, מוסד או מיקום מדויק במרחב הציבורי.</div></div>
   <div class="qtile" style="left:292px;top:205px"><div class="q" data-act="fn:qopen" data-xp><i>4</i>האם יש סכנה מיידית?</div><div class="ans">האם המצב עלול לסכן אנשים או לגרום לנזק אם לא יטופל עכשיו? למשל: אש, הצפה, חסימה, מפגע בטיחותי או חוסר גישה למרחב מוגן.</div></div>
@@ -863,21 +992,29 @@ b{font-weight:800}
 <!-- ======================= 20 חירום – מוסרים רק מידע מוסמך + אתם לא לבד (שקף 24 בתסריט – פופאפים) ======================= -->
 <section class="slide" id="s20" data-title="חירום – מוסרים רק מידע מוסמך" data-chapter="3" data-nonext="1">
   <img class="a bg" src="assets/bg-point.jpg" style="left:0;top:46px;width:1200px;height:654px" alt="">
-  <div class="a" style="left:600px;top:98px;width:542px;display:flex;align-items:center;gap:10px">
-    <span style="flex:0 0 36px;height:36px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center"><img src="assets/ic-warning.png" style="width:21px" alt=""></span>
-    <span class="org" style="font-size:22px;font-weight:800">חשוב לזכור: מוסרים רק מידע מוסמך!</span>
+  <div class="a" style="left:650px;top:104px;width:495px;display:flex;align-items:center;gap:12px">
+    <span style="flex:0 0 40px;height:40px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center"><img src="assets/ic-warning.png" style="width:23px" alt=""></span>
+    <span class="org" style="font-size:25px;font-weight:800">חשוב לזכור: מוסרים רק מידע מוסמך!</span>
   </div>
-  <div class="dobox no" style="left:648px;top:142px;width:494px"><b class="t"><i>✕</i>לא מוסרים לתושב</b>מידע ששמענו באתרי חדשות, בקבוצות וואטסאפ, בטלגרם או מגורמים לא רשמיים – גם אם נשמע אמין.</div>
-  <div class="dobox yes" style="left:648px;top:236px;width:494px"><b class="t"><i>✓</i>מוסרים לתושב</b>אך ורק מידע שהתקבל מגורם מוסמך בתוך המוקד: <b>מהאחמ״ש, מהנהלת המוקד או מדף ההנחיות העדכני.</b></div>
-  <button class="btn pulse" data-act="layer:team" style="left:648px;top:338px;width:260px;height:44px">ומי עוד נמצא איתכם במוקד?</button>
+  <div class="trow" style="left:650px;top:154px;width:495px;padding-bottom:8px">
+    <i class="no">✕</i>
+    <div><b>לא מוסרים לאזרח</b>מידע ששמענו באתרי חדשות, בקבוצות וואטסאפ, בטלגרם או מגורמים לא רשמיים – גם אם נשמע אמין.</div>
+  </div>
+  <div class="trow" style="left:650px;top:246px;width:495px;padding-bottom:8px">
+    <i class="yes">✓</i>
+    <div><b>מוסרים לאזרח</b>אך ורק מידע שהתקבל מגורם מוסמך בתוך המוקד: <b style="display:inline">מהאחמ״ש, מהנהלת המוקד או מדף ההנחיות העדכני.</b></div>
+  </div>
+  <button class="btn pulse" data-act="layer:team" style="left:650px;top:352px;width:250px;height:36px;font-size:15px">ומי עוד נמצא איתכם במוקד?</button>
   <div class="layer" data-layer="team">
     <div class="dim"></div>
-    <div class="card" style="left:270px;top:170px;width:660px;height:340px"></div>
-    <img class="a" src="assets/ic-love-g.png" style="left:568px;top:140px;width:64px" alt="">
-    <div class="a c" style="left:270px;top:214px;width:660px;font-size:28px;font-weight:800">אתם לא לבד!</div>
-    <div class="a c lh" style="left:310px;top:262px;width:580px;font-size:17px">בזמן חירום יושבים איתכם במוקד, פיזית, גורמים שונים – אשר נותנים מענה ממוקד ולפי הצורך:</div>
-    <div class="a chips" style="left:310px;top:326px;width:580px;justify-content:center"><span style="font-size:17px">מכלול תפעול</span><span style="font-size:17px">יקל״ר</span><span style="font-size:17px">רווחה</span></div>
-    <button class="btn" data-act="next" style="left:508px;top:420px;width:185px;height:44px">ממשיכים</button>
+    <div class="glass" style="left:230px;top:150px;width:740px;height:380px;border-radius:24px"></div>
+    <img class="a" src="assets/ic-love-g.png" style="left:568px;top:172px;width:64px" alt="">
+    <div class="a c w" style="left:230px;top:246px;width:740px;font-size:32px;font-weight:800">אתם לא לבד!</div>
+    <div class="a c lh w" style="left:290px;top:300px;width:620px;font-size:18px">בזמן חירום יושבים איתכם במוקד, פיזית, גורמים שונים – אשר נותנים מענה ממוקד ולפי הצורך:</div>
+    <div class="shift" style="left:270px;top:366px;width:200px;height:74px;font-size:19px">מכלול תפעול</div>
+    <div class="shift" style="left:500px;top:366px;width:200px;height:74px;font-size:19px">יקל״ר</div>
+    <div class="shift" style="left:730px;top:366px;width:200px;height:74px;font-size:19px">רווחה</div>
+    <button class="btn pulse" data-act="next" style="left:508px;top:466px;width:185px;height:44px">ממשיכים</button>
   </div>
 </section>
 
@@ -886,14 +1023,14 @@ b{font-weight:800}
   <img class="a bg" src="assets/bg-content.jpg" style="left:0;top:46px;width:1204px;height:685px" alt="">
   <div class="a f16 w" style="left:400px;top:94px;width:735px;font-weight:800">חירום – <span class="sky">אתם חלק מתמונת המצב</span></div>
   <div class="a w lh" style="left:400px;top:128px;width:735px;font-size:15px">
-    <p>שעת חירום יכולה להיות מלחיצה גם עבורנו, המוקדנים. זה טבעי להרגיש עומס, לחץ, חוסר ודאות או דאגה – במיוחד כשנכנסות הרבה שיחות, כשהתושבים נשמעים חרדים, וכשגם אתם חלק מאותה מציאות.</p>
+    <p>שעת חירום יכולה להיות מלחיצה גם עבורנו, המוקדנים. זה טבעי להרגיש עומס, לחץ, חוסר ודאות או דאגה – במיוחד כשנכנסות הרבה שיחות, כשהאזרחים נשמעים חרדים, וכשגם אתם חלק מאותה מציאות.</p>
     <p style="margin-top:6px;font-size:18px;font-weight:800;color:var(--sky)">אתם לא לבד בעמדה!</p>
     <p style="margin-top:4px">בשגרה, בעומס וכמובן בזמן חירום – יש סביבנו אחמ״ש, נציגים בכירים, הנהלת מוקד וצוות שמחזיק יחד את המשמרת. כשמשהו לא ברור, כשיש ספק מקצועי, שיחה קשה או כשאנחנו מרגישים מוצפים – <b>מציפים.</b></p>
   </div>
-  <div class="tip" style="left:961px;top:318px;width:182px;height:144px"><b>עוצרים רגע כשצריך</b>אם שיחה הייתה קשה או מערערת – עדכנו את האחמ״ש ובקשו הכוונה.</div>
-  <div class="tip" style="left:767px;top:318px;width:182px;height:144px;border-top-color:var(--orange)"><b>לא מקבלים החלטות לבד כשיש ספק</b>אם אתם לא בטוחים – זו סיבה טובה לשאול ולהתייעץ, ולספק את המידע הנכון ביותר.</div>
-  <div class="tip" style="left:573px;top:318px;width:182px;height:144px;border-top-color:var(--green)"><b>שומרים על שפה רגועה מול התושב</b>גם כשהתושב לחוץ, התפקיד שלנו הוא לתת מענה ברור, מוסמך ומכבד.</div>
-  <div class="tip" style="left:379px;top:318px;width:182px;height:144px;border-top-color:#9b7bd8"><b>נשענים על ההנחיות</b>ההנחיות, דף הכוננות והאחמ״ש נועדו לעזור לכם לפעול נכון גם כשאין ודאות מלאה.</div>
+  <div class="tip" style="left:961px;top:306px;width:182px;height:132px"><b>עוצרים רגע כשצריך</b>אם שיחה הייתה קשה או מערערת – עדכנו את האחמ״ש ובקשו הכוונה.</div>
+  <div class="tip" style="left:767px;top:306px;width:182px;height:132px;border-top-color:var(--orange)"><b>לא מקבלים החלטות לבד כשיש ספק</b>אם אתם לא בטוחים – זו סיבה טובה לשאול ולהתייעץ, ולספק את המידע הנכון ביותר.</div>
+  <div class="tip" style="left:573px;top:306px;width:182px;height:132px;border-top-color:var(--green)"><b>שומרים על שפה רגועה מול האזרח</b>גם כשהאזרח לחוץ, התפקיד שלנו הוא לתת מענה ברור, מוסמך ומכבד.</div>
+  <div class="tip" style="left:379px;top:306px;width:182px;height:132px;border-top-color:#9b7bd8"><b>נשענים על ההנחיות</b>ההנחיות, דף הכוננות והאחמ״ש נועדו לעזור לכם לפעול נכון גם כשאין ודאות מלאה.</div>
   <button class="btn pulse" data-act="next" style="left:15px;top:607px;width:200px;height:48px">חזרה לקיר המסכים</button>
 </section>
 
@@ -901,16 +1038,51 @@ b{font-weight:800}
 <section class="slide hub" id="s22" data-title="מסכי ה-Pit Wall (4)" data-chapter="4" data-done="3"></section>
 
 <!-- ======================= 23 סיכום – המרוץ מסתיים, אך העיבוד רק מתחיל (שקף 26 בתסריט – חלק 1) ======================= -->
-<!-- תמונה מעוצבת מלאה: הנציגה בקו הסיום ובועת הדיבור (הטקסט כלול בתמונה) -->
+<!-- הרקע: הנציגה בקו הסיום ובועת דיבור ריקה (bg-end1.jpg); הטקסט בבועה הוא טקסט HTML – קל לעריכה -->
 <section class="slide" id="s23" data-title="המרוץ מסתיים, אך העיבוד רק מתחיל" data-chapter="4">
-  <img class="a bg" src="assets/bg-end1.jpg" style="left:0;top:45px;width:1200px;height:630px;object-fit:cover" alt="המרוץ מסתיים, אך העיבוד רק מתחיל. בסיום המרוץ, צוות ה-Pit-Wall כבר מעבד את המרוץ למסקנות ולמידה להמשך. כך גם כאן: בכל פנייה חשוב להבין מה התושב מדווח ובאיזו תמונת מצב הפנייה מתקבלת: שגרה, עומס או חירום – כך תנהלו את הפניות בצורה המקצועית ביותר.">
-  <button class="btn pulse" data-act="next" data-delay="1" style="left:15px;top:607px;width:185px;height:48px">ממשיכים</button>
+  <img class="a bg" src="assets/bg-end1.jpg" style="left:0;top:45px;width:1200px;height:630px;object-fit:cover" alt="">
+  <div class="a" style="left:644px;top:294px;width:480px;color:var(--navy)">
+    <div style="font-size:26px;font-weight:800;line-height:1.15">המרוץ מסתיים, אך <span style="color:#e8590c">העיבוד רק מתחיל</span></div>
+    <svg viewBox="0 0 516 14" preserveAspectRatio="none" style="display:block;width:480px;height:14px;margin-top:2px" aria-hidden="true"><path d="M2 10 Q250 -2 514 6" fill="none" stroke="#f26a1b" stroke-width="3.5" stroke-linecap="round"/></svg>
+    <p style="font-size:17px;line-height:1.45;margin-top:12px">בסיום המרוץ, צוות ה-Pit Wall מעבד את המרוץ למסקנות וללמידה להמשך.</p>
+    <p style="font-size:17px;line-height:1.45;margin-top:12px">גם בעבודת המוקד, בכל פנייה חשוב להבין <b>מה האזרח מדווח</b> ו<b>באיזו תמונת מצב</b> הפנייה מתקבלת: שגרה, עומס או חירום. כך תנהלו את הפניות בצורה המקצועית ביותר.</p>
+  </div>
+  <button class="btn pulse" data-act="next" data-delay="1" style="left:15px;top:607px;width:185px;height:48px">לסיכום</button>
 </section>
 
 <!-- ======================= 24 סיכום – שגרה / עומס / חירום על מסכי המוקד (שקף 26 בתסריט – חלק 2) ======================= -->
-<!-- תמונה מעוצבת מלאה: שלושת המסכים (הטקסט כלול בתמונה) + כפתור יציאה -->
-<section class="slide" id="s24" data-title="שגרה, עומס וחירום – סיכום" data-chapter="4">
-  <img class="a bg" src="assets/bg-end2.jpg" style="left:0;top:45px;width:1200px;height:630px;object-fit:cover" alt="שגרה | מבט על הפנייה: בשגרה מתמקדים בפנייה שמולנו – מה קרה, איפה זה קרה, מה רמת הדחיפות, איך נכון לסווג, מי הגורם המטפל ומה חשוב לתעד. הדגש: טיפול מדויק, מסודר ומתועד בכל פנייה. עומס | מבט על הדפוס: בעומס מרימים מבט מעבר לשיחה הבודדת – האם מתקבלות כמה פניות בזמן קצר? האם הן מגיעות מאותו אזור? האם אותו נושא או גורם מטפל חוזרים בכמה פניות? הדגש: ממשיכים לטפל בכל פנייה, אבל מזהים את הדפוס ומציפים לאחמ״ש. חירום | מבט על המצב בשטח: בחירום מתמקדים בתמונה הרחבה – מה קורה בשטח, אילו גורמי חירום פועלים, ומה ההשפעה על התושבים. הדגש: תיאום, עדכון שוטף ומעקב עד סגירה.">
+<!-- שלושה כרטיסים (HTML) באותו גודל ועיצוב + כפתור יציאה -->
+<section class="slide framed" id="s24" data-title="שגרה, עומס וחירום – סיכום" data-chapter="4">
+  <img class="a bg" src="assets/bg-drag.jpg" style="left:0;top:45px;width:1200px;height:630px" alt="">
+  <div class="a w c" style="left:0;top:62px;width:1200px;font-size:28px;font-weight:800">שגרה, עומס <span class="sky">וחירום</span> – סיכום</div>
+  <div class="a c" style="left:0;top:104px;width:1200px;font-size:17px;font-weight:700;color:rgba(255,255,255,.85)">שלוש נקודות מבט על אותה עבודה: מה מסתכלים עליו בכל מצב</div>
+
+  <div class="sumcard sc-blue" style="left:810px;top:142px;width:360px;height:424px">
+    <div class="sh"><svg viewBox="0 0 64 64"><rect x="14" y="10" width="36" height="46" rx="4"/><path d="M24 10h16v8H24zM22 31h20M22 41h20"/></svg><div><b>שגרה</b><small>מבט על הפנייה</small></div></div>
+    <div class="sb">
+      <p class="lead">בשגרה מתמקדים בפנייה שמולנו:</p>
+      <ul class="dots"><li>מה קרה ואיפה זה קרה?</li><li>מה רמת הדחיפות?</li><li>איך נכון לסווג?</li><li>מי הגורם המטפל?</li><li>מה חשוב לתעד?</li></ul>
+    </div>
+    <div class="em"><b>הדגש:</b> טיפול מדויק, מסודר ומתועד בכל פנייה.</div>
+  </div>
+
+  <div class="sumcard sc-org" style="left:420px;top:142px;width:360px;height:424px">
+    <div class="sh"><svg viewBox="0 0 64 64"><path d="M12 54V34M26 54V20M40 54V28M54 54V10"/></svg><div><b>עומס</b><small>מבט על הדפוס</small></div></div>
+    <div class="sb">
+      <p class="lead">בעומס מרימים מבט מעבר לשיחה הבודדת:</p>
+      <ul class="dots o"><li>האם מתקבלות כמה פניות בזמן קצר?</li><li>האם הן מגיעות מאותו אזור?</li><li>האם אותו נושא או גורם מטפל חוזרים בכמה פניות?</li></ul>
+    </div>
+    <div class="em"><b>הדגש:</b> ממשיכים לטפל בכל פנייה, אבל מזהים את הדפוס ומציפים לאחמ״ש.</div>
+  </div>
+
+  <div class="sumcard sc-red" style="left:30px;top:142px;width:360px;height:424px">
+    <div class="sh"><svg><use href="#icSiren"/></svg><div><b>חירום</b><small>מבט על תמונת האירוע</small></div></div>
+    <div class="sb">
+      <p class="lead">בחירום מתמקדים בתמונת האירוע:</p>
+      <ul class="dots r"><li>מה קורה בשטח?</li><li>אילו גורמי חירום פועלים?</li><li>מה ההשפעה על האזרחים?</li></ul>
+    </div>
+    <div class="em"><b>הדגש:</b> לא רק לסווג את הפנייה, אלא להבין מה מחייב פעולה עכשיו – ולפעול לפי הנחיות החירום והכוננות.</div>
+  </div>
   <button class="btn pulse" data-act="layer:done" data-sfx="finish" data-delay="1" style="left:15px;top:607px;width:185px;height:48px;font-size:18.7px">יציאה 🏁</button>
   <div class="layer" data-layer="done">
     <div class="dim"></div>
@@ -926,14 +1098,16 @@ b{font-weight:800}
 
 <!-- hub template (נשכפל לכל .slide.hub): שגרה מימין, עומס באמצע, חירום משמאל -->
 <template id="hubTpl">
-  <!-- הכותרת "מסכי ה-Pit Wall (המוקד)" כלולה בתמונה; תוויות המסכים בחלק העליון של כל מסך -->
-  <img class="a bg" src="assets/bg-hub.jpg" style="left:0;top:45px;width:1200px;height:675px" alt="מסכי ה-Pit Wall (המוקד)">
+  <!-- כותרת השקף היא טקסט HTML (מכסה את הכותרת המצוירת שבתמונת הרקע); ההנחיה נמצאת בתוך הכותרת, בראש המסך -->
+  <img class="a bg" src="assets/bg-hub.jpg" style="left:0;top:45px;width:1200px;height:675px" alt="">
+  <div class="hubtitle" style="left:388px;top:62px;width:432px;height:140px">
+    <div class="ht1">מסכי ה-<span class="sky">Pit Wall</span></div>
+    <div class="ht2">שלושה מצבי עבודה: שגרה, עומס וחירום</div>
+    <div class="hubhint">לחצו על מסך השגרה להרחבה</div>
+  </div>
   <div class="scr" data-station="1" data-go="s07" style="left:812px;top:112px;width:374px;height:286px"><div class="tag" style="top:188px;bottom:auto;transform:translate(-50%,-50%)"><img class="num" src="assets/num-1.png" alt="">שגרה – מבט ממוקד<img class="flag" src="assets/ic-finish-flag.png" alt=""></div></div>
   <div class="scr" data-station="2" data-go="s12" style="left:412px;top:192px;width:378px;height:206px"><div class="tag" style="top:108px;bottom:auto;transform:translate(-50%,-50%)"><img class="num" src="assets/num-2.png" alt="">עומס – מזהים את הדפוס<img class="flag" src="assets/ic-finish-flag.png" alt=""></div></div>
   <div class="scr" data-station="3" data-go="s18" style="left:12px;top:112px;width:378px;height:286px"><div class="tag" style="top:188px;bottom:auto;transform:translate(-50%,-50%)"><img class="num" src="assets/num-3.png" alt="">חירום – תמונת מצב<img class="flag" src="assets/ic-finish-flag.png" alt=""></div></div>
-  <div class="glass" style="left:390px;top:440px;width:420px;height:50px;display:flex;align-items:center;justify-content:center">
-    <div class="hubhint" style="font-size:18px;font-weight:800;color:var(--sky)">לחצו על מסך השגרה להרחבה</div>
-  </div>
 </template>
 
 </div>
@@ -980,7 +1154,7 @@ b{font-weight:800}
 
   /* ---- build hub slides (Pit Wall) ---- */
   const tpl = document.getElementById('hubTpl');
-  const HINT = ['לחצו על מסך השגרה להרחבה', 'לחצו על המסך הבא: עומס', 'לחצו על המסך הבא: חירום', 'כל המסכים הושלמו – ממשיכים לקו הסיום!'];
+  const HINT = ['לחצו על מסך השגרה להרחבה', 'לחצו על המסך הבא: עומס', 'לחצו על המסך הבא: חירום', ''];
   document.querySelectorAll('.slide.hub').forEach(s => {
     s.appendChild(tpl.content.cloneNode(true));
     const done = +s.dataset.done;
@@ -988,7 +1162,8 @@ b{font-weight:800}
       const n = +c.dataset.station;
       c.classList.add(n <= done ? 'done' : n === done + 1 ? 'next' : 'locked');
     });
-    s.querySelector('.hubhint').textContent = HINT[done];
+    const hint = s.querySelector('.hubhint');
+    hint.textContent = HINT[done]; hint.hidden = !HINT[done];
     if (done === 3) {
       const b = document.createElement('button');
       b.className = 'btn pulse'; b.dataset.act = 'next'; b.textContent = 'לקו הסיום 🏁';
@@ -1034,7 +1209,9 @@ b{font-weight:800}
     const completed = s.classList.contains('checked') || s.classList.contains('called') || s.dataset.solved === '1';
     btnNext.classList.toggle('gone', cur === slides.length - 1 || ownBtn || ((s.dataset.nonext === '1' || s.classList.contains('choice')) && !completed));
     btnNext.classList.toggle('disabled', s.classList.contains('hub') && +s.dataset.done < 3);
-    btnPrev.classList.toggle('gone', cur === 0);
+    // inside an open pop-up the "back" arrow is hidden – it would leave the slide instead of closing the pop-up
+    stage.classList.toggle("framed", s.classList.contains("framed"));
+    btnPrev.classList.toggle('gone', cur === 0 || !!s.querySelector('.layer.show'));
   }
   function go(i){
     if (i < 0 || i >= slides.length) return;
@@ -1082,16 +1259,25 @@ b{font-weight:800}
     else if (name === 'fb-bad' || name === 'fb-retry') play('wrong');
     updateNav();
   }
-  function hideLayers(s){ s.querySelectorAll('.layer.show').forEach(l => l.classList.remove('show')); s.classList.remove('answered'); if (s === slides[cur]) updateNav(); }
+  function hideLayers(s, keepGate){
+    s.querySelectorAll('.layer.show').forEach(l => l.classList.remove('show')); s.classList.remove('answered');
+    if (s._gateWait && !keepGate) revealGate(s);   // the last pop-up was closed – now the "continue" elements may appear
+    if (s === slides[cur]) updateNav();
+  }
 
-  /* ---- "click to expand": when every [data-xp] on the slide was opened, the .gate elements appear ---- */
+  /* ---- "click to expand": when every [data-xp] on the slide was opened, the .gate elements appear
+         (only after the pop-up of the last item was closed, so they never show on top of it) ---- */
+  function revealGate(s){
+    s._gateWait = false;
+    s.querySelectorAll('.xphint').forEach(h => h.classList.add('done'));
+    s.querySelectorAll('.gate').forEach((g, i) => setTimeout(() => g.classList.add('shown'), 250 + i * 250));
+  }
   function seen(s, el){
     el.classList.add('seen');
     const all = [...s.querySelectorAll('[data-xp]')];
     if (all.length && all.every(x => x.classList.contains('seen')) && !s.classList.contains('explored')) {
       s.classList.add('explored');
-      s.querySelectorAll('.xphint').forEach(h => h.classList.add('done'));
-      s.querySelectorAll('.gate').forEach((g, i) => setTimeout(() => g.classList.add('shown'), 250 + i * 250));
+      if (s.querySelector('.layer.show')) s._gateWait = true; else revealGate(s);
     }
   }
 
@@ -1102,7 +1288,7 @@ b{font-weight:800}
     if (a.dataset.sfx) play(a.dataset.sfx); else if (act !== 'next') play('click');   // no sound when moving between slides
     if (act === 'next') next();
     else if (act === 'close') hideLayers(s);
-    else if (act.startsWith('layer:')) { hideLayers(s); showLayer(s, act.slice(6)); }   // one popup at a time
+    else if (act.startsWith('layer:')) { hideLayers(s, true); showLayer(s, act.slice(6)); }   // one popup at a time
     else if (act.startsWith('tab:')) showTab(s, a, act.slice(4));
     else if (act.startsWith('fn:')) fns[act.slice(3)](s, a);
     if (a.hasAttribute('data-xp')) seen(s, a);
@@ -1110,7 +1296,10 @@ b{font-weight:800}
 
   /* ---- tabs (slide 05) ---- */
   function showTab(s, btn, name){
-    s.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t === btn));
+    s.classList.add('tabbed');   // the opening tiles give way to the tab bar
+    s.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.act === 'tab:' + name));
+    const tile = s.querySelector(`.landing[data-act="tab:${name}"]`);   // opening it from the tab bar counts as seen too
+    if (tile && !tile.classList.contains('seen')) seen(s, tile);
     s.querySelectorAll('.tabpanel').forEach(p => {
       const on = p.dataset.panel === name; p.classList.toggle('on', on);
       if (on) { animate(p, .05, .05); p.querySelectorAll('.checklist li').forEach((li, i) => li.style.setProperty('--cd', (.3 + i * .12) + 's')); }
@@ -1118,7 +1307,7 @@ b{font-weight:800}
   }
 
   /* ---- emergency question tiles (slide 19) ---- */
-  fns.qopen = (s, q) => q.closest('.qtile').classList.add('open');
+  fns.qopen = (s, q) => q.closest('.qtile').classList.toggle('open');   // click again to close
 
   /* ---- hub screens ---- */
   document.querySelectorAll('.scr').forEach(c => c.addEventListener('click', () => {
