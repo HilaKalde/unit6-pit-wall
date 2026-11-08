@@ -411,10 +411,9 @@ b{font-weight:800}
 .pop3 .phead svg{flex:0 0 52px;width:52px;height:52px;fill:none;stroke:var(--sky);stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
 .pop3 .phead b{display:block;font-size:30px;line-height:1.1}
 .pop3 .phead span{font-size:18px;font-weight:700;color:var(--sky)}
-.pop3 .pclose{position:absolute;left:22px;top:22px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.16);border:2px solid rgba(255,255,255,.6);color:#fff;font-size:20px;line-height:1;display:flex;align-items:center;justify-content:center;transition:background .15s}
-.pop3 .pclose:hover{background:rgba(255,255,255,.32)}
 .pop3 .mnext{display:none;left:76px;top:21px;width:150px;height:42px}   /* appears once all three topics were opened: goes straight to the next slide */
 .slide.explored .pop3 .mnext{display:flex}
+.pop3 .mnext.always{display:flex;left:22px}   /* window without an X: always shown – returns to the icons, or moves on once all topics were opened */
 .pop3 .pbody{padding:22px 36px 16px;font-size:18px;line-height:1.42}
 .pop3 .pbody p+p,.pop3 .pbody p+ul,.pop3 .pbody ul+p{margin-top:8px}
 .pop3 .pbody .lead{font-size:20px;font-weight:700;color:#1d6fa5}
@@ -730,8 +729,7 @@ b{font-weight:800}
     <div class="dim"></div>
     <div class="pcard" style="left:90px;top:50px;width:1020px;height:622px">
       <div class="phead"><svg><use href="#icDanger"/></svg><div><b>סכנה</b><span>האם יש כאן סיכון מיידי?</span></div></div>
-      <button class="pclose" data-act="close" aria-label="סגירה">✕</button>
-      <button class="btn pulse mnext" data-act="next">ממשיכים</button>
+      <button class="btn pulse mnext always" data-act="fn:popContinue">ממשיכים</button>
       <div class="pbody">
         <p class="lead">פניות הדורשות <b>תשומת לב מיוחדת</b> הן פניות שיש בהן סכנה לאנשים, לרכוש או למרחב הציבורי.</p>
         <div class="ex"><b>לדוגמה:</b> רמזור שלא עובד, בור פתוח, חפץ בנתיב נסיעה, מבנים מסוכנים, מקרר עם דלתות ועוד.</div>
@@ -750,8 +748,7 @@ b{font-weight:800}
     <div class="dim"></div>
     <div class="pcard" style="left:90px;top:62px;width:1020px;height:604px">
       <div class="phead"><svg><use href="#icClock"/></svg><div><b>זמן / שעה</b><span>מתי הפנייה מתקבלת?</span></div></div>
-      <button class="pclose" data-act="close" aria-label="סגירה">✕</button>
-      <button class="btn pulse mnext" data-act="next">ממשיכים</button>
+      <button class="btn pulse mnext always" data-act="fn:popContinue">ממשיכים</button>
       <div class="pbody">
         <p class="lead">אותה פנייה יכולה לקבל מסלול טיפול שונה לפי השעה שבה היא מתקבלת.</p>
         <p>לכל מחלקה יש <b>שעות פעילות מוגדרות</b>. בשעות הפעילות, הפנייה עוברת בדרך כלל למחלקה או לגורם המטפל הרלוונטי.</p>
@@ -770,8 +767,7 @@ b{font-weight:800}
     <div class="dim"></div>
     <div class="pcard" style="left:90px;top:62px;width:1020px;height:604px">
       <div class="phead"><svg><use href="#icHandler"/></svg><div><b>גורם מטפל</b><span>מי יטפל בפנייה?</span></div></div>
-      <button class="pclose" data-act="close" aria-label="סגירה">✕</button>
-      <button class="btn pulse mnext" data-act="next">ממשיכים</button>
+      <button class="btn pulse mnext always" data-act="fn:popContinue">ממשיכים</button>
       <div class="pbody">
         <p class="lead">כל פנייה שמגיעה למוקד מטופלת על ידי אגף, מחלקה עירונית או גוף חוץ־ארגוני: מים וביוב, תקשורת, חשמל, כבאות, משטרה, תשתיות או תחבורה.</p>
         <h4>לפני שמעבירים נבדוק:</h4>
@@ -1307,6 +1303,7 @@ b{font-weight:800}
   }
 
   /* ---- emergency question tiles (slide 19) ---- */
+  fns.popContinue = s => { if (s.classList.contains('explored')) next(); else hideLayers(s); };
   fns.qopen = (s, q) => q.closest('.qtile').classList.toggle('open');   // click again to close
 
   /* ---- hub screens ---- */
